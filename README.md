@@ -8,7 +8,7 @@ Before you begin, ensure you have the following prerequisites installed and conf
 
 2. kubectl: The Kubernetes command-line tool, kubectl, allows you to run commands against Kubernetes clusters. Install kubectl if you haven't already.
 
-3. Helm: Helm is a package manager for Kubernetes that facilitates the deployment and management of applications. Install Helm if it's not already set up.
+3. [Helm](https://helm.sh/docs/intro/install/): Helm is a package manager for Kubernetes that facilitates the deployment and management of applications. Install Helm if it's not already set up.
 
 4. Helmfile: Helmfile is a declarative spec for deploying helm charts. It lets you keep descriptions of your desired state of Helm charts in a versioned YAML file. Install Helmfile if you haven't.
 
