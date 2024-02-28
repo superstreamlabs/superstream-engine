@@ -1,5 +1,7 @@
 environment: production # Define the environment name/id. MAX LENGTH is 32 characters and the character "." (dot) is not allowed
 imageTag: 1.0.0 # Define the tag for the Docker image, indicating the specific version or build to use (e.g., 'latest' or '1.2.3').
 namespace: superstream # Specify the Kubernetes namespace where the resources will be deployed, isolating them within this designated namespace.
-accountId: # Provide the account ID that is associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
-activationToken: # Enter the activation token required for services or resources that need an initial token for activation or authentication.
+accountId: "" # Provide the account ID that is associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
+activationToken: "" # Enter the activation token required for services or resources that need an initial token for activation or authentication.
+loggingToken: ""
+monitoringToken: ""

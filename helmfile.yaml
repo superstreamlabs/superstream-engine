@@ -103,7 +103,7 @@ releases:
                 organization: "superstream"
                 bucket: "logs"
                 content_encoding: "gzip"
-                token: "F0g8EUthiiKa4hM9-TtIuFncFAYAUx3LRhuTE52Gf0c9L6lbwCrrdKZ-gsgEuIqpmqxmDNbVCVfyX1yslgiP0A=="
+                token: "{{ .Values.loggingToken }}"
                 namepass: ["syslog"]
             - influxdb_v2:
                 urls:
@@ -111,20 +111,13 @@ releases:
                 organization: "superstream"
                 bucket: "metrics"
                 content_encoding: "gzip"
-                token: "_KXiKF3axpfzip_oAd2NIzlM_eeoSxg18HQGKLyQ2t_ULm9kNOKUNro7pCtCF01-_HiwkZ3gW2SYVjd6mD9ucw=="
-                namedrop: ["syslog"]                
-            - file:
-                files:
-                - "stdout"
-                use_batch_format: false
-                rotation_interval: "0h"
-                rotation_max_size: "0MB"
-                data_format: "influx"          
+                token: "{{ .Values.monitoringToken }}"
+                namedrop: ["syslog"]                         
           inputs:
           - syslog:
               server: "udp://:6514"
               tags:
-                accountId: {{ .Values.accountId }}
+                accountId: "{{ .Values.accountId }}"
           - prometheus:
               monitor_kubernetes_pods_namespace: "{{ .Values.namespace }}"
               kubernetes_label_selector: "app.kubernetes.io/name=nats,app.kubernetes.io/component=nats"
@@ -132,7 +125,7 @@ releases:
               monitor_kubernetes_pods_method: "settings"
               monitor_kubernetes_pods_port: 7777
               tags:
-                accountId: {{ .Values.accountId }}
+                accountId: "{{ .Values.accountId }}"
 
   - name: {{ .Values.superstreamReleaseName }} 
     installed: true
