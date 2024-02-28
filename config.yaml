@@ -6,11 +6,10 @@ dataPlane:
       fileName: connection.conf
       fileContent: | 
         connections:
-        - name: connection_test_1_stg
+        - name: connection
           type: confluent_kafka # available types : confluent_kafka, MSK, apache_kafka
           hosts: # list of Bootstrap servers
-            - pkc-7xoy1.eu-central-1.aws.confluent.cloud:9092
-            # - kafka-bootstrap-tls.memphis-gcp.dev:9093
+            - kafka.example.com:9092
             # - localhost:9092
           authentication:
             method:
@@ -19,50 +18,19 @@ dataPlane:
               ssl:
                 enabled: false
                 protocol: SSL
-                ca: "-----BEGIN CERTIFICATE----- \nMIIFLTCCAxWgAwIBAgIUQfyABCYLFOz6XCoRD9wAZMKWhuUwDQYJKoZIhvcNAQEN\nBQAwLTETMBEGA1UECgwKaW8uc3RyaW16aTEWMBQGA1UEAwwNY2x1c3Rlci1jYSB2\nMDAeFw0yMzEyMDIxNjA4MTlaFw0yNDEyMDExNjA4MTlaMC0xEzARBgNVBAoMCmlv\nLnN0cmltemkxFjAUBgNVBAMMDWNsdXN0ZXItY2EgdjAwggIiMA0GCSqGSIb3DQEB\nAQUAA4ICDwAwggIKAoICAQC7IvtYkd99XGSaK20yYLt4+MmW6BZPOirrjZHayQwM\ngMMcni4a+FbGMGeVbtkBFisvdltG3a2IkexQK2Xx9sCkaPUW6PX42c1pFp69FjxK\nlmR2ln5mxvEhKZKxh+8lj11FgLHUUO7mvoznArq4yTeegBFs6kF8uAyEm/TT3EFC\nqtDD0ZSFxo7KvDRRgfdu5shduwMd5Sx3Cz1A+PD8dZdb3Kr2ZfUaQ1jes7FxDcXN\nCkqozHR7w/INhB/S2ePvD1k0ZUvQI0sFTwynt/elKE3Yia1UxVAtP0Y4tObC/PRI\nqnGOQ6tgtzdvqB3U9b6lNnT97xd7d9FtOQ7kRn04GUfL+x41bZFxZEg+k3DgwD5h\nq34H448TM7V9jD93DSOoJAqxomI4mNTCc9LczZAPkb5MPjqM8JswvrOAv+Gy2LhR\nkCR1tm58sIGnQbTxysAakLpWIM9jpky3xFNLv9ZTk7pCGd7foKF5J+xvj34YRWbV\nlIm8QzC3d/0eTY3qSyov5Y4HNizTD0D2LPSuxYofpf4AAJV+l+610RMrT6zJmrg9\nk1TwN5O/3gJFLAgkY8r5OfPZGSfLcGA8vbeH3GfhqZVa1goDe1LmV5YlSf8SroMI\nhaUJ/2O9lebPHmlGan4HGbjzAeCW0ls7YJ52ZzB7EMNAzgG/jWPfzkAiNn2/zobd\nvwIDAQABo0UwQzAdBgNVHQ4EFgQUorUBfGZlBpB1ql0CDQsnRRocwdMwEgYDVR0T\nAQH/BAgwBgEB/wIBADAOBgNVHQ8BAf8EBAMCAQYwDQYJKoZIhvcNAQENBQADggIB\nAEmhvUJcdI+PekIuVwKtHA6svRKoP0ibGYPDoafzN8eNrr7LkAPj+GgiEA4o+eiL\nHivDUCgVJuhrB8rSwGi36IFY0K2tqWhQc8PQNkLnhKLgOUQS83BbvNy4EdP3bLf1\n+9D3KuReys7xgPIbsSeA58djAqcftTMEoKPFipxUfYyfmLm5j2hd31jfn4tDw18c\n5U/vrg6mRRqJ4pWT66dMOpu+lz9/fOsL5vPtDZCvxXPuZibTq5KM3ejJ0bDYK+CB\n53J0FcAaC9X5jGK0aC6arOY/MKGH5PdkhS6D61AW0hp2fLi0fZHVMsocO5PhPn82\npEsBp3H93nE2wdby5ZkHM001wCW2Oi5BUTWxXHh4Cx0QcgY6O3tSHpmp1tpfmS2v\nQ2ekFJbxTDn4KfHlpY2la6qmbmmc/SLU6GbuDWtJFmuUb5LR81RU/009IMBPstV8\nYllg+tKHjutS01og0qW5IoDqD34R0IgzRJE9tD/tayynr9QH75tDrvlcYtarQF7p\nCe3FVpM6q9A0c2xFyr0fkTtmkkKc2QKRM+L3G88IiAI6XoHwfbSFdDXMRSn7gYRS\nyRr6EFEiiYqW5SJh4I/w2UKyR2YERaSw1fXBokmG1pCEl51q214x55dhsSJNPDUE\noxwxtDJLAZSDHbeK94MiV+t9byk/Zu9JnJmK2GKzcpAV\n-----END CERTIFICATE-----"
-                cert: "-----BEGIN CERTIFICATE----- \nMIIEEzCCAfugAwIBAgIUXxqZyqsJNG6lHvyvIZ4/9sXMsHcwDQYJKoZIhvcNAQEN\nBQAwLTETMBEGA1UECgwKaW8uc3RyaW16aTEWMBQGA1UEAwwNY2xpZW50cy1jYSB2\nMDAeFw0yMzEyMDMxMzA2NDFaFw0yNDEyMDIxMzA2NDFaMBkxFzAVBgNVBAMMDmth\nZmthLXRscy11c2VyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA05iz\nrMAkDck6t0KWCF9fbTAGyRMjadPqdMdvZcdAPwGJEphDd21DKFnwW6XvK46MXMlg\nwWjTAdhTUIDp3tDon4+7KeJ55oxtFay6yyS4Lf8+Sxww9ZOkyNuN5K5klZgHpSdb\nwXsAYXiuX0ZYTFP/v1FCNZcSZyRvdNhHjJoqr6NtvpPVW4pVpKVq4YpAGiHLonV6\nhntPKdgi7jFTRvEKArP8KXAXvQKcPgM8cJJPT6dfF9IOYyVRFEJZiepVN8ciRTom\n3tdUc5J/iPJhocS3Hqwk/+8ZUkKFFQWq+2V8qOeafWQaONwI5LehkzGi6yR9Qa7G\n5DpjHhXzJfSDO2OwBQIDAQABoz8wPTAdBgNVHQ4EFgQUk89E9WbcufYyjLjpyI+c\nps5s2SUwDAYDVR0TAQH/BAIwADAOBgNVHQ8BAf8EBAMCBaAwDQYJKoZIhvcNAQEN\nBQADggIBAGHXYLAE0uD7nO1cBnvfsWH1OThXgVkSY7ktwjxfjtR+1HyEupwl1j6c\nMHq9C6SlrbmlV9dvdgQtQz7axMg9HcoLKltl1hFZOkqFNQyqqCSoC2xtbDfj/SIE\nug5cEN+LsGrzfWK0NjfBJTUSGtSVCD+UZJuVdAuE/1WwSEc04T/+tM5pLaV6hWgH\nCjzpfqtQ5TDZ4nNydktgbwwqR5itnacsG16cE9wn8eSQPvF7zJT+9OzkXtETGMmG\nnC3VRXiOivi7zYkjVZiuyv+/te2ZBhbx+xA60MfSwKPooqYkR03TPWlCXU19AA6R\nk1pSYfmOIb5mzHkPe3ZFxzsWLYwYR6ZVX8vFED9rnH70X0/8uiVJZamoM5ozS2Ac\nIAkCKQ9rjpZX4r4LQ+qKCH/G5E5w+tMKe7bF0lhM0/3W4aHoiMm+QtBFU/Wri+xY\n+FA0IeUq7F4tVcgmRHCItoezdAd5l36T98HnSv3f/9lvOig7U5sbPZtf3JjU1mhL\nU2Op9899CvS74/ftqkYfnkmOEWmtBprPZVupA3pe+wDwStmgpgCwjTzGZq/G7gDx\nz4r8gIhRGd+mEcNlmTZ0ZMcN1ZKNA9vWqjIiE7yqy8dUen6D0CemiHiT3ieqzXgV\nHZbr24OtHkpMXBxE/UamkZuD2qVGteauxnxoKyXPfuqvcZm1YqkJ\n-----END CERTIFICATE-----"
-                key: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDTmLOswCQNyTq3\nQpYIX19tMAbJEyNp0+p0x29lx0A/AYkSmEN3bUMoWfBbpe8rjoxcyWDBaNMB2FNQ\ngOne0Oifj7sp4nnmjG0VrLrLJLgt/z5LHDD1k6TI243krmSVmAelJ1vBewBheK5f\nRlhMU/+/UUI1lxJnJG902EeMmiqvo22+k9VbilWkpWrhikAaIcuidXqGe08p2CLu\nMVNG8QoCs/wpcBe9Apw+Azxwkk9Pp18X0g5jJVEUQlmJ6lU3xyJFOibe11Rzkn+I\n8mGhxLcerCT/7xlSQoUVBar7ZXyo55p9ZBo43Ajkt6GTMaLrJH1BrsbkOmMeFfMl\n9IM7Y7AFAgMBAAECggEAZoDe6Zza2mLVMtnq3Ht3Oum9H8NJsIacWZ4TdPalROB1\nirCAXmZr1ixbp8ompq8TiA9187vYHFizY5hPs0T4q/Nw88Vm0CzO22UlyCstnfq8\nLp6liRHRDgxuHI3u5BkV+weqB3ySnqVbs4PcWn2GsyOmM1fP7m9UHwJ3BsHYU+Sy\nLL0Rzg9EPRY+Rg/1zlQZL6sHAkIihJ2tVUnFCpqU2RzBDg+TGPVTb/KFcrjCc3We\naNXTggw26If/5lTvBnQP6vO2bMIl3aAy46n+xLrpY2fZ6rsVGVO2h5GaBSDkQir7\n4IdqQyE+M8+xi1bFZEQIMfewwie/VaMTOnqZtCKqgQKBgQDxRNFVi0iinWlh7NMP\n8Jo/Nu6itxqC0dSwsJl8NLfhzAyur5XxZ/wiQdGktNVkV0Q/Cog1ASi7Fw4SWror\nFpTCDXz4gcd33RzSAuSVtIts3FzfxybOTYgL+2P3CjeEu9kjeRL0LP2Gzdk629DZ\nEGZzeaw3ESShhR6uUyXMXUVJ7QKBgQDghBZOkZQW+wXBtFGOjR1OyNX5BXV3flyl\nJVAnJ6SZffRGhMf7PIqFbM8T5rb5Qcv3x3TnzSL+IZh0nIXBeGtAtqlVc5pW1QxM\nw0PNa62c+Mr0Lc7Xi7yzIYAlW39dyq4KjPNdHZzkjWMNDtkv0S8FL2KPW601gdpD\n+Oq92D7beQKBgE1DB3JIf0Mr+4JTb6eMGikiMztCPagk/+JxO0WOMFCLoogSTIcZ\nEKH7x+Hh0vAmDgHOIp4ut9dp46S3DyUbPxoBbcK69KCK217ZdFAImBmNW+SBhwjL\nxURpBbMnv22vJjL447vz6GBR7T2vBOtuGBDkpuSfhcZ/tbqHf/Q47iZlAoGBALnx\n65+qxmG6COyC8UEE8o77muuhb8ZFq2lDW/zxwks1nAiDlDUp0PfsRB0Rad1KdymB\n0frhVOfw3xlFQSoZF4sDPX9+PQdJb+RrnE4XrjRhgYV2Iuc13lTlnAJUo0oEwNwQ\nHMaz7esEhlKcR5howW6j7hcZMH0uTJ0bHR+aZ4TRAoGAa//eLmFeF2FSIOF7u4+r\n9LuuroLMYzKow5iroqG0GI5miAdYHCnVf7JMe0J9Q3E4EUVbTM8eH+3S0a0UHM+C\noGasAOVdKXMyD3Lk2Msg3rFsdQlUKj9Li/HaPCmjQ3UQ79O2pPVLe7+7bkBo8NkH\nimupSsWrteIJ2bAk3sNhn80=\n-----END PRIVATE KEY-----"
+                ca: ""
+                cert: ""
+                key: ""
                 insecureSkipVerify: true
               sasl:
                 enabled: true  
                 # mechanism: PLAIN # sasl_mechanism options: "PLAIN", "SCRAM-SHA-512" 
                 protocol: SASL_SSL
-                username: 5TDEPONAAYTZD6WV
-                password: 4yVb3kdDmUu/kVtJbtXAGfDnFI2Dq7PFYraQhwX+hQiQQsL8FkFjJvF5xXrTQR6Q
+                username: 
+                password: 
                 tls:
                   enabled: false
                   ca: ""
                   cert: ""
                   key: ""
                   insecureSkipVerify: true
-        - name: connection_test_2_stg
-          type: confluent_kafka # available types : confluent_kafka, MSK, apache_kafka
-          hosts: # list of Bootstrap servers
-            - pkc-7xoy1.eu-central-1.aws.confluent.cloud:9092
-            # - kafka-bootstrap-tls.memphis-gcp.dev:9093
-            # - localhost:9092
-          authentication:
-            method:
-              noAuthentication:
-                enabled: false
-              ssl:
-                enabled: false
-                protocol: SSL
-                ca: "-----BEGIN CERTIFICATE----- \nMIIFLTCCAxWgAwIBAgIUQfyABCYLFOz6XCoRD9wAZMKWhuUwDQYJKoZIhvcNAQEN\nBQAwLTETMBEGA1UECgwKaW8uc3RyaW16aTEWMBQGA1UEAwwNY2x1c3Rlci1jYSB2\nMDAeFw0yMzEyMDIxNjA4MTlaFw0yNDEyMDExNjA4MTlaMC0xEzARBgNVBAoMCmlv\nLnN0cmltemkxFjAUBgNVBAMMDWNsdXN0ZXItY2EgdjAwggIiMA0GCSqGSIb3DQEB\nAQUAA4ICDwAwggIKAoICAQC7IvtYkd99XGSaK20yYLt4+MmW6BZPOirrjZHayQwM\ngMMcni4a+FbGMGeVbtkBFisvdltG3a2IkexQK2Xx9sCkaPUW6PX42c1pFp69FjxK\nlmR2ln5mxvEhKZKxh+8lj11FgLHUUO7mvoznArq4yTeegBFs6kF8uAyEm/TT3EFC\nqtDD0ZSFxo7KvDRRgfdu5shduwMd5Sx3Cz1A+PD8dZdb3Kr2ZfUaQ1jes7FxDcXN\nCkqozHR7w/INhB/S2ePvD1k0ZUvQI0sFTwynt/elKE3Yia1UxVAtP0Y4tObC/PRI\nqnGOQ6tgtzdvqB3U9b6lNnT97xd7d9FtOQ7kRn04GUfL+x41bZFxZEg+k3DgwD5h\nq34H448TM7V9jD93DSOoJAqxomI4mNTCc9LczZAPkb5MPjqM8JswvrOAv+Gy2LhR\nkCR1tm58sIGnQbTxysAakLpWIM9jpky3xFNLv9ZTk7pCGd7foKF5J+xvj34YRWbV\nlIm8QzC3d/0eTY3qSyov5Y4HNizTD0D2LPSuxYofpf4AAJV+l+610RMrT6zJmrg9\nk1TwN5O/3gJFLAgkY8r5OfPZGSfLcGA8vbeH3GfhqZVa1goDe1LmV5YlSf8SroMI\nhaUJ/2O9lebPHmlGan4HGbjzAeCW0ls7YJ52ZzB7EMNAzgG/jWPfzkAiNn2/zobd\nvwIDAQABo0UwQzAdBgNVHQ4EFgQUorUBfGZlBpB1ql0CDQsnRRocwdMwEgYDVR0T\nAQH/BAgwBgEB/wIBADAOBgNVHQ8BAf8EBAMCAQYwDQYJKoZIhvcNAQENBQADggIB\nAEmhvUJcdI+PekIuVwKtHA6svRKoP0ibGYPDoafzN8eNrr7LkAPj+GgiEA4o+eiL\nHivDUCgVJuhrB8rSwGi36IFY0K2tqWhQc8PQNkLnhKLgOUQS83BbvNy4EdP3bLf1\n+9D3KuReys7xgPIbsSeA58djAqcftTMEoKPFipxUfYyfmLm5j2hd31jfn4tDw18c\n5U/vrg6mRRqJ4pWT66dMOpu+lz9/fOsL5vPtDZCvxXPuZibTq5KM3ejJ0bDYK+CB\n53J0FcAaC9X5jGK0aC6arOY/MKGH5PdkhS6D61AW0hp2fLi0fZHVMsocO5PhPn82\npEsBp3H93nE2wdby5ZkHM001wCW2Oi5BUTWxXHh4Cx0QcgY6O3tSHpmp1tpfmS2v\nQ2ekFJbxTDn4KfHlpY2la6qmbmmc/SLU6GbuDWtJFmuUb5LR81RU/009IMBPstV8\nYllg+tKHjutS01og0qW5IoDqD34R0IgzRJE9tD/tayynr9QH75tDrvlcYtarQF7p\nCe3FVpM6q9A0c2xFyr0fkTtmkkKc2QKRM+L3G88IiAI6XoHwfbSFdDXMRSn7gYRS\nyRr6EFEiiYqW5SJh4I/w2UKyR2YERaSw1fXBokmG1pCEl51q214x55dhsSJNPDUE\noxwxtDJLAZSDHbeK94MiV+t9byk/Zu9JnJmK2GKzcpAV\n-----END CERTIFICATE-----"
-                cert: "-----BEGIN CERTIFICATE----- \nMIIEEzCCAfugAwIBAgIUXxqZyqsJNG6lHvyvIZ4/9sXMsHcwDQYJKoZIhvcNAQEN\nBQAwLTETMBEGA1UECgwKaW8uc3RyaW16aTEWMBQGA1UEAwwNY2xpZW50cy1jYSB2\nMDAeFw0yMzEyMDMxMzA2NDFaFw0yNDEyMDIxMzA2NDFaMBkxFzAVBgNVBAMMDmth\nZmthLXRscy11c2VyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA05iz\nrMAkDck6t0KWCF9fbTAGyRMjadPqdMdvZcdAPwGJEphDd21DKFnwW6XvK46MXMlg\nwWjTAdhTUIDp3tDon4+7KeJ55oxtFay6yyS4Lf8+Sxww9ZOkyNuN5K5klZgHpSdb\nwXsAYXiuX0ZYTFP/v1FCNZcSZyRvdNhHjJoqr6NtvpPVW4pVpKVq4YpAGiHLonV6\nhntPKdgi7jFTRvEKArP8KXAXvQKcPgM8cJJPT6dfF9IOYyVRFEJZiepVN8ciRTom\n3tdUc5J/iPJhocS3Hqwk/+8ZUkKFFQWq+2V8qOeafWQaONwI5LehkzGi6yR9Qa7G\n5DpjHhXzJfSDO2OwBQIDAQABoz8wPTAdBgNVHQ4EFgQUk89E9WbcufYyjLjpyI+c\nps5s2SUwDAYDVR0TAQH/BAIwADAOBgNVHQ8BAf8EBAMCBaAwDQYJKoZIhvcNAQEN\nBQADggIBAGHXYLAE0uD7nO1cBnvfsWH1OThXgVkSY7ktwjxfjtR+1HyEupwl1j6c\nMHq9C6SlrbmlV9dvdgQtQz7axMg9HcoLKltl1hFZOkqFNQyqqCSoC2xtbDfj/SIE\nug5cEN+LsGrzfWK0NjfBJTUSGtSVCD+UZJuVdAuE/1WwSEc04T/+tM5pLaV6hWgH\nCjzpfqtQ5TDZ4nNydktgbwwqR5itnacsG16cE9wn8eSQPvF7zJT+9OzkXtETGMmG\nnC3VRXiOivi7zYkjVZiuyv+/te2ZBhbx+xA60MfSwKPooqYkR03TPWlCXU19AA6R\nk1pSYfmOIb5mzHkPe3ZFxzsWLYwYR6ZVX8vFED9rnH70X0/8uiVJZamoM5ozS2Ac\nIAkCKQ9rjpZX4r4LQ+qKCH/G5E5w+tMKe7bF0lhM0/3W4aHoiMm+QtBFU/Wri+xY\n+FA0IeUq7F4tVcgmRHCItoezdAd5l36T98HnSv3f/9lvOig7U5sbPZtf3JjU1mhL\nU2Op9899CvS74/ftqkYfnkmOEWmtBprPZVupA3pe+wDwStmgpgCwjTzGZq/G7gDx\nz4r8gIhRGd+mEcNlmTZ0ZMcN1ZKNA9vWqjIiE7yqy8dUen6D0CemiHiT3ieqzXgV\nHZbr24OtHkpMXBxE/UamkZuD2qVGteauxnxoKyXPfuqvcZm1YqkJ\n-----END CERTIFICATE-----"
-                key: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDTmLOswCQNyTq3\nQpYIX19tMAbJEyNp0+p0x29lx0A/AYkSmEN3bUMoWfBbpe8rjoxcyWDBaNMB2FNQ\ngOne0Oifj7sp4nnmjG0VrLrLJLgt/z5LHDD1k6TI243krmSVmAelJ1vBewBheK5f\nRlhMU/+/UUI1lxJnJG902EeMmiqvo22+k9VbilWkpWrhikAaIcuidXqGe08p2CLu\nMVNG8QoCs/wpcBe9Apw+Azxwkk9Pp18X0g5jJVEUQlmJ6lU3xyJFOibe11Rzkn+I\n8mGhxLcerCT/7xlSQoUVBar7ZXyo55p9ZBo43Ajkt6GTMaLrJH1BrsbkOmMeFfMl\n9IM7Y7AFAgMBAAECggEAZoDe6Zza2mLVMtnq3Ht3Oum9H8NJsIacWZ4TdPalROB1\nirCAXmZr1ixbp8ompq8TiA9187vYHFizY5hPs0T4q/Nw88Vm0CzO22UlyCstnfq8\nLp6liRHRDgxuHI3u5BkV+weqB3ySnqVbs4PcWn2GsyOmM1fP7m9UHwJ3BsHYU+Sy\nLL0Rzg9EPRY+Rg/1zlQZL6sHAkIihJ2tVUnFCpqU2RzBDg+TGPVTb/KFcrjCc3We\naNXTggw26If/5lTvBnQP6vO2bMIl3aAy46n+xLrpY2fZ6rsVGVO2h5GaBSDkQir7\n4IdqQyE+M8+xi1bFZEQIMfewwie/VaMTOnqZtCKqgQKBgQDxRNFVi0iinWlh7NMP\n8Jo/Nu6itxqC0dSwsJl8NLfhzAyur5XxZ/wiQdGktNVkV0Q/Cog1ASi7Fw4SWror\nFpTCDXz4gcd33RzSAuSVtIts3FzfxybOTYgL+2P3CjeEu9kjeRL0LP2Gzdk629DZ\nEGZzeaw3ESShhR6uUyXMXUVJ7QKBgQDghBZOkZQW+wXBtFGOjR1OyNX5BXV3flyl\nJVAnJ6SZffRGhMf7PIqFbM8T5rb5Qcv3x3TnzSL+IZh0nIXBeGtAtqlVc5pW1QxM\nw0PNa62c+Mr0Lc7Xi7yzIYAlW39dyq4KjPNdHZzkjWMNDtkv0S8FL2KPW601gdpD\n+Oq92D7beQKBgE1DB3JIf0Mr+4JTb6eMGikiMztCPagk/+JxO0WOMFCLoogSTIcZ\nEKH7x+Hh0vAmDgHOIp4ut9dp46S3DyUbPxoBbcK69KCK217ZdFAImBmNW+SBhwjL\nxURpBbMnv22vJjL447vz6GBR7T2vBOtuGBDkpuSfhcZ/tbqHf/Q47iZlAoGBALnx\n65+qxmG6COyC8UEE8o77muuhb8ZFq2lDW/zxwks1nAiDlDUp0PfsRB0Rad1KdymB\n0frhVOfw3xlFQSoZF4sDPX9+PQdJb+RrnE4XrjRhgYV2Iuc13lTlnAJUo0oEwNwQ\nHMaz7esEhlKcR5howW6j7hcZMH0uTJ0bHR+aZ4TRAoGAa//eLmFeF2FSIOF7u4+r\n9LuuroLMYzKow5iroqG0GI5miAdYHCnVf7JMe0J9Q3E4EUVbTM8eH+3S0a0UHM+C\noGasAOVdKXMyD3Lk2Msg3rFsdQlUKj9Li/HaPCmjQ3UQ79O2pPVLe7+7bkBo8NkH\nimupSsWrteIJ2bAk3sNhn80=\n-----END PRIVATE KEY-----"
-                insecureSkipVerify: true
-              sasl:
-                enabled: true  
-                mechanism: PLAIN # sasl_mechanism options: "PLAIN", "SCRAM-SHA-512" 
-                protocol: SASL_SSL
-                username: 5TDEPONAAYTZD6WV
-                password: 4yVb3kdDmUu/kVtJbtXAGfDnFI2Dq7PFYraQhwX+hQiQQsL8FkFjJvF5xXrTQR6Q
-                tls:
-                  enabled: false
-                  ca: ""
-                  cert: ""
-                  key: ""
-                  insecureSkipVerify: true
-                  #magic___^_^___line
-
