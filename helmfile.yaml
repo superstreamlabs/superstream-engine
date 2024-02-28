@@ -130,7 +130,7 @@ releases:
   - name: {{ .Values.superstreamReleaseName }} 
     installed: true
     namespace: {{ .Values.namespace }}
-    chart: memphis/superstream
+    chart: superstream/superstream
     values:
       - config.yaml
       - superstream:
