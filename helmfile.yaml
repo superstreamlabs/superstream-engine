@@ -1,0 +1,155 @@
+repositories:
+    - name: influxdata
+      url: https://helm.influxdata.com/
+    - name: nats 
+      url: https://nats-io.github.io/k8s/helm/charts/
+    - name: superstream 
+      url: https://k8s.superstream.dev/superstream/charts/
+
+
+environments:
+  default:
+    values:
+    - ./environments/default.yaml
+    - rbacCreate: true 
+    - rbacClusterWide: true 
+    - natsReleaseName: nats # Set the release name for the NATS deployment, which is used to uniquely identify the set of resources deployed for NATS.
+    - superstreamReleaseName: superstream # Specify the release name for the Superstream deployment, uniquely identifying the resources for Superstream.
+    - telegrafReleaseName: telegraf # Define the release name for the Telegraf deployment, used for identifying the Telegraf resources in the cluster.
+    - controlPlane: broker.superstream.dev # Indicate the control plane configuration or identifier, which may include settings specific to the cluster's control plane.
+    - imageRepo: memphisos/superstream-data-plane-be # Specify the repository for the Docker image to be used in the deployment (e.g., mydockerhub/myapp).
+    - releaseDate: 2024-02-28-12-43
+
+
+helmDefaults:
+  wait: true
+
+---
+releases:
+  - name: {{ .Values.natsReleaseName }}
+    installed: true
+    namespace: {{ .Values.namespace }}
+    chart: nats/nats
+    version: 1.1.7
+    values:
+      - container:
+          image: 
+            tag: alpine3.19
+          env: 
+            ACTIVATION_TOKEN:
+              valueFrom:
+                secretKeyRef:
+                  name: superstream-creds
+                  key: ACTIVATION_TOKEN 
+      - promExporter:
+          enabled: true
+      - natsBox:
+          enabled: false         
+      - extraResources: 
+        - apiVersion: v1
+          data:
+            ACTIVATION_TOKEN: ZG9VbFVSVGlWRXJBCg==
+          kind: Secret
+          metadata:
+            annotations: {}
+            labels: {}
+            name: nats-creds
+          type: Opaque    
+      - config:
+            cluster: 
+              enabled: true
+            jetstream: 
+              enabled: true
+            merge: { 
+                            accounts: {
+                              SYS: {
+                                users: [{user: superstream_sys, password: << $ACTIVATION_TOKEN >>}]
+                                # System account allows subscribing to $SYS.>
+                              },
+                              internal: {
+                                jetstream: enable,
+                                users: [{user: superstream_internal, password: << $ACTIVATION_TOKEN >>}]
+                                # Regular user account for clients
+                              }
+                            },
+                            # Reference the system account
+                            "system_account": SYS,
+                            "remote_syslog": "udp://{{ .Values.superstreamReleaseName }}-syslog.{{ .Values.namespace }}:5514"
+            }
+
+                  
+  - name: {{ .Values.telegrafReleaseName }}
+    installed: true
+    namespace: {{ .Values.namespace }} 
+    chart: influxdata/telegraf 
+    version: 1.8.42
+    values:
+      - rbac:
+          create: {{ .Values.rbacCreate }}
+          clusterWide: {{ .Values.rbacClusterWide }}
+          rules:    
+          - apiGroups: [""]
+            resources:
+            - namespaces
+            - services
+            - endpoints
+            - pods
+            verbs: ["get", "list", "watch"]          
+      - config:
+          outputs:
+            - influxdb_v2:
+                urls:
+                - "https://influxdb.mgmt.memphis-gcp.dev"
+                organization: "superstream"
+                bucket: "logs"
+                content_encoding: "gzip"
+                token: "F0g8EUthiiKa4hM9-TtIuFncFAYAUx3LRhuTE52Gf0c9L6lbwCrrdKZ-gsgEuIqpmqxmDNbVCVfyX1yslgiP0A=="
+                namepass: ["syslog"]
+            - influxdb_v2:
+                urls:
+                - "https://influxdb.mgmt.memphis-gcp.dev"
+                organization: "superstream"
+                bucket: "metrics"
+                content_encoding: "gzip"
+                token: "_KXiKF3axpfzip_oAd2NIzlM_eeoSxg18HQGKLyQ2t_ULm9kNOKUNro7pCtCF01-_HiwkZ3gW2SYVjd6mD9ucw=="
+                namedrop: ["syslog"]                
+            - file:
+                files:
+                - "stdout"
+                use_batch_format: false
+                rotation_interval: "0h"
+                rotation_max_size: "0MB"
+                data_format: "influx"          
+          inputs:
+          - syslog:
+              server: "udp://:6514"
+              tags:
+                accountId: {{ .Values.accountId }}
+          - prometheus:
+              monitor_kubernetes_pods_namespace: "{{ .Values.namespace }}"
+              kubernetes_label_selector: "app.kubernetes.io/name=nats,app.kubernetes.io/component=nats"
+              monitor_kubernetes_pods: true
+              monitor_kubernetes_pods_method: "settings"
+              monitor_kubernetes_pods_port: 7777
+              tags:
+                accountId: {{ .Values.accountId }}
+
+  - name: {{ .Values.superstreamReleaseName }} 
+    installed: true
+    namespace: {{ .Values.namespace }}
+    chart: memphis/superstream
+    values:
+      - config.yaml
+      - superstream:
+          environment: {{ .Values.environment }}
+      - dataPlane:
+          image:
+            repository: {{ .Values.imageRepo }}
+            tag:  {{ .Values.imageTag }}
+          secret:
+            activationToken: {{ .Values.activationToken }}
+          controlPlane:
+            host: {{ .Values.controlPlane }}
+          internalNatsConnection:
+            host: {{ .Values.natsReleaseName }}
+          releaseDate: {{ .Values.releaseDate }} 
