@@ -12,6 +12,8 @@ Before you begin, ensure you have the following prerequisites installed and conf
 
 4. [Helmfile](https://helmfile.readthedocs.io/en/latest/#installation): Helmfile is a declarative spec for deploying helm charts. It lets you keep descriptions of your desired state of Helm charts in a versioned YAML file. Install Helmfile if you haven't.
 
+5. [helm-diff plugin](https://github.com/databus23/helm-diff#install) plugin shows a diff explaining what a `helm upgrade` would change. This is useful for understanding what changes will be applied to your Kubernetes resources before actually applying them.
+
 ## Configuration
 Before deploying with Helmfile, you need to configure your environment settings and any specific parameters required for your deployment. Follow these steps to set up your configuration:
 
