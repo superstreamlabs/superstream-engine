@@ -131,14 +131,12 @@ releases:
     installed: true
     namespace: {{ .Values.namespace }}
     chart: superstream/superstream
+    version: {{ .Values.helmVersion }}
     values:
       - config.yaml
       - superstream:
           environment: {{ .Values.environment }}
       - dataPlane:
-          image:
-            repository: {{ .Values.imageRepo }}
-            tag:  {{ .Values.imageTag }}
           secret:
             activationToken: {{ .Values.activationToken }}
           controlPlane:
