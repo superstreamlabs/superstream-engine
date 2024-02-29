@@ -135,7 +135,7 @@ releases:
     values:
       - config.yaml
       - superstream:
-          environment: {{ .Values.environment }}
+          environment: {{ .Values.environmentName }}
       - dataPlane:
           secret:
             activationToken: {{ .Values.activationToken }}
