@@ -14,11 +14,107 @@ Before you begin, ensure you have the following prerequisites installed and conf
 
 5. [helm-diff plugin](https://github.com/databus23/helm-diff#install) plugin shows a diff explaining what a `helm upgrade` would change. This is useful for understanding what changes will be applied to your Kubernetes resources before actually applying them.
 
-## Configuration
-Before deploying with Helmfile, you need to configure your environment settings and any specific parameters required for your deployment. Follow these steps to set up your configuration:
+6. This guide assumes that the repository has been cloned and that the installation commands are run from its root directory
 
+# Configuration
+Before deploying with helmfile, you need to configure your environment settings and any specific parameters required for your deployment. Follow these steps to set up your configuration:
+## Configure Environment Tokens
 Open the `environments/default.yaml` file in your preferred text editor. Add or update the necessary parameters to match your deployment requirements.
 
+## Configure Kafka Connections Configuration File
+This guide provides detailed instructions on how to configure Kafka connections for the Superstream's data-plane. Our YAML configuration file supports multiple types of Kafka connections, including Confluent Kafka, Confluent Cloud Kafka, Amazon MSK, and Apache Kafka. Follow the steps below to correctly set up your YAML configuration file.
+
+### Configuration Format
+
+The configuration should be defined in a YAML file as follows:
+
+```yaml
+connections:
+  - name: <connection_name>
+    type: <connection_type> # available types : confluent_kafka, confluent_cloud_kafka, MSK, apache_kafka
+    hosts: # list of bootstrap servers
+      - <bootstrap_server_1>
+      - <bootstrap_server_2>
+    authentication: # Specify one prefered method for connection
+      method:
+        noAuthentication:
+          enabled: <true_or_false>
+        ssl:
+          enabled: <true_or_false>
+          protocol: SSL
+          ca: "<path_to_ca_cert>"
+          cert: "<path_to_cert>"
+          key: "<path_to_key>"
+          insecureSkipVerify: <true_or_false>
+        sasl:
+          enabled: <true_or_false>
+          mechanism: <sasl_mechanism> # available options: "PLAIN", "SCRAM-SHA-512"
+          protocol: SASL_SSL
+          username: "<username>"
+          password: "<password>"
+          tls:
+            enabled: <true_or_false>
+            ca: "<path_to_ca_cert>"
+            cert: "<path_to_cert>"
+            key: "<path_to_key>"
+            insecureSkipVerify: <true_or_false>
+```
+
+### Configuration Details
+
+- `name`: A unique name for the connection.
+- `type`: The type of Kafka connection. Options include `confluent_kafka`, `confluent_cloud_kafka`, `MSK`, and `apache_kafka`.
+- `hosts`: A list of bootstrap servers for the Kafka cluster.
+
+### Authentication
+
+Specify one preferred method for connection under `authentication`:
+
+- `noAuthentication`: Set `enabled` to `true` if no authentication is required.
+- `ssl`: For SSL encryption without SASL authentication.
+  - `enabled`: Set to `true` to enable SSL authentication.
+  - `protocol`: Should always be `SSL`.
+  - `ca`, `cert`, `key`: Paths to your CA certificate, client certificate, and client key files.
+  - `insecureSkipVerify`: Set to `true` to bypass server certificate verification (not recommended for production environments).
+- `sasl`: For SASL authentication.
+  - `enabled`: Set to `true` to enable SASL authentication.
+  - `mechanism`: The SASL mechanism to use. Options: `PLAIN`, `SCRAM-SHA-512`.
+  - `protocol`: Should be `SASL_SSL` for encrypted connections.
+  - `username` and `password`: Credentials for SASL authentication.
+  - `tls`: Optional TLS configuration for SASL authentication.
+
+#### TLS Configuration for SASL
+
+If TLS is used with SASL, specify the following:
+- `enabled`: Set to `true` to enable TLS.
+- `ca`, `cert`, `key`: Paths to your CA certificate, client certificate, and client key files, if required.
+- `insecureSkipVerify`: Set to `true` to bypass server certificate verification (not recommended for production environments).
+
+## Example
+
+Below is an example configuration for a SASL_SSL authenticated connection:
+
+```yaml
+connections:
+  - name: my_kafka_connection
+    type: confluent_cloud_kafka
+    hosts:
+      - kafka.example.com:9092
+    authentication:
+      method:
+        sasl:
+          enabled: true
+          mechanism: PLAIN
+          protocol: SASL_SSL
+          username: "myUsername"
+          password: "myPassword"
+          tls:
+            enabled: false
+```
+
+Replace placeholders (e.g., `<connection_name>`, `<bootstrap_server_1>`) with your actual Kafka connection details. Make sure to follow the correct indentation and formatting as shown in the examples.
+
+For any questions or further assistance, please refer to the official Kafka documentation or reach out to your Kafka provider.
 ## Using Helmfile
 To apply the Helmfile configurations and deploy your Kubernetes resources, follow these steps:
 
