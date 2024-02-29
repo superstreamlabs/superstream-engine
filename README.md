@@ -136,3 +136,25 @@ After applying the Helmfile, you can verify the deployment by listing the Helm r
 ```bash
 helm list
 ```
+
+# Appendix A
+
+## In case the data-plane deployed twice or more on the same cluster next adjustment needed
+
+### Edit the following parameter "rbacClusterWide" in the environment section of the helmfile.yaml file
+```yaml
+environments:
+  default:
+    values:
+    - ./environments/default.yaml
+    - rbacCreate: true 
+    - rbacClusterWide: true
+```
+
+### Update "telegraf" Cluster Role Binding with the additional namespace. Add the following to the "subjects" section. (edit namespace variable)
+```yaml
+subjects:
+  - kind: ServiceAccount
+    name: telegraf
+    namespace: superstream-new-namespace
+```
