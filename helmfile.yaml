@@ -103,7 +103,7 @@ releases:
                 organization: "superstream"
                 bucket: "logs"
                 content_encoding: "gzip"
-                token: "{{ .Values.loggingToken }}"
+                token:  "{{ .Values.monitoringToken }}"
                 namepass: ["syslog"]
             - influxdb_v2:
                 urls:
