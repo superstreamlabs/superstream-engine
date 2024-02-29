@@ -17,7 +17,6 @@ environments:
     - superstreamReleaseName: superstream # Specify the release name for the Superstream deployment, uniquely identifying the resources for Superstream.
     - telegrafReleaseName: telegraf # Define the release name for the Telegraf deployment, used for identifying the Telegraf resources in the cluster.
     - controlPlane: broker.superstream.dev # Indicate the control plane configuration or identifier, which may include settings specific to the cluster's control plane.
-    - imageRepo: memphisos/superstream-data-plane-be # Specify the repository for the Docker image to be used in the deployment (e.g., mydockerhub/myapp).
     - releaseDate: 2024-02-28-12-43
 
 
@@ -117,7 +116,7 @@ releases:
           - syslog:
               server: "udp://:6514"
               tags:
-                accountId: "{{ .Values.accountId }}"
+                accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
           - prometheus:
               monitor_kubernetes_pods_namespace: "{{ .Values.namespace }}"
               kubernetes_label_selector: "app.kubernetes.io/name=nats,app.kubernetes.io/component=nats"
@@ -125,7 +124,7 @@ releases:
               monitor_kubernetes_pods_method: "settings"
               monitor_kubernetes_pods_port: 7777
               tags:
-                accountId: "{{ .Values.accountId }}"
+                accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
 
   - name: {{ .Values.superstreamReleaseName }} 
     installed: true
