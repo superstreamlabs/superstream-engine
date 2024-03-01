@@ -1,6 +1,10 @@
+<div align="center">
+
 <img src="https://github.com/memphisdev/superstream-helmfile/assets/70286779/5921cf13-ce6c-4888-8ed1-e602f7f60383" width="30%"><br><br>
 Improve And Optimize Your Kafka In Literally Minutes.<br>
 Reduce Costs and Boost Performance by 75% Without Changing a Single Component or Your Existing Kafka!
+
+</div>
 
 # On-prem Superstream data plane deployment
 This README guides deploying and managing Superstream on-prem data plane on Kubernetes platform.
