@@ -1,5 +1,13 @@
-# Helmfile Deployment for Superstream
-##### This README provides guidance on how to deploy and manage Superstream microservies on Kubernetes platform.
+<div align="center">
+
+<img src="https://github.com/memphisdev/superstream-helmfile/assets/70286779/5921cf13-ce6c-4888-8ed1-e602f7f60383" width="30%"><br><br>
+Improve And Optimize Your Kafka In Literally Minutes.<br>
+Reduce Costs and Boost Performance by 75% Without Changing a Single Component or Your Existing Kafka!
+
+</div>
+
+# On-prem Superstream data plane deployment
+This README guides deploying and managing Superstream on-prem data plane on Kubernetes platform.
 
 ## Prerequisites
 Before you begin, ensure you have the following prerequisites installed and configured:
@@ -14,19 +22,29 @@ Before you begin, ensure you have the following prerequisites installed and conf
 
 5. [helm-diff plugin](https://github.com/databus23/helm-diff#install) plugin shows a diff explaining what a `helm upgrade` would change. This is useful for understanding what changes will be applied to your Kubernetes resources before actually applying them.
 
-6. This guide assumes that the repository has been cloned and that the installation commands are run from its root directory
+6. `Account ID`, `Activation Token`, `Monitoring Token`. To be received by the Superstream team.
 
-# Configuration
-Before deploying with helmfile, you need to configure your environment settings and any specific parameters required for your deployment. Follow these steps to set up your configuration:
-## Configure Environment Tokens
-Open the `environments/default.yaml` file in your preferred text editor. Add or update the necessary parameters to match your deployment requirements.
+7. Clone this repo
 
-## Configure Kafka Connections Configuration File
-This guide provides detailed instructions on how to configure Kafka connections for the Superstream's data-plane. Our YAML configuration file supports multiple types of Kafka connections, including Confluent Kafka, Confluent Cloud Kafka, Amazon MSK, and Apache Kafka. Follow the steps below to correctly set up your YAML configuration file.
+# Deployed pods
+- 2 Superstream data planes
+- 3 NATS brokers
+- 1 Superstream syslog adapter
+- 1 telegraf agent for monitoring
 
-### Configuration Format
+# Getting started
+Before deploying with helmfile, you need to configure your environment settings and any specific parameters required for your deployment.
+Follow these steps to set up your configuration:
 
-The configuration should be defined in a YAML file as follows:
+## 1. Configure Environment Tokens
+Open the `environments/default.yaml` file in your preferred text editor. 
+Add or update the necessary parameters to match your deployment requirements.
+
+## 2. *Optional.* Configure Kafka Connections (Can take place through the GUI)
+Every data plane is capable of establishing connections with one or several Kafka clusters simultaneously. 
+To determine the optimal strategy for your setup, it is advisable to seek guidance from the Superstream team.
+
+Kafka clusters should be defined in the `config.yaml` file:
 
 ```yaml
 connections:
@@ -35,7 +53,7 @@ connections:
     hosts: # list of bootstrap servers
       - <bootstrap_server_1>
       - <bootstrap_server_2>
-    authentication: # Specify one prefered method for connection
+    authentication: # Specify one preferred method for connection
       method:
         noAuthentication:
           enabled: <true_or_false>
@@ -60,15 +78,11 @@ connections:
             insecureSkipVerify: <true_or_false>
 ```
 
-### Configuration Details
-
-- `name`: A unique name for the connection.
-- `type`: The type of Kafka connection. Options include `confluent_kafka`, `confluent_cloud_kafka`, `MSK`, and `apache_kafka`.
+- `name`: A unique name for the connection to be displayed through Superstream GUI.
+- `type`: The type of Kafka. Options include `confluent_kafka`, `confluent_cloud_kafka`, `MSK`, and `apache_kafka`.
 - `hosts`: A list of bootstrap servers for the Kafka cluster.
 
-### Authentication
-
-Specify one preferred method for connection under `authentication`:
+**Authentication:**
 
 - `noAuthentication`: Set `enabled` to `true` if no authentication is required.
 - `ssl`: For SSL encryption without SASL authentication.
@@ -90,7 +104,7 @@ If TLS is used with SASL, specify the following:
 - `ca`, `cert`, `key`: Paths to your CA certificate, client certificate, and client key files, if required.
 - `insecureSkipVerify`: Set to `true` to bypass server certificate verification (not recommended for production environments).
 
-## Example
+### Example
 
 Below is an example configuration for a SASL_SSL authenticated connection:
 
@@ -115,31 +129,25 @@ connections:
 Replace placeholders (e.g., `<connection_name>`, `<bootstrap_server_1>`) with your actual Kafka connection details. Make sure to follow the correct indentation and formatting as shown in the examples.
 
 For any questions or further assistance, please refer to the official Kafka documentation or reach out to your Kafka provider.
-## Using Helmfile
+## 3. Deploy using Helmfile
 To apply the Helmfile configurations and deploy your Kubernetes resources, follow these steps:
 
 1. Navigate to the Helmfile Directory (where helmfile is stored):
-
-2. Apply Helmfile Configuration:
-
+2. Apply Helmfile:
 Run the following command to apply the Helmfile configuration. This will sync your Helm releases to match the state declared in your helmfile.yaml.
-
 ``` bash
 helmfile -e default apply
 ```
 The `-e default` flag specifies the environment. Adjust this according to your Helmfile's environment configurations.
-
 3. Verify Deployment:
-
 After applying the Helmfile, you can verify the deployment by listing the Helm releases:
-
 ```bash
 helm list
 ```
 
 # Appendix A
 
-## In case the data-plane deployed twice or more on the same cluster next adjustment needed
+## In case a data plane deployed twice or more on the same K8S cluster
 
 ### Edit the following parameter "rbacClusterWide" in the environment section of the helmfile.yaml file
 ```yaml
