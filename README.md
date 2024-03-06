@@ -166,3 +166,52 @@ subjects:
     name: telegraf
     namespace: superstream-new-namespace
 ```
+
+# Appendix B
+
+## To update the Superstream Data Plane version, run the following steps.
+
+1. Retrieve the Most Recent Version of the Superstream Helm Chart
+
+```bash
+helm search repo superstream/superstream --versions | sort -r | head -n 1
+```
+
+2. Modify the `helmVersion` value in the `environments/default.yaml` file.
+
+3. To update your Helm releases in accordance with the state outlined in your `helmfile.yaml`, run the command below. This synchronizes your deployments to the latest configurations:
+   
+``` bash
+helmfile -e default apply
+``` 
+
+### If you're planning to upgrade to a major version, the initial step involves backing up your current `default.yaml` file. Following this, update your repository by pulling the latest changes from the master branch. Once you've updated, merge your backup values back into the environments/default.yaml file. Continue with the process by following these instructions:
+
+1. Check the Pending Changes:
+
+```bash
+helmfile -e default diff
+```
+
+2. Implement the updates to your Helm releases to match the latest helmfile.yaml configuration, ensuring your deployments are updated to the newest settings, by running:
+   
+``` bash
+helmfile -e default apply
+``` 
+
+# Appendix C 
+
+## Steps to Uninstall Superstream Data Plane Deployment.
+
+1. Delete Superstream Data Plane Helm Releases:
+```bash
+helmfile -e default destroy
+```
+
+2. Remove Persistent Storage Bound to the Data Plane:
+
+It's crucial to delete the stateful storage linked to the data plane. Ensure you carefully specify the namespace in the command below before executing it:
+
+```bash
+kubectl delete pvc -l app.kubernetes.io/instance=nats -n <NAMESPACE>
+```
