@@ -73,7 +73,8 @@ releases:
                             },
                             # Reference the system account
                             "system_account": SYS,
-                            "remote_syslog": "udp://{{ .Values.superstreamReleaseName }}-syslog.{{ .Values.namespace }}:5514"
+                            "remote_syslog": "udp://{{ .Values.superstreamReleaseName }}-syslog.{{ .Values.namespace }}:5514",
+                            "max_payload":  << 8MB >>
             }
 
                   
