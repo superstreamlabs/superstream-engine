@@ -13,6 +13,7 @@ environments:
     - ./environments/default.yaml
     - rbacCreate: true 
     - rbacClusterWide: true 
+    - haDeployment: true
     - natsReleaseName: nats # Set the release name for the NATS deployment, which is used to uniquely identify the set of resources deployed for NATS.
     - superstreamReleaseName: superstream # Specify the release name for the Superstream deployment, uniquely identifying the resources for Superstream.
     - telegrafReleaseName: telegraf # Define the release name for the Telegraf deployment, used for identifying the Telegraf resources in the cluster.
@@ -56,7 +57,7 @@ releases:
           type: Opaque    
       - config:
             cluster: 
-              enabled: true
+              enabled: {{ .Values.haDeployment }}
             jetstream: 
               enabled: true
             merge: { 
