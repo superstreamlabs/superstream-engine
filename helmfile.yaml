@@ -43,17 +43,7 @@ releases:
       - promExporter:
           enabled: true
       - natsBox:
-          enabled: false         
-      - extraResources: 
-        - apiVersion: v1
-          data:
-            ACTIVATION_TOKEN: ZG9VbFVSVGlWRXJBCg==
-          kind: Secret
-          metadata:
-            annotations: {}
-            labels: {}
-            name: nats-creds
-          type: Opaque    
+          enabled: false  
       - config:
             cluster: 
               enabled: true
@@ -120,9 +110,9 @@ releases:
                 accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
           - prometheus:
               monitor_kubernetes_pods_namespace: "{{ .Values.namespace }}"
-              kubernetes_label_selector: "app.kubernetes.io/name=nats,app.kubernetes.io/component=nats"
+              kubernetes_label_selector: "app.kubernetes.io/name in (nats, superstream)"
               monitor_kubernetes_pods: true
-              monitor_kubernetes_pods_method: "settings"
+              monitor_kubernetes_pods_method: "settings+annotations"
               monitor_kubernetes_pods_port: 7777
               tags:
                 accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
