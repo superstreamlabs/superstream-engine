@@ -138,18 +138,18 @@ Run the following command to apply the Helmfile configuration. This will sync yo
 ``` bash
 helmfile -e default apply
 ```
-The `-e default` flag specifies the environment. Adjust this according to your Helmfile's environment configurations.
+The `-e default` flag specifies the environment. You can adjust this according to your Helmfile's environment configurations.
 3. Verify Deployment:
 After applying the Helmfile, you can verify the deployment by listing the Helm releases:
 ```bash
 helm list
 ```
 
-# Appendix A
+# Appendix A - Cluster Role Configuration
 
 ## In case a data plane deployed twice or more on the same K8S cluster
 
-### Edit the following parameter "rbacClusterWide" in the environment section of the helmfile.yaml file
+### Edit the following parameter `rbacClusterWide` in the environment section of the helmfile.yaml file
 ```yaml
 environments:
   default:
@@ -159,7 +159,7 @@ environments:
     - rbacClusterWide: true
 ```
 
-### Update "telegraf" Cluster Role Binding with the additional namespace. Add the following to the "subjects" section. (edit namespace variable)
+### Update `telegraf` Cluster Role Binding with the additional namespace. Add the following to the `subjects` section. (edit namespace variable)
 ```yaml
 subjects:
   - kind: ServiceAccount
@@ -167,7 +167,20 @@ subjects:
     namespace: superstream-new-namespace
 ```
 
-# Appendix B
+# Appendix B - Non-HA Deployment
+
+## For testing purposes only Superstream can be deployed without HA capabilities
+
+### Change to `false` the following parameter `haDeployment` in the environment section of the helmfile.yaml file
+```yaml
+environments:
+  default:
+    values:
+    - ./environments/default.yaml
+    - haDeployment: false
+```
+
+# Appendix C - Superstream Update
 
 ## To update the Superstream Data Plane version, run the following steps.
 
@@ -199,7 +212,7 @@ helmfile -e default diff
 helmfile -e default apply
 ``` 
 
-# Appendix C 
+# Appendix D - Uninstall
 
 ## Steps to Uninstall Superstream Data Plane Deployment.
 
