@@ -182,7 +182,9 @@ environments:
 
 # Appendix C - Superstream Update
 
-## To update the Superstream Data Plane version, run the following steps.
+## Minor update
+
+### To update the Superstream Data Plane version, run the following steps.
 
 1. Retrieve the Most Recent Version of the Superstream Helm Chart
 
@@ -198,15 +200,32 @@ helm search repo superstream/superstream --versions | sort -r | head -n 1
 helmfile -e default apply
 ``` 
 
-### If you're planning to upgrade to a major version, the initial step involves backing up your current `default.yaml` file. Following this, update your repository by pulling the latest changes from the master branch. Once you've updated, merge your backup values back into the environments/default.yaml file. Continue with the process by following these instructions:
+## Major update
 
-1. Check the Pending Changes:
+### The first step involves backing up your current `default.yaml` file. Following this, update your repository by pulling the latest changes from the master branch. Once updated, merge your backup values into the environments/default.yaml file. Continue with the process by following these instructions:
+
+1. Backup the `defualt.yaml` file:
+   
+```bash
+cp environments/default.yaml environments/default.yaml.bkp
+```
+
+2. Pull the latest updates from the repository master branch
+
+```bash
+git stash push -m "stash changes"
+git pull
+```
+
+3. Edit the new version of the `default.yaml` file according to the previous backup.
+
+4. Check the Pending Changes:
 
 ```bash
 helmfile -e default diff
 ```
 
-2. Implement the updates to your Helm releases to match the latest helmfile.yaml configuration, ensuring your deployments are updated to the newest settings, by running:
+5. Implement the updates to your Helm releases to match the latest helmfile.yaml configuration, ensuring your deployments are updated to the newest settings, by running:
    
 ``` bash
 helmfile -e default apply
