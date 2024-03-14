@@ -213,7 +213,7 @@ cp environments/default.yaml environments/default.yaml.bkp
 2. Pull the latest updates from the repository master branch
 
 ```bash
-git stash push -m "stash changes"
+git stash
 git pull
 ```
 
