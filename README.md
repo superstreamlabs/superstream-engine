@@ -32,6 +32,18 @@ Before you begin, ensure you have the following prerequisites installed and conf
 - 1 Superstream syslog adapter
 - 1 telegraf agent for monitoring
 
+# System Requirments 
+
+To ensure optimal performance and stability of the application within a Kubernetes environment, the following system requirements and deployment guidelines must be met:
+
+Hardware Requirements:
+ - `CPU`: Minimum of 4 CPU cores.
+ - `RAM`: Minimum of 4 GB.
+Allocating sufficient resources is crucial to meet or exceed these specifications for the application to function as intended within a Kubernetes pod.
+
+Deployment Restrictions:
+Cloud Instances: The application must be deployed on dedicated or reserved instances within the Kubernetes cluster. It `cannot run on spot instances` due to the potential for unexpected termination, which could disrupt the service.
+
 # Getting started
 Before deploying with helmfile, you need to configure your environment settings and any specific parameters required for your deployment.
 Follow these steps to set up your configuration:
