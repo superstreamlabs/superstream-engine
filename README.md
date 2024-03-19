@@ -18,7 +18,7 @@ Before you begin, ensure you have the following prerequisites installed and conf
 
 3. [Helm](https://helm.sh/docs/intro/install/): Helm is a package manager for Kubernetes that facilitates the deployment and management of applications. Install Helm if it's not already set up.
 
-4. [Helmfile](https://helmfile.readthedocs.io/en/latest/#installation): Helmfile is a declarative spec for deploying helm charts. It lets you keep descriptions of your desired state of Helm charts in a versioned YAML file. Install Helmfile if you haven't.
+4. [Helmfile](https://helmfile.readthedocs.io/en/latest/#installation): Helmfile is a declarative spec for deploying helm charts. It lets you keep descriptions of your desired state of Helm charts in a versioned YAML file. Install Helmfile if you haven't. (The Linux OS binary is available [here](https://github.com/helmfile/helmfile/releases).)
 
 5. [helm-diff plugin](https://github.com/databus23/helm-diff#install) plugin shows a diff explaining what a `helm upgrade` would change. This is useful for understanding what changes will be applied to your Kubernetes resources before actually applying them.
 
@@ -41,6 +41,9 @@ Hardware Requirements:
  - `RAM`: Minimum of 4 GB.
 Allocating sufficient resources is crucial to meet or exceed these specifications for the application to function as intended within a Kubernetes pod.
 
+Storage Requirements:
+Default Storage Class: A default storage class must be configured and available in the Kubernetes cluster to dynamically provision storage as required by the application.
+
 Deployment Restrictions:
 Cloud Instances: The application must be deployed on dedicated or reserved instances within the Kubernetes cluster. It `cannot run on spot instances` due to the potential for unexpected termination, which could disrupt the service.
 
@@ -48,11 +51,17 @@ Cloud Instances: The application must be deployed on dedicated or reserved insta
 Before deploying with helmfile, you need to configure your environment settings and any specific parameters required for your deployment.
 Follow these steps to set up your configuration:
 
-## 1. Configure Environment Tokens
+## 1. Clone the current repository using HTTPS with the following command:
+
+```bash
+git clone https://github.com/memphisdev/superstream-dp-deployment.git
+```
+
+## 2. Configure Environment Tokens
 Open the `environments/default.yaml` file in your preferred text editor. 
 Add or update the necessary parameters to match your deployment requirements.
 
-## 2. *Optional.* Configure Kafka Connections (Can take place through the GUI)
+## 3. *Optional.* Configure Kafka Connections (Can take place through the GUI)
 Every data plane is capable of establishing connections with one or several Kafka clusters simultaneously. 
 To determine the optimal strategy for your setup, it is advisable to seek guidance from the Superstream team.
 
