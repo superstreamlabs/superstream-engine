@@ -157,29 +157,7 @@ After applying the Helmfile, you can verify the deployment by listing the Helm r
 helm list
 ```
 
-# Appendix A - Cluster Role Configuration
-
-## In case a data plane deployed twice or more on the same K8S cluster
-
-### Edit the following parameter `rbacClusterWide` in the environment section of the helmfile.yaml file
-```yaml
-environments:
-  default:
-    values:
-    - ./environments/default.yaml
-    - rbacCreate: true 
-    - rbacClusterWide: true
-```
-
-### Update `telegraf` Cluster Role Binding with the additional namespace. Add the following to the `subjects` section. (edit namespace variable)
-```yaml
-subjects:
-  - kind: ServiceAccount
-    name: telegraf
-    namespace: superstream-new-namespace
-```
-
-# Appendix B - Non-HA Deployment
+# Appendix A - Non-HA Deployment
 
 ## For testing purposes only Superstream can be deployed without HA capabilities
 
@@ -192,9 +170,9 @@ environments:
     - haDeployment: false
 ```
 
-# Appendix C - Superstream Update
+# Appendix B - Superstream Update
 
-## Minor update
+## Minor update - X.X.1 -> X.X.2
 
 ### To update the Superstream Data Plane version, run the following steps.
 
@@ -213,7 +191,7 @@ environments:
 helmfile -e default apply
 ``` 
 
-## Major update
+## Major update - X.1.X -> X.2.X
 
 ### The first step involves backing up your current `default.yaml` file. Following this, update your repository by pulling the latest changes from the master branch. Once updated, merge your backup values into the environments/default.yaml file. Continue with the process by following these instructions:
 
@@ -244,7 +222,7 @@ helmfile -e default diff
 helmfile -e default apply
 ``` 
 
-# Appendix D - Uninstall
+# Appendix C - Uninstall
 
 ## Steps to Uninstall Superstream Data Plane Deployment.
 
