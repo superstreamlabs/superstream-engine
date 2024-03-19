@@ -201,7 +201,8 @@ environments:
 1. Retrieve the Most Recent Version of the Superstream Helm Chart
 
 ```bash
-helm search repo superstream/superstream --versions | sort -r | head -n 1
+ helm repo add superstream https://k8s.superstream.dev/charts/ --force-update
+ helm search repo superstream/superstream --versions | head -n 2
 ```
 
 2. Modify the `helmVersion` value in the `environments/default.yaml` file.
