@@ -11,8 +11,6 @@ environments:
   default:
     values:
     - ./environments/default.yaml
-    - rbacCreate: true 
-    - rbacClusterWide: true 
     - haDeployment: true
     - requestCpu: '4'
     - requestMemory: 4Gi
@@ -75,15 +73,12 @@ releases:
     installed: true
     namespace: {{ .Values.namespace }} 
     chart: influxdata/telegraf 
-    version: 1.8.42
+    version: 1.8.43
     values:
       - rbac:
-          create: {{ .Values.rbacCreate }}
-          clusterWide: {{ .Values.rbacClusterWide }}
           rules:    
           - apiGroups: [""]
             resources:
-            - namespaces
             - services
             - endpoints
             - pods
