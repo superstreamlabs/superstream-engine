@@ -51,7 +51,7 @@ Cloud Instances: The application must be deployed on dedicated or reserved insta
 Before deploying with helmfile, you need to configure your environment settings and any specific parameters required for your deployment.
 Follow these steps to set up your configuration:
 
-## 1. Clone the current repository using HTTPS with the following command:
+## 1. Clone the repository
 
 ```bash
 git clone https://github.com/memphisdev/superstream-dp-deployment.git
