@@ -14,8 +14,8 @@ environments:
     - rbacCreate: true 
     - rbacClusterWide: true 
     - haDeployment: true
-    - requestCpu: '4'
-    - requestMemory: 4Gi
+    - requestCpu: '2'
+    - requestMemory: 2Gi
     - natsReleaseName: nats # Set the release name for the NATS deployment, which is used to uniquely identify the set of resources deployed for NATS.
     - superstreamReleaseName: superstream # Specify the release name for the Superstream deployment, uniquely identifying the resources for Superstream.
     - telegrafReleaseName: telegraf # Define the release name for the Telegraf deployment, used for identifying the Telegraf resources in the cluster.
