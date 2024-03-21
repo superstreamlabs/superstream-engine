@@ -166,29 +166,7 @@ After applying the Helmfile, you can verify the deployment by listing the Helm r
 helm list
 ```
 
-# Appendix A - Cluster Role Configuration
-
-## In case a data plane deployed twice or more on the same K8S cluster
-
-### Edit the following parameter `rbacClusterWide` in the environment section of the helmfile.yaml file
-```yaml
-environments:
-  default:
-    values:
-    - ./environments/default.yaml
-    - rbacCreate: true 
-    - rbacClusterWide: true
-```
-
-### Update `telegraf` Cluster Role Binding with the additional namespace. Add the following to the `subjects` section. (edit namespace variable)
-```yaml
-subjects:
-  - kind: ServiceAccount
-    name: telegraf
-    namespace: superstream-new-namespace
-```
-
-# Appendix B - Non-HA Deployment
+# Appendix A - Non-HA Deployment
 
 ## For testing purposes only Superstream can be deployed without HA capabilities
 
@@ -201,9 +179,9 @@ environments:
     - haDeployment: false
 ```
 
-# Appendix C - Superstream Update
+# Appendix B - Superstream Update
 
-## Minor update
+## Minor update - X.X.1 -> X.X.2
 
 ### To update the Superstream Data Plane version, run the following steps.
 
@@ -222,7 +200,7 @@ environments:
 helmfile -e default apply
 ``` 
 
-## Major update
+## Major update - X.1.X -> X.2.X
 
 ### The first step involves backing up your current `default.yaml` file. Following this, update your repository by pulling the latest changes from the master branch. Once updated, merge your backup values into the environments/default.yaml file. Continue with the process by following these instructions:
 
@@ -253,7 +231,7 @@ helmfile -e default diff
 helmfile -e default apply
 ``` 
 
-# Appendix D - Uninstall
+# Appendix C - Uninstall
 
 ## Steps to Uninstall Superstream Data Plane Deployment.
 
@@ -268,4 +246,115 @@ It's crucial to delete the stateful storage linked to the data plane. Ensure you
 
 ```bash
 kubectl delete pvc -l app.kubernetes.io/instance=nats -n <NAMESPACE>
+```
+
+# Appendix D - Custom changes to the helmfile
+
+## StorageClass definition for NATS service
+
+If there is no default storageClass configured for the Kubernetes cluster, it should be configured manually from the helmfile.yaml.
+
+1. Open helmfile.yaml with preferred editor and navigate to the nats configuration section:
+
+```yaml
+releases:
+  - name: {{ .Values.natsReleaseName }}
+    installed: true
+    namespace: {{ .Values.namespace }}
+    chart: nats/nats
+    version: 1.1.7
+    values:
+      - container:
+          image: 
+            tag: alpine3.19
+          env: 
+            ACTIVATION_TOKEN:
+              valueFrom:
+                secretKeyRef:
+                  name: superstream-creds
+                  key: ACTIVATION_TOKEN 
+      - promExporter:
+          enabled: true
+      - natsBox:
+          enabled: false 
+      - config:
+            cluster: 
+              enabled: {{ .Values.haDeployment }}
+            jetstream: 
+              enabled: true
+```
+
+2. Add the following section after `jetsream.enabled` line and mention the name of the desired storageClass:
+
+```yaml
+  jetstream:
+    enabled: true
+    fileStore:
+      pvc:
+        storageClassName: <THE_NAME>
+```
+
+3. Run the deployment
+
+```bash
+helmfile -e default apply
+```
+
+## Disable HPA - autoscalling ability of the Data Plane service
+
+If no autoscaling CRD is configured for the Kubernetes cluster, it should be configured manually from the helmfile.yaml.
+
+1. Open helmfile.yaml with preferred editor and navigate to the data plane(superstream) configuration section:
+
+```yaml
+  - name: {{ .Values.superstreamReleaseName }} 
+    installed: true
+    namespace: {{ .Values.namespace }}
+    chart: ./superstream
+    values:
+      - config.yaml
+      - superstream:
+          environment: {{ .Values.environment }}
+      - dataPlane:
+          image:
+            repository: {{ .Values.imageRepo }}
+            tag:  {{ .Values.imageTag }}
+          imagePullSecrets:
+            - name: regcred            
+          secret:
+            activationToken: {{ .Values.activationToken }}
+          resources:
+            requests:
+              cpu: {{ .Values.requestCpu }}
+              memory: {{ .Values.requestMemory }}
+          controlPlane:
+            host: {{ .Values.controlPlane }}
+          internalNatsConnection:
+            host: {{ .Values.natsReleaseName }}
+          releaseDate: {{ .Values.releaseDate }}
+```
+
+2. Add the following section at the end of the configuration file:
+
+```yaml
+autoscaling:
+    enabled: false
+```
+
+Example:
+```yaml
+...
+          controlPlane:
+            host: {{ .Values.controlPlane }}
+          internalNatsConnection:
+            host: {{ .Values.natsReleaseName }}
+          releaseDate: {{ .Values.releaseDate }}
+          autoscaling:
+            enabled: false
+```
+
+3. Run the deployment
+
+```bash
+helmfile -e default apply
 ```

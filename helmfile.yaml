@@ -11,11 +11,9 @@ environments:
   default:
     values:
     - ./environments/default.yaml
-    - rbacCreate: true 
-    - rbacClusterWide: true 
     - haDeployment: true
-    - requestCpu: '4'
-    - requestMemory: 4Gi
+    - requestCpu: '2'
+    - requestMemory: 2Gi
     - natsReleaseName: nats # Set the release name for the NATS deployment, which is used to uniquely identify the set of resources deployed for NATS.
     - superstreamReleaseName: superstream # Specify the release name for the Superstream deployment, uniquely identifying the resources for Superstream.
     - telegrafReleaseName: telegraf # Define the release name for the Telegraf deployment, used for identifying the Telegraf resources in the cluster.
@@ -32,11 +30,9 @@ releases:
     installed: true
     namespace: {{ .Values.namespace }}
     chart: nats/nats
-    version: 1.1.7
+    version: 1.1.10
     values:
       - container:
-          image: 
-            tag: alpine3.19
           env: 
             ACTIVATION_TOKEN:
               valueFrom:
@@ -75,15 +71,12 @@ releases:
     installed: true
     namespace: {{ .Values.namespace }} 
     chart: influxdata/telegraf 
-    version: 1.8.42
+    version: 1.8.43
     values:
       - rbac:
-          create: {{ .Values.rbacCreate }}
-          clusterWide: {{ .Values.rbacClusterWide }}
           rules:    
           - apiGroups: [""]
             resources:
-            - namespaces
             - services
             - endpoints
             - pods
