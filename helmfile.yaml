@@ -30,11 +30,9 @@ releases:
     installed: true
     namespace: {{ .Values.namespace }}
     chart: nats/nats
-    version: 1.1.7
+    version: 1.1.10
     values:
       - container:
-          image: 
-            tag: alpine3.19
           env: 
             ACTIVATION_TOKEN:
               valueFrom:
