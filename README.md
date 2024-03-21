@@ -247,3 +247,114 @@ It's crucial to delete the stateful storage linked to the data plane. Ensure you
 ```bash
 kubectl delete pvc -l app.kubernetes.io/instance=nats -n <NAMESPACE>
 ```
+
+# Appendix D - Custom changes to the helmfile
+
+## StorageClass definition for NATS service
+
+If there is no default storageClass configured for the Kubernetes cluster, it should be configured manually from the helmfile.yaml.
+
+1. Open helmfile.yaml with preferred editor and navigate to the nats configuration section:
+
+```yaml
+releases:
+  - name: {{ .Values.natsReleaseName }}
+    installed: true
+    namespace: {{ .Values.namespace }}
+    chart: nats/nats
+    version: 1.1.7
+    values:
+      - container:
+          image: 
+            tag: alpine3.19
+          env: 
+            ACTIVATION_TOKEN:
+              valueFrom:
+                secretKeyRef:
+                  name: superstream-creds
+                  key: ACTIVATION_TOKEN 
+      - promExporter:
+          enabled: true
+      - natsBox:
+          enabled: false 
+      - config:
+            cluster: 
+              enabled: {{ .Values.haDeployment }}
+            jetstream: 
+              enabled: true
+```
+
+2. Add the following section after `jetsream.enabled` line and mention the name of the desired storageClass:
+
+```yaml
+  jetstream:
+    enabled: true
+    fileStore:
+      pvc:
+        storageClassName: <THE_NAME>
+```
+
+3. Run the deployment
+
+```bash
+helmfile -e default apply
+```
+
+## Disable HPA - autoscalling ability of the Data Plane service
+
+If no autoscaling CRD is configured for the Kubernetes cluster, it should be configured manually from the helmfile.yaml.
+
+1. Open helmfile.yaml with preferred editor and navigate to the data plane(superstream) configuration section:
+
+```yaml
+  - name: {{ .Values.superstreamReleaseName }} 
+    installed: true
+    namespace: {{ .Values.namespace }}
+    chart: ./superstream
+    values:
+      - config.yaml
+      - superstream:
+          environment: {{ .Values.environment }}
+      - dataPlane:
+          image:
+            repository: {{ .Values.imageRepo }}
+            tag:  {{ .Values.imageTag }}
+          imagePullSecrets:
+            - name: regcred            
+          secret:
+            activationToken: {{ .Values.activationToken }}
+          resources:
+            requests:
+              cpu: {{ .Values.requestCpu }}
+              memory: {{ .Values.requestMemory }}
+          controlPlane:
+            host: {{ .Values.controlPlane }}
+          internalNatsConnection:
+            host: {{ .Values.natsReleaseName }}
+          releaseDate: {{ .Values.releaseDate }}
+```
+
+2. Add the following section at the end of the configuration file:
+
+```yaml
+autoscaling:
+    enabled: false
+```
+
+Example:
+```yaml
+...
+          controlPlane:
+            host: {{ .Values.controlPlane }}
+          internalNatsConnection:
+            host: {{ .Values.natsReleaseName }}
+          releaseDate: {{ .Values.releaseDate }}
+          autoscaling:
+            enabled: false
+```
+
+3. Run the deployment
+
+```bash
+helmfile -e default apply
+```
