@@ -1,4 +1,4 @@
-helmVersion: 0.1.10 # Define the version of the superstream helm chart.
+helmVersion: 0.2.1 # Define the version of the superstream helm chart.
 namespace: superstream # Specify the Kubernetes namespace where the resources will be deployed, isolating them within this designated namespace.
 name: <DATAPLANE_NAME> # Define the data plane name within 32 characters, excluding '.', and using only letters, numbers, '-', and '_'.
 accountId: "" # Provide the account ID that is associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
