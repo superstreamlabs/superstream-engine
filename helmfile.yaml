@@ -134,7 +134,7 @@ releases:
               monitor_kubernetes_pods_port: 7777
               tags:
                 accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
-           - internal:
+          - internal:
               tags:
                 accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
                 chart: "telegraf-{{ .Values.telegrafHelmVersion }}"
