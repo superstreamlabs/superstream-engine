@@ -103,7 +103,24 @@ releases:
                 bucket: "metrics"
                 content_encoding: "gzip"
                 token: "{{ .Values.monitoringToken }}"
-                namedrop: ["syslog"]                         
+                namedrop: ["syslog"]
+          processors:
+            - enum:
+                mapping:
+                  field: "status"
+                  dest: "status_code"
+                  value_mappings:
+                    healthy: 1
+                    problem: 2
+                    critical: 3    
+            - starlark:
+                namepass: ["syslog"]  
+                source: |
+                  def apply(metric):
+                      unique_str = metric.name + str(metric.fields) + str(metric.tags)
+                      random_value = str(hash(unique_str))[-8:]
+                      metric.tags['eventId'] = random_value
+                      return metric                                          
           inputs:
           - syslog:
               server: "udp://:6514"
