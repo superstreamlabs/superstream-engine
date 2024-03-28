@@ -105,7 +105,24 @@ releases:
                 content_encoding: "gzip"
                 http_headers:
                   Authorization: "{{ .Values.activationToken }}"
-                namedrop: ["syslog"]                         
+                namedrop: ["syslog"] 
+          processors:
+            - enum:
+                mapping:
+                  field: "status"
+                  dest: "status_code"
+                  value_mappings:
+                    healthy: 1
+                    problem: 2
+                    critical: 3    
+            - starlark:
+                namepass: ["syslog"]  
+                source: |
+                  def apply(metric):
+                      unique_str = metric.name + str(metric.fields) + str(metric.tags)
+                      random_value = str(hash(unique_str))[-8:]
+                      metric.tags['eventId'] = random_value
+                      return metric                                         
           inputs:
           - syslog:
               server: "udp://:6514"
@@ -119,7 +136,7 @@ releases:
               monitor_kubernetes_pods_port: 7777
               tags:
                 accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
-           - internal:
+          - internal:
               tags:
                 accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
                 chart: "telegraf-{{ .Values.telegrafHelmVersion }}"
