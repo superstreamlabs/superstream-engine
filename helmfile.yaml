@@ -133,6 +133,7 @@ releases:
       - config.yaml
       - superstream:
           environment: {{ .Values.name }}
+          ha: {{ .Values.haDeployment }}
       - dataPlane:
           secret:
             activationToken: {{ .Values.activationToken }}
