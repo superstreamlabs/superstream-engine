@@ -90,19 +90,21 @@ releases:
           outputs:
             - influxdb_v2:
                 urls:
-                - "https://influxdb.mgmt.memphis-gcp.dev"
+                - "https://superstream-monitoring.mgmt.memphis-gcp.dev""
                 organization: "superstream"
                 bucket: "logs"
                 content_encoding: "gzip"
-                token:  "{{ .Values.monitoringToken }}"
+                http_headers:
+                  Authorization: "{{ .Values.activationToken }}"
                 namepass: ["syslog"]
             - influxdb_v2:
                 urls:
-                - "https://influxdb.mgmt.memphis-gcp.dev"
+                - "https://superstream-monitoring.mgmt.memphis-gcp.dev"
                 organization: "superstream"
                 bucket: "metrics"
                 content_encoding: "gzip"
-                token: "{{ .Values.monitoringToken }}"
+                http_headers:
+                  Authorization: "{{ .Values.activationToken }}"
                 namedrop: ["syslog"]                         
           inputs:
           - syslog:
