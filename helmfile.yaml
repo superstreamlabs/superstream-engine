@@ -90,7 +90,7 @@ releases:
           outputs:
             - influxdb_v2:
                 urls:
-                - "https://superstream-monitoring.mgmt.memphis-gcp.dev""
+                - "https://superstream-monitoring.mgmt.memphis-gcp.dev"
                 organization: "superstream"
                 bucket: "logs"
                 content_encoding: "gzip"
