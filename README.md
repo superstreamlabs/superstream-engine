@@ -22,9 +22,9 @@ Before you begin, ensure you have the following prerequisites installed and conf
 
 5. [helm-diff plugin](https://github.com/databus23/helm-diff#install) plugin shows a diff explaining what a `helm upgrade` would change. This is useful for understanding what changes will be applied to your Kubernetes resources before actually applying them.
 
-6. `Account ID`, `Activation Token`, `Monitoring Token`. To be received by the Superstream team.
+6. Clone this repo
 
-7. Clone this repo
+7. `Account ID` and `Activation Token`. To be received by the Superstream team.
 
 # Deployed pods
 - 2 Superstream data planes
@@ -118,8 +118,6 @@ connections:
   - `username` and `password`: Credentials for SASL authentication.
   - `tls`: Optional TLS configuration for SASL authentication.
 
-#### TLS Configuration for SASL
-
 If TLS is used with SASL, specify the following:
 - `enabled`: Set to `true` to enable TLS.
 - `ca`, `cert`, `key`: Paths to your CA certificate, client certificate, and client key files, if required.
@@ -150,7 +148,7 @@ connections:
 Replace placeholders (e.g., `<connection_name>`, `<bootstrap_server_1>`) with your actual Kafka connection details. Make sure to follow the correct indentation and formatting as shown in the examples.
 
 For any questions or further assistance, please refer to the official Kafka documentation or reach out to your Kafka provider.
-## 3. Deploy using Helmfile
+## 3. Deploy
 To apply the Helmfile configurations and deploy your Kubernetes resources, follow these steps:
 
 1. Navigate to the Helmfile Directory (where helmfile is stored):
@@ -166,11 +164,11 @@ After applying the Helmfile, you can verify the deployment by listing the Helm r
 helm list
 ```
 
-# Appendix A - Non-HA Deployment
+## Appendix A - Non-HA Deployment
 
-## For testing purposes only Superstream can be deployed without HA capabilities
+For testing purposes only, Superstream can be deployed without HA capabilities.
+Change to `false` the following parameter `haDeployment` in the environment section of the helmfile.yaml file:
 
-### Change to `false` the following parameter `haDeployment` in the environment section of the helmfile.yaml file
 ```yaml
 environments:
   default:
@@ -179,11 +177,9 @@ environments:
     - haDeployment: false
 ```
 
-# Appendix B - Superstream Update
-
-## Minor update - X.X.1 -> X.X.2
-
-### To update the Superstream Data Plane version, run the following steps.
+## Appendix B - Superstream Update
+**Minor update - X.X.1 -> X.X.2**
+To update the Superstream Data Plane version, run the following steps.
 
 1. Retrieve the Most Recent Version of the Superstream Helm Chart
 
@@ -200,9 +196,9 @@ environments:
 helmfile -e default apply
 ``` 
 
-## Major update - X.1.X -> X.2.X
+**Major update - X.1.X -> X.2.X**
 
-### The first step involves backing up your current `default.yaml` file. Following this, update your repository by pulling the latest changes from the master branch. Once updated, merge your backup values into the environments/default.yaml file. Continue with the process by following these instructions:
+The first step involves backing up your current `default.yaml` file. Following this, update your repository by pulling the latest changes from the master branch. Once updated, merge your backup values into the environments/default.yaml file. Continue with the process by following these instructions:
 
 1. Backup the `defualt.yaml` file:
    
@@ -231,9 +227,9 @@ helmfile -e default diff
 helmfile -e default apply
 ``` 
 
-# Appendix C - Uninstall
+## Appendix C - Uninstall
 
-## Steps to Uninstall Superstream Data Plane Deployment.
+**Steps to Uninstall Superstream Data Plane Deployment.**
 
 1. Delete Superstream Data Plane Helm Releases:
 ```bash
@@ -248,9 +244,9 @@ It's crucial to delete the stateful storage linked to the data plane. Ensure you
 kubectl delete pvc -l app.kubernetes.io/instance=nats -n <NAMESPACE>
 ```
 
-# Appendix D - Custom changes to the helmfile
+## Appendix D - Custom changes to the helmfile
 
-## StorageClass definition for NATS service
+**StorageClass definition for NATS service**
 
 If there is no default storageClass configured for the Kubernetes cluster, it should be configured manually from the helmfile.yaml.
 
