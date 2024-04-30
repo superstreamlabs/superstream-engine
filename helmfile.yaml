@@ -87,6 +87,22 @@ releases:
             - pods
             verbs: ["get", "list", "watch"]          
       - config:
+          agent:
+            interval: "10s"
+            round_interval: true
+            metric_batch_size: 1000
+            metric_buffer_limit: 10000
+            collection_jitter: "0s"
+            flush_interval: "10s"
+            flush_jitter: "0s"
+            precision: ""
+            debug: false
+            quiet: false
+            logfile: "/tmp/telegraf.log"
+            logfile_rotation_max_size: "10MB"
+            logfile_rotation_max_archives: 5
+            hostname: "$HOSTNAME"
+            omit_hostname: false        
           outputs:
             - influxdb_v2:
                 urls:
@@ -96,7 +112,7 @@ releases:
                 content_encoding: "gzip"
                 http_headers:
                   Authorization: "{{ .Values.activationToken }}"
-                namepass: ["syslog"]
+                namepass: ["syslog","telegraf_logs"]
             - influxdb_v2:
                 urls:
                 - "https://superstream-monitoring.mgmt.memphis-gcp.dev"
@@ -105,7 +121,7 @@ releases:
                 content_encoding: "gzip"
                 http_headers:
                   Authorization: "{{ .Values.activationToken }}"
-                namedrop: ["syslog"] 
+                namedrop: ["syslog","telegraf_logs"] 
           processors:
             - enum:
                 mapping:
@@ -140,6 +156,16 @@ releases:
               tags:
                 accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
                 chart: "telegraf-{{ .Values.telegrafHelmVersion }}"
+          - tail:
+              files:
+                - "/tmp/telegraf.log"
+              from_beginning: false  
+              data_format: "grok"
+              grok_patterns:
+                - "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:loglevel}! %{GREEDYDATA:message}"
+              grok_custom_patterns: |
+                LOGLEVEL [IWE] 
+              name_override: "telegraf_logs"                   
 
   - name: {{ .Values.superstreamReleaseName }} 
     installed: true
