@@ -226,8 +226,65 @@ helmfile -e default diff
 ``` bash
 helmfile -e default apply
 ``` 
+## Appendix C - Superstream Client Configuration
 
-## Appendix C - Uninstall
+**Client Connection**
+
+To establish a connection of a new client, the data plane's Fully Qualified Domain Name (FQDN) for the Superstream service must be accessible and exposed. Below are the connection procedures based on the client’s location relative to the Superstream service:
+
+**Internal Clients (Within the Same Kubernetes Cluster):**
+Ensure the client is in the same Kubernetes cluster as the Superstream service.
+1. Configure the Superstream service's Kubernetes FQDN for use by constructing it as follows:
+```bash
+nats.<NAMESPACE>.svc.cluster.local
+```
+Replace <NAMESPACE> with the namespace where Superstream is deployed.
+
+**External Clients or Restricted Inter-Namespace Communication:**
+If the client is outside the Kubernetes cluster or if namespace communication is restricted, the Superstream FQDN needs to be externally exposed.
+1. For clients in environments like AWS EKS, you can expose the Superstream service using a LoadBalancer. Below is an example of the required service configuration in a YAML file (svc.yaml):
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: superstream-host-external
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-name: superstream-host-external
+spec:
+  ports:
+  - name: superstream-host-external
+    port: 4222
+    protocol: TCP
+    targetPort: 4222
+  selector:
+    app.kubernetes.io/component: nats
+    app.kubernetes.io/instance: nats
+    app.kubernetes.io/name: nats
+  type: LoadBalancer
+```
+
+2. To deploy this configuration, use the following command, replacing <NAMESPACE> with the appropriate namespace:
+```bash
+kubectl apply -f svc.yaml -n <NAMESPACE>
+```
+
+3. Validate that the load balancer is created successfully and the FQDN is created:
+```bash
+$ kubectl get svc superstream-host-external -n <NAMESPACE>
+NAME                             TYPE           CLUSTER-IP      EXTERNAL-IP                                                                   PORT(S)                         AGE
+superstream-host-external   LoadBalancer   10.100.100.100   superstream-host-external.elb.us-east-1.amazonaws.com   4222:32074/TCP   1d
+```
+
+The exposed FQDN should be used together with the provided activation token with the following variables in the client configuration:
+```yaml
+SUPERSTREAM_HOST=<FQDN>
+SUPERSTREAM_TOKEN=<ACTIVATION_TOKEN>
+```
+
+## Appendix D - Uninstall
 
 **Steps to Uninstall Superstream Data Plane Deployment.**
 
@@ -244,7 +301,7 @@ It's crucial to delete the stateful storage linked to the data plane. Ensure you
 kubectl delete pvc -l app.kubernetes.io/instance=nats -n <NAMESPACE>
 ```
 
-## Appendix D - Custom changes to the helmfile
+## Appendix E - Custom changes to the helmfile
 
 **StorageClass definition for NATS service**
 
