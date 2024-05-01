@@ -232,16 +232,6 @@ helmfile -e default apply
 
 To establish a connection of a new client, the data plane's Fully Qualified Domain Name (FQDN) for the Superstream service must be accessible and exposed. Below are the connection procedures based on the client’s location relative to the Superstream service:
 
-**Internal Clients (Within the Same Kubernetes Cluster):**
-Ensure the client is in the same Kubernetes cluster as the Superstream service.
-1. Configure the Superstream service's Kubernetes FQDN for use by constructing it as follows:
-```bash
-nats.<NAMESPACE>.svc.cluster.local
-```
-Replace <NAMESPACE> with the namespace where Superstream is deployed.
-
-**External Clients or Restricted Inter-Namespace Communication:**
-If the client is outside the Kubernetes cluster or if namespace communication is restricted, the Superstream FQDN needs to be externally exposed.
 1. For clients in environments like AWS EKS, you can expose the Superstream service using a LoadBalancer. Below is an example of the required service configuration in a YAML file (svc.yaml):
 ```yaml
 apiVersion: v1
