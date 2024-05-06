@@ -12,6 +12,7 @@ environments:
     values:
     - ./environments/default.yaml
     - haDeployment: true
+    - skipLocalAuthentication: true
     - requestCpu: '2'
     - requestMemory: 2Gi
     - natsReleaseName: nats # Set the release name for the NATS deployment, which is used to uniquely identify the set of resources deployed for NATS.
@@ -53,12 +54,12 @@ releases:
             merge: { 
                             accounts: {
                               SYS: {
-                                users: [{user: superstream_sys, password: << $ACTIVATION_TOKEN >>}]
+                                users: [{user: superstream_sys, password: {{ if .Values.skipLocalAuthentication }}"no-auth"{{ else }}"<< $ACTIVATION_TOKEN >>"{{ end }}}]
                                 # System account allows subscribing to $SYS.>
                               },
                               internal: {
                                 jetstream: enable,
-                                users: [{user: superstream_internal, password: << $ACTIVATION_TOKEN >>}]
+                                users: [{user: superstream_internal, password: {{ if .Values.skipLocalAuthentication }}"no-auth"{{ else }}"<< $ACTIVATION_TOKEN >>"{{ end }}}]
                                 # Regular user account for clients
                               }
                             },
