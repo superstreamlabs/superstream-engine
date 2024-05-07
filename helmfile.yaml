@@ -14,6 +14,8 @@ environments:
     - haDeployment: true
     - requestCpu: '2'
     - requestMemory: 2Gi
+# Uncomment and modify the following lines if you are using a private repository:    
+    # - DockerRegistrySecret: 'my-registry-sec'
     - natsReleaseName: nats # Set the release name for the NATS deployment, which is used to uniquely identify the set of resources deployed for NATS.
     - superstreamReleaseName: superstream # Specify the release name for the Superstream deployment, uniquely identifying the resources for Superstream.
     - telegrafReleaseName: telegraf # Define the release name for the Telegraf deployment, used for identifying the Telegraf resources in the cluster.
@@ -34,6 +36,25 @@ releases:
     chart: nats/nats
     version: {{ .Values.natsHelmVersion }}
     values:
+# Uncomment and modify the following lines if you are using a private repository: 
+      # - global:
+      #     image:
+      #       pullSecretNames: 
+      #       - {{ .Values.DockerRegistrySecret }}   
+      # - container:
+      #     image:
+      #       repository: YOURREPOSITORY/nats
+      #       tag: YOURTAG
+      # - reloader:
+      #     enabled: true
+      #     image:
+      #       repository: YOURREPOSITORY/nats-server-config-reloader
+      #       tag: YOURTAG
+      # - promExporter:
+      #     enabled: false
+      #     image:
+      #       repository: YOURREPOSITORY/prometheus-nats-exporter
+      #       tag: YOURTAG 
       - container:
           env: 
             ACTIVATION_TOKEN:
@@ -75,9 +96,15 @@ releases:
     chart: influxdata/telegraf 
     version: {{ .Values.telegrafHelmVersion }}
     values:
+# Uncomment and modify the following lines if you are using a private repository:    
+      # - image: 
+      #     repo: "YOURREPOSITORY/telegraf"
+      #     tag: "YOURTAG"
+      # - imagePullSecrets: 
+      #     - name: {{ .Values.DockerRegistrySecret }}            
       - metrics:
           internal:
-            collect_memstats: true
+            collect_memstats: true      
       - rbac:
           rules:    
           - apiGroups: [""]
@@ -151,7 +178,29 @@ releases:
       - superstream:
           environment: {{ .Values.name }}
           ha: {{ .Values.haDeployment }}
+# Uncomment and modify the following lines if you are using a private repository:          
+      # - initContainers:
+      #     # Image used for readiness checks or setup tasks before the main containers start
+      #     image: YOURREPOSITORY/curl:8.6.0   
+      # - syslog:
+      #     replicaCount: 1
+      #     image:
+      #       repository: YOURREPOSITORY/syslog-ng
+      #       pullPolicy: IfNotPresent
+      #       tag: "4.5.0" # Use a specific version to ensure consistency across deployments 
+      #     imagePullSecrets: 
+      #       - name: {{ .Values.DockerRegistrySecret }}                                  
       - dataPlane:
+# Uncomment and modify the following lines if you are using a private repository:      
+          # image:
+          #   # Docker image repository for the backend service
+          #   repository: YOURREPOSITORY/superstream-data-plane-be
+          #   # Policy for pulling the image
+          #   pullPolicy: Always
+          #   # Overrides the image tag whose default is the chart appVersion.
+          #   tag: "latest"  
+          # imagePullSecrets: 
+          #   -  {{ .Values.DockerRegistrySecret }}              
           secret:
             activationToken: {{ .Values.activationToken }}
           resources:
@@ -162,4 +211,4 @@ releases:
             host: {{ .Values.controlPlane }}
           internalNatsConnection:
             host: {{ .Values.natsReleaseName }}
-          releaseDate: {{ .Values.releaseDate }} 
+          releaseDate: {{ .Values.releaseDate }}            
