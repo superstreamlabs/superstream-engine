@@ -15,7 +15,7 @@ environments:
     - requestCpu: '2'
     - requestMemory: 2Gi
 # Uncomment and modify the following lines if you are using a private repository:    
-    # - DockerRegistrySecret: 'my-registry-sec'
+    # - pullSecretName: 'my-registry-sec'
     - natsReleaseName: nats # Set the release name for the NATS deployment, which is used to uniquely identify the set of resources deployed for NATS.
     - superstreamReleaseName: superstream # Specify the release name for the Superstream deployment, uniquely identifying the resources for Superstream.
     - telegrafReleaseName: telegraf # Define the release name for the Telegraf deployment, used for identifying the Telegraf resources in the cluster.
@@ -40,7 +40,7 @@ releases:
       # - global:
       #     image:
       #       pullSecretNames: 
-      #       - {{ .Values.DockerRegistrySecret }}   
+      #       - {{ .Values.pullSecretName }}   
       # - container:
       #     image:
       #       repository: YOURREPOSITORY/nats
@@ -101,7 +101,7 @@ releases:
       #     repo: "YOURREPOSITORY/telegraf"
       #     tag: "YOURTAG"
       # - imagePullSecrets: 
-      #     - name: {{ .Values.DockerRegistrySecret }}            
+      #     - name: {{ .Values.pullSecretName }}            
       - metrics:
           internal:
             collect_memstats: true      
@@ -189,7 +189,7 @@ releases:
       #       pullPolicy: IfNotPresent
       #       tag: "4.5.0" # Use a specific version to ensure consistency across deployments 
       #     imagePullSecrets: 
-      #       - name: {{ .Values.DockerRegistrySecret }}                                  
+      #       - name: {{ .Values.pullSecretName }}                                  
       - dataPlane:
 # Uncomment and modify the following lines if you are using a private repository:      
           # image:
@@ -200,7 +200,7 @@ releases:
           #   # Overrides the image tag whose default is the chart appVersion.
           #   tag: "latest"  
           # imagePullSecrets: 
-          #   -  {{ .Values.DockerRegistrySecret }}              
+          #   -  {{ .Values.pullSecretName }}              
           secret:
             activationToken: {{ .Values.activationToken }}
           resources:
