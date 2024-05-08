@@ -20,7 +20,7 @@ environments:
     - telegrafReleaseName: telegraf # Define the release name for the Telegraf deployment, used for identifying the Telegraf resources in the cluster.
     - natsHelmVersion: 1.1.10
     - telegrafHelmVersion: 1.8.43
-    - controlPlane: broker.superstream.ai # Indicate the control plane configuration or identifier, which may include settings specific to the cluster's control plane.
+    - controlPlane: broker.superstream.dev # Indicate the control plane configuration or identifier, which may include settings specific to the cluster's control plane.
     - releaseDate: 2024-02-28-12-43
 
 
