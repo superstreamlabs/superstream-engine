@@ -51,6 +51,11 @@ releases:
               enabled: {{ .Values.haDeployment }}
             jetstream: 
               enabled: true
+              {{ if .Values.storageClassName }}
+              fileStore:
+                pvc:
+                  storageClassName: {{ .Values.storageClassName }}
+              {{ end }}
             merge: { 
                             accounts: {
                               SYS: {

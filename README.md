@@ -291,56 +291,44 @@ It's crucial to delete the stateful storage linked to the data plane. Ensure you
 kubectl delete pvc -l app.kubernetes.io/instance=nats -n <NAMESPACE>
 ```
 
-## Appendix E - Custom changes to the helmfile
+## Appendix E - Custom changes
 
-**StorageClass definition for NATS service**
+**StorageClass definition**
 
-If there is no default storageClass configured for the Kubernetes cluster, it should be configured manually from the helmfile.yaml.
+If there is no default storageClass configured for the Kubernetes cluster or there is a need to choose a custom storageClass, it can be done by specifying its name in the `environments/default.yaml` file.
 
-1. Open helmfile.yaml with preferred editor and navigate to the nats configuration section:
-
-```yaml
-releases:
-  - name: {{ .Values.natsReleaseName }}
-    installed: true
-    namespace: {{ .Values.namespace }}
-    chart: nats/nats
-    version: 1.1.7
-    values:
-      - container:
-          image: 
-            tag: alpine3.19
-          env: 
-            ACTIVATION_TOKEN:
-              valueFrom:
-                secretKeyRef:
-                  name: superstream-creds
-                  key: ACTIVATION_TOKEN 
-      - promExporter:
-          enabled: true
-      - natsBox:
-          enabled: false 
-      - config:
-            cluster: 
-              enabled: {{ .Values.haDeployment }}
-            jetstream: 
-              enabled: true
-```
-
-2. Add the following section after `jetsream.enabled` line and mention the name of the desired storageClass:
+1. Open `environments/default.yaml` with a preferred editor:
 
 ```yaml
-  jetstream:
-    enabled: true
-    fileStore:
-      pvc:
-        storageClassName: <THE_NAME>
+helmVersion: 0.2.3 # Define the version of the superstream helm chart.
+namespace: superstream # Specify the Kubernetes namespace where the resources will be deployed, isolating them within this designated namespace.
+storageClassName: "" # Leave blank if you want to use default K8s cluster storageClass
+...
 ```
 
-3. Run the deployment
+2. Fill the name of the desired storageClass name.
+
+```yaml
+helmVersion: 0.2.3 # Define the version of the superstream helm chart.
+namespace: superstream # Specify the Kubernetes namespace where the resources will be deployed, isolating them within this designated namespace.
+storageClassName: "exampleSsdStorageClass" # Leave blank if you want to use default K8s cluster storageClass
+...
+```
+
+3. Run the deployment.
 
 ```bash
 helmfile -e default apply
+```
+
+4. Validate that the created PVCs are assigned to the desired storageClass.
+   
+```bash
+kubectl get pvc -n superstream
+NAME             STATUS   VOLUME         CAPACITY   ACCESS MODES   STORAGECLASS             AGE
+nats-js-nats-0   Bound    pvc-ac65bfe7   10Gi       RWO            exampleSsdStorageClass   45h
+nats-js-nats-1   Bound    pvc-d3982397   10Gi       RWO            exampleSsdStorageClass   45h
+nats-js-nats-2   Bound    pvc-e85b69e0   10Gi       RWO            exampleSsdStorageClass   45h
 ```
 
 ## Disable HPA - autoscalling ability of the Data Plane service
