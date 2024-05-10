@@ -300,23 +300,35 @@ If there is no default storageClass configured for the Kubernetes cluster or the
 1. Open `environments/default.yaml` with a preferred editor:
 
 ```yaml
-
+helmVersion: 0.2.3 # Define the version of the superstream helm chart.
+namespace: superstream # Specify the Kubernetes namespace where the resources will be deployed, isolating them within this designated namespace.
+storageClassName: "" # Leave blank if you want to use default K8s cluster storageClass
+...
 ```
 
-2. Add the following section after `jetsream.enabled` line and mention the name of the desired storageClass:
+2. Fill the name of the desired storageClass name.
 
 ```yaml
-  jetstream:
-    enabled: true
-    fileStore:
-      pvc:
-        storageClassName: <THE_NAME>
+helmVersion: 0.2.3 # Define the version of the superstream helm chart.
+namespace: superstream # Specify the Kubernetes namespace where the resources will be deployed, isolating them within this designated namespace.
+storageClassName: "exampleSsdStorageClass" # Leave blank if you want to use default K8s cluster storageClass
+...
 ```
 
-3. Run the deployment
+3. Run the deployment.
 
 ```bash
 helmfile -e default apply
+```
+
+4. Validate that the created PVCs are assigned to the desired storageClass.
+   
+```bash
+kubectl get pvc -n superstream
+NAME             STATUS   VOLUME         CAPACITY   ACCESS MODES   STORAGECLASS             AGE
+nats-js-nats-0   Bound    pvc-ac65bfe7   10Gi       RWO            exampleSsdStorageClass   45h
+nats-js-nats-1   Bound    pvc-d3982397   10Gi       RWO            exampleSsdStorageClass   45h
+nats-js-nats-2   Bound    pvc-e85b69e0   10Gi       RWO            exampleSsdStorageClass   45h
 ```
 
 ## Disable HPA - autoscalling ability of the Data Plane service
