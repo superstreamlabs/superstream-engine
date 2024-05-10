@@ -291,40 +291,16 @@ It's crucial to delete the stateful storage linked to the data plane. Ensure you
 kubectl delete pvc -l app.kubernetes.io/instance=nats -n <NAMESPACE>
 ```
 
-## Appendix E - Custom changes to the helmfile
+## Appendix E - Custom changes
 
-**StorageClass definition for NATS service**
+**StorageClass definition**
 
-If there is no default storageClass configured for the Kubernetes cluster, it should be configured manually from the helmfile.yaml.
+If there is no default storageClass configured for the Kubernetes cluster or there is a need to choose a custom storageClass, it can be done by specifying its name in the `environments/default.yaml` file.
 
-1. Open helmfile.yaml with preferred editor and navigate to the nats configuration section:
+1. Open `environments/default.yaml` with a preferred editor:
 
 ```yaml
-releases:
-  - name: {{ .Values.natsReleaseName }}
-    installed: true
-    namespace: {{ .Values.namespace }}
-    chart: nats/nats
-    version: 1.1.7
-    values:
-      - container:
-          image: 
-            tag: alpine3.19
-          env: 
-            ACTIVATION_TOKEN:
-              valueFrom:
-                secretKeyRef:
-                  name: superstream-creds
-                  key: ACTIVATION_TOKEN 
-      - promExporter:
-          enabled: true
-      - natsBox:
-          enabled: false 
-      - config:
-            cluster: 
-              enabled: {{ .Values.haDeployment }}
-            jetstream: 
-              enabled: true
+
 ```
 
 2. Add the following section after `jetsream.enabled` line and mention the name of the desired storageClass:
