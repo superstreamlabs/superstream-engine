@@ -169,9 +169,12 @@ releases:
               data_format: "grok"
               grok_patterns:
                 - "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:loglevel}! %{GREEDYDATA:message}"
-              grok_custom_patterns: |
+              grok_custom_patterns:
                 LOGLEVEL [IWE] 
-              name_override: "telegraf_logs"                   
+              name_override: "telegraf_logs" 
+              tags:
+                accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
+                appname: "telegraf"                               
 
   - name: {{ .Values.superstreamReleaseName }} 
     installed: true
