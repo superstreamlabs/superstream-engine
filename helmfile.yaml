@@ -12,6 +12,7 @@ environments:
     values:
     - ./environments/default.yaml
     - haDeployment: true
+    - skipLocalAuthentication: true
     - requestCpu: '2'
     - requestMemory: 2Gi
     - natsReleaseName: nats # Set the release name for the NATS deployment, which is used to uniquely identify the set of resources deployed for NATS.
@@ -50,15 +51,20 @@ releases:
               enabled: {{ .Values.haDeployment }}
             jetstream: 
               enabled: true
+              {{ if .Values.storageClassName }}
+              fileStore:
+                pvc:
+                  storageClassName: {{ .Values.storageClassName }}
+              {{ end }}
             merge: { 
                             accounts: {
                               SYS: {
-                                users: [{user: superstream_sys, password: << $ACTIVATION_TOKEN >>}]
+                                users: [{user: superstream_sys, password: {{ if .Values.skipLocalAuthentication }}"no-auth"{{ else }}"<< $ACTIVATION_TOKEN >>"{{ end }}}]
                                 # System account allows subscribing to $SYS.>
                               },
                               internal: {
                                 jetstream: enable,
-                                users: [{user: superstream_internal, password: << $ACTIVATION_TOKEN >>}]
+                                users: [{user: superstream_internal, password: {{ if .Values.skipLocalAuthentication }}"no-auth"{{ else }}"<< $ACTIVATION_TOKEN >>"{{ end }}}]
                                 # Regular user account for clients
                               }
                             },
@@ -87,6 +93,22 @@ releases:
             - pods
             verbs: ["get", "list", "watch"]          
       - config:
+          agent:
+            interval: "10s"
+            round_interval: true
+            metric_batch_size: 1000
+            metric_buffer_limit: 10000
+            collection_jitter: "0s"
+            flush_interval: "10s"
+            flush_jitter: "0s"
+            precision: ""
+            debug: false
+            quiet: false
+            logfile: "/tmp/telegraf.log"
+            logfile_rotation_max_size: "10MB"
+            logfile_rotation_max_archives: 5
+            hostname: "$HOSTNAME"
+            omit_hostname: false        
           outputs:
             - influxdb_v2:
                 urls:
@@ -96,7 +118,7 @@ releases:
                 content_encoding: "gzip"
                 http_headers:
                   Authorization: "{{ .Values.activationToken }}"
-                namepass: ["syslog"]
+                namepass: ["syslog","telegraf_logs"]
             - influxdb_v2:
                 urls:
                 - "https://superstream-monitoring.mgmt.memphis-gcp.dev"
@@ -105,7 +127,7 @@ releases:
                 content_encoding: "gzip"
                 http_headers:
                   Authorization: "{{ .Values.activationToken }}"
-                namedrop: ["syslog"] 
+                namedrop: ["syslog","telegraf_logs"] 
           processors:
             - enum:
                 mapping:
@@ -140,6 +162,19 @@ releases:
               tags:
                 accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
                 chart: "telegraf-{{ .Values.telegrafHelmVersion }}"
+          - tail:
+              files:
+                - "/tmp/telegraf.log"
+              from_beginning: false  
+              data_format: "grok"
+              grok_patterns:
+                - "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:loglevel}! %{GREEDYDATA:message}"
+              grok_custom_patterns:
+                LOGLEVEL [IWE] 
+              name_override: "telegraf_logs" 
+              tags:
+                accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
+                appname: "telegraf"                               
 
   - name: {{ .Values.superstreamReleaseName }} 
     installed: true
