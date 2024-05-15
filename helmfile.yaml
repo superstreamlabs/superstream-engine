@@ -136,7 +136,14 @@ releases:
                   value_mappings:
                     healthy: 1
                     problem: 2
-                    critical: 3    
+                    critical: 3
+            - enum:         
+                mapping:
+                  tag: "severity"
+                  value_mappings:
+                    I: info
+                    W: warning
+                    E: err
             - starlark:
                 namepass: ["syslog"]  
                 source: |
@@ -144,7 +151,7 @@ releases:
                       unique_str = metric.name + str(metric.fields) + str(metric.tags)
                       random_value = str(hash(unique_str))[-8:]
                       metric.tags['eventId'] = random_value
-                      return metric                                         
+                      return metric                                                                       
           inputs:
           - syslog:
               server: "udp://:6514"
@@ -165,17 +172,19 @@ releases:
           - tail:
               files:
                 - "/tmp/telegraf.log"
-              from_beginning: false  
+              from_beginning: true  
               data_format: "grok"
+              watch_method: "inotify"
               grok_patterns:
-                - "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:loglevel}! %{GREEDYDATA:message}"
-              grok_custom_patterns:
-                LOGLEVEL [IWE] 
+                - "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:severity:tag}! %{GREEDYDATA:message}"
+              grok_custom_patterns: 
+                LOGLEVEL [IEW]
               name_override: "telegraf_logs" 
+              tagpass: ["I", "W", "E"]
               tags:
                 accountId: "{{ .Values.accountId }}_{{ .Values.name }}"
-                appname: "telegraf"                               
-
+                appname: "telegraf" 
+                                                       
   - name: {{ .Values.superstreamReleaseName }} 
     installed: true
     namespace: {{ .Values.namespace }}
