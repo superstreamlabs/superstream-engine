@@ -1,6 +1,7 @@
 <div align="center">
 
-<a href="https://superstream.dev"><img src="https://github.com/memphisdev/superstream-helmfile/assets/70286779/5921cf13-ce6c-4888-8ed1-e602f7f60383" width="30%"></a><br><br>
+![Superstream new logo black (1)](https://github.com/superstreamlabs/superstream-engine/assets/107035359/a381e31e-5c13-4d56-a4cd-0add71141723)
+
 <b>Improve And Optimize Your Kafka In Literally Minutes.<br>
 Reduce Costs and Boost Performance by 75% Without Changing a Single Component or Your Existing Kafka!</b>
 
