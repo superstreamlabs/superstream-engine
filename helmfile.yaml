@@ -1,4 +1,4 @@
-rerepositories:
+repositories:
     - name: influxdata
       url: https://helm.influxdata.com/
     - name: nats 
