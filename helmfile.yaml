@@ -186,6 +186,7 @@ releases:
       - superstream:
           environment: {{ .Values.name }}
           ha: {{ .Values.haDeployment }}
+          skipLocalAuthentication: {{ .Values.skipLocalAuthentication }}
       - dataPlane:
           secret:
             activationToken: {{ .Values.activationToken }}
