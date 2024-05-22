@@ -1,4 +1,4 @@
-repositories:
+erepositories:
     - name: influxdata
       url: https://helm.influxdata.com/
     - name: nats 
@@ -186,6 +186,7 @@ releases:
       - superstream:
           environment: {{ .Values.name }}
           ha: {{ .Values.haDeployment }}
+          skipLocalAuthentication: {{ .Values.skipLocalAuthentication }}
       - dataPlane:
           secret:
             activationToken: {{ .Values.activationToken }}
