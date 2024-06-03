@@ -1,0 +1,46 @@
+# templates/configmap.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: syslog-config
+data:
+  syslog-ng.conf: |
+    @version: 4.2
+    @include "scl.conf"
+
+    # Define source for incoming logs
+    source s_local {
+      internal();
+    };
+
+    source s_network {
+      syslog(transport({{ .Values.syslog.service.protocol }}) port({{ .Values.syslog.service.port }}));
+    };
+
+    # Define RFC5424 template
+    template t_rfc5424 {
+    #    template("<${PRI}>1 ${ISODATE} ${HOST} ${PROGRAM} ${PID} ${MSGID} [exampleSDID@0 iut=\"3\" eventSource=\"Application\" eventID=\"1011\"] ${MSG}\n");
+        template("<${PRI}>1 ${ISODATE} ${HOST} ${PROGRAM} 1 - [SDID@0 eventSource=\"Application\"] ${MSG}\n");
+        template_escape(no);
+    };
+
+    # Define destination where the formatted logs will be sent
+    destination d_local {
+        file("/config/log/rfc5424.log" template(t_rfc5424));
+    };
+    # Define destination for forwarding logs to a remote syslog server
+    destination d_remote_syslog {
+        network("{{ .Values.syslog.remoteSyslog.destinationHost }}.{{ include "superstream.namespace" . }}" port({{ .Values.syslog.remoteSyslog.port }}) transport("{{ .Values.syslog.remoteSyslog.protocol }}") template(t_rfc5424));
+        # Change "remote-syslog-server-address" to your remote syslog server's IP or hostname
+        # Adjust the port if your remote server listens on a different port
+        # Change transport to "udp" if your remote server expects UDP
+    };
+
+    # Log path to process and route the logs
+    log {
+      source(s_local);
+      source(s_network);
+      destination(d_local); # Local file destination
+      destination(d_remote_syslog); # Remote syslog server destination
+    };

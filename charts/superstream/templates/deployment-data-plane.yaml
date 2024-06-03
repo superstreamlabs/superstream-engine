@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "superstream.fullname" . }}-data-plane
+  labels:
+    {{- include "superstream.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.superstreamEngine.autoscaling.enabled }}
+  replicas: {{ .Values.superstreamEngine.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "superstream.selectorLabels" . | nindent 6 }}-data-plane
+  template:
+    metadata:
+      {{- with .Values.superstreamEngine.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        releaseDate: {{ .Values.superstreamEngine.releaseDate }}
+        {{- include "superstream.labels" . | nindent 8 }}
+        {{- include "superstream.selectorLabels" . | nindent 8 }}-data-plane
+    spec:
+      initContainers:
+      - name: check-nats-readiness
+        image: {{ .Values.superstreamEngine.initContainers.image }}
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: NATS_HOST
+            value: nats.{{ include "superstream.namespace" . }}    
+        command: 
+          - "sh"
+          - "-c"
+          - |
+            until nc -z $NATS_HOST.svc.cluster.local 4222 ; do
+              echo waiting for $NATS_HOST
+              sleep 2
+            done 
+
+      {{- with .Values.superstreamEngine.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "superstream.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.superstreamEngine.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-data-plane
+          securityContext:
+            {{- toYaml .Values.superstreamEngine.securityContext | nindent 12 }}
+          image: "{{ .Values.superstreamEngine.image.repository }}:{{ .Values.superstreamEngine.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.superstreamEngine.image.pullPolicy }}
+          ports:
+          - name: data-plane
+            containerPort: {{ .Values.superstreamEngine.service.port }}
+            protocol: TCP
+          env:
+            - name: ENV_NAME
+              value: {{ .Values.global.environment }}
+            - name: IS_HA
+              value: {{ .Values.nats.config.cluster.enabled | quote }}
+            - name: SKIP_LOCAL_AUTHENTICATION
+              value: {{ .Values.global.skipLocalAuthentication | quote }}
+            - name: ACTIVATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: superstream-creds
+                  key: ACTIVATION_TOKEN
+            {{- if .Values.superstreamEngine.service.enabled }}
+            - name: PORT
+              value: {{ .Values.superstreamEngine.service.port | quote }}
+            {{- end }}
+            - name: ENCRYPTION_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: superstream-creds
+                  key: ENCRYPTION_SECRET_KEY
+            - name: NATS_HOST
+              value: nats.{{ include "superstream.namespace" . }}
+            - name: NATS_PORT
+              value: {{ .Values.superstreamEngine.internalNatsConnection.port | quote }}
+            - name: CONTROL_PLANE_HOST
+              value: {{ .Values.superstreamEngine.controlPlane.host }}
+            - name: CONTROL_PLANE_PORT
+              value: {{ .Values.superstreamEngine.controlPlane.port | quote }}
+            - name: SYSLOG
+              value: {{ .Values.superstreamEngine.syslog.enabled | quote }}
+            - name: SYSLOG_HOST
+              value: {{ .Values.superstreamEngine.syslog.remoteSyslog }}.{{ include "superstream.namespace" . }}
+            - name: SYSLOG_PROTOCOL
+              value: {{ .Values.superstreamEngine.syslog.protocol }}
+            - name: SYSLOG_PORT
+              value: {{ .Values.superstreamEngine.syslog.port | quote }}
+          resources:
+            {{- toYaml .Values.superstreamEngine.resources | nindent 12 }}                 
+      {{- $fileDataExists := and .Values.superstreamEngine.configMap.fileData .Values.superstreamEngine.configMap.fileData.fileContent }}        
+      {{- if or $fileDataExists .Values.superstreamEngine.configMap.useExisting }}
+          volumeMounts:
+          - name: config-volume
+            mountPath: {{ .Values.superstreamEngine.configMap.fileData.mountPath }}       
+          readinessProbe:
+            httpGet:
+              path: /monitoring/status
+              port: 7777
+              scheme: HTTP   
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ if .Values.superstreamEngine.configMap.useExisting }}{{ .Values.superstreamEngine.configMap.existingConfigMapName }}{{ else }}{{ .Values.superstreamEngine.configMap.name }}{{ end }}
+      {{- end }}                 
+      {{- with .Values.superstreamEngine.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.superstreamEngine.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.superstreamEngine.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+

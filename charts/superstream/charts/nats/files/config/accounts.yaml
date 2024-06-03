@@ -1,0 +1,9 @@
+SYS:
+  users:
+    - user: superstream_sys
+      password: {{ if .Values.global.skipLocalAuthentication }}"no-auth"{{ else }}"<< $ACTIVATION_TOKEN >>"{{ end }}
+internal:
+  jetstream: enable
+  users:
+    - user: superstream_internal
+      password: {{ if .Values.global.skipLocalAuthentication }}"no-auth"{{ else }}"<< $ACTIVATION_TOKEN >>"{{ end }}

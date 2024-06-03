@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "telegraf.fullname" . }}
+  labels:
+    {{- include "telegraf.labels" . | nindent 4 }}
+data:
+  telegraf.conf: |
+    [agent]
+      collection_jitter = "0s"
+      debug = false
+      flush_interval = "10s"
+      flush_jitter = "0s"
+      hostname = "$HOSTNAME"
+      interval = "10s"
+      logfile = "/tmp/telegraf.log"
+      logfile_rotation_max_archives = 5
+      logfile_rotation_max_size = "10MB"
+      metric_batch_size = 1000
+      metric_buffer_limit = 10000
+      omit_hostname = false
+      precision = ""
+      quiet = false
+      round_interval = true
+    [[processors.enum]]
+      [[processors.enum.mapping]]
+        dest = "status_code"
+        field = "status"
+        [processors.enum.mapping.value_mappings]
+            critical = 3
+            healthy = 1
+            problem = 2
+    [[processors.starlark]]
+      namepass = [
+        "syslog"
+      ]
+      source = "def apply(metric):\n    unique_str = metric.name + str(metric.fields) + str(metric.tags)\n    random_value = str(hash(unique_str))[-8:]\n    metric.tags['eventId'] = random_value\n    return metric                                         \n"
+    [[outputs.influxdb_v2]]
+      bucket = "logs"
+      content_encoding = "gzip"
+      namepass = [
+        "syslog",
+        "telegraf_logs"
+      ]
+      organization = "superstream"
+      urls = [
+        "https://superstream-monitoring.mgmt.memphis-gcp.dev"
+      ]
+      [outputs.influxdb_v2.http_headers]
+        Authorization = {{ .Values.global.activationToken | quote }}
+    [[outputs.influxdb_v2]]
+      bucket = "metrics"
+      content_encoding = "gzip"
+      namedrop = [
+        "syslog",
+        "telegraf_logs"
+      ]
+      organization = "superstream"
+      urls = [
+        "https://superstream-monitoring.mgmt.memphis-gcp.dev"
+      ]
+      [outputs.influxdb_v2.http_headers]
+        Authorization = {{ .Values.global.activationToken | quote }}
+    [[inputs.syslog]]
+      server = "udp://:6514"
+      [inputs.syslog.tags]
+        accountId = "{{ .Values.global.accountId }}_{{ .Values.global.environment }}"
+        env = {{ .Values.global.environment | quote }}
+    [[inputs.prometheus]]
+      kubernetes_label_selector = "app.kubernetes.io/name in (nats, superstream)"
+      monitor_kubernetes_pods = true
+      monitor_kubernetes_pods_method = "settings+annotations"
+      monitor_kubernetes_pods_namespace = {{ .Release.Namespace | quote}}
+      monitor_kubernetes_pods_port = 7777
+      [inputs.prometheus.tags]
+        accountId = "{{ .Values.global.accountId }}_{{ .Values.global.environment }}"
+        env = {{ .Values.global.environment | quote }}
+    [[inputs.internal]]
+      [inputs.internal.tags]
+        accountId = "{{ .Values.global.accountId }}_{{ .Values.global.environment }}"
+        env = {{ .Values.global.environment | quote }}
+        chart = "telegraf-1.8.48"
+    [[inputs.tail]]
+      data_format = "grok"
+      files = [
+        "/tmp/telegraf.log"
+      ]
+      from_beginning = false
+      grok_custom_patterns = "LOGLEVEL [IWE]"
+      grok_patterns = [
+        "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:loglevel}! %{GREEDYDATA:message}"
+      ]
+      name_override = "telegraf_logs"
+      [inputs.tail.tags]
+        accountId = "{{ .Values.global.accountId }}_{{ .Values.global.environment }}"
+        env = {{ .Values.global.environment | quote }}
+        appname = "telegraf"
+
+    [[inputs.internal]]
+      collect_memstats = true

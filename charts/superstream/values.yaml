@@ -1,0 +1,177 @@
+############################################################
+# GLOBAL configuration for Superstream Engine
+############################################################
+global:
+  environment: "" # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
+  accountId: "" # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
+  activationToken: "" # Enter the activation token required for services or resources that need an initial token for activation or authentication.
+  skipLocalAuthentication: true
+############################################################
+# NATS config
+############################################################
+# NATS HA Deployment. Default "true"
+nats:
+  config:
+    cluster:
+      enabled: true
+      # NATS storageClass configuration. Default blank "".
+    jetstream:
+      fileStore:
+        pvc:
+          storageClassName: ""
+############################################################
+# Superstream Engine config
+############################################################
+superstreamEngine:
+  releaseDate: "2024-02-22-13-03"
+  # Number of replicas for the backend deployment
+  replicaCount: 2
+  image:
+    # Docker image repository for the backend service
+    repository: superstreamlabs/superstream-data-plane-be
+    # Policy for pulling the image
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+  imagePullSecrets: []
+  # Overrides for Helm's default naming conventions
+  nameOverride: ""
+  fullnameOverride: ""
+  # ConfigMap settings for mounting or referencing within the deployment   
+  # Init container configuration
+  initContainers:
+    # Image used for readiness checks or setup tasks before the main containers start
+    image: curlimages/curl:8.6.0
+  configMap:
+    enable: ""
+    # Option to use an existing ConfigMap instead of creating a new one
+    useExisting: false
+    # Name of the existing ConfigMap to use if `useExisting` is true
+    existingConfigMapName: my-existing-configmap
+    # Name used when creating a new ConfigMap
+    name: ""
+    fileData:
+      # Path where the ConfigMap will be mounted in the pod
+      mountPath: /etc/superstream-conf/
+      # Example: Uncomment to enable file data
+      fileName: ""
+      fileContent: ""
+  #    # Example file content  
+  # Secret configuration for handling sensitive information
+  secret:
+    name: superstream-creds
+    encryptionSecretKey: ""
+    activationToken: ""
+  podAnnotations:
+    prometheus.io/path: "/monitoring/metrics"
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: "7777"
+  podSecurityContext: {}
+  # fsGroup: 2000
+
+  securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 7777
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: '8'
+      memory: 8Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+  # Autoscaling configuration for dynamically adjusting the number of pod replicas
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 75
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  internalNatsConnection:
+    host: ""
+    port: 4222
+  controlPlane:
+    host: "broker.superstream.dev"
+    port: 4222
+  syslog:
+    enabled: true
+    remoteSyslog: superstream-syslog
+    port: 5514
+    protocol: udp
+  releaseDate: "2024-03-20-11-12"
+syslog:
+  replicaCount: 1
+  image:
+    repository: linuxserver/syslog-ng
+    pullPolicy: IfNotPresent
+    tag: "4.5.0" # Use a specific version to ensure consistency across deployments
+  imagePullSecrets: []
+  service:
+    type: ClusterIP
+    port: 5514
+    protocol: UDP
+  resources:
+    limits:
+      cpu: "100m"
+      memory: "256Mi"
+    requests:
+      cpu: "50m"
+      memory: "128Mi"
+  podAnnotations:
+    prometheus.io/scrape: 'false'
+  remoteSyslog:
+    destinationHost: telegraf
+    port: 6514
+    protocol: udp
+  configMap:
+    enabled: true
+    name: syslog-config
+    mountPath: /config/syslog-ng.conf
+    subPath: syslog-ng.conf # Optional, use if you want to mount a specific file from the ConfigMap
+  # Persistent Volume configuration, if needed
+  persistence:
+    enabled: false
+    size: "1Gi"
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: "standard"
+dataPlane:
+  image:
+    tag: latest

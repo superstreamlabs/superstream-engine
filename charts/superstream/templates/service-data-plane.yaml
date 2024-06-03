@@ -1,0 +1,17 @@
+ {{- if .Values.superstreamEngine.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "superstream.fullname" . }}-data-plane
+  labels:
+    {{- include "superstream.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.superstreamEngine.service.type }}
+  ports:
+    - port: {{ .Values.superstreamEngine.service.port }}
+      targetPort: data-plane
+      protocol: TCP
+      name: data-plane
+  selector:
+    {{- include "superstream.selectorLabels" . | nindent 4 }}-data-plane
+{{- end }}

@@ -1,0 +1,12 @@
+{{- $fileDataExists := and .Values.superstreamEngine.configMap.fileData .Values.superstreamEngine.configMap.fileData.fileContent }}
+{{- if $fileDataExists }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.superstreamEngine.configMap.name }}
+data:
+  {{- if $fileDataExists }}
+  {{ .Values.superstreamEngine.configMap.fileData.fileName }}: |
+{{ .Values.superstreamEngine.configMap.fileData.fileContent | indent 4 }}
+  {{- end }}
+{{- end }}

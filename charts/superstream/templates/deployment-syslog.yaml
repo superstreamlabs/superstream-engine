@@ -1,0 +1,43 @@
+# templates/deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  {{ include "superstream.fullname" . }}-syslog
+  labels:
+    {{- include "superstream.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.syslog.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "superstream.selectorLabels" . | nindent 6 }}-syslog
+  template:
+    metadata:
+      {{- with .Values.syslog.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "superstream.selectorLabels" . | nindent 8 }}-syslog
+    spec:
+      {{- with .Values.syslog.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}    
+      securityContext:
+        fsGroup: 911
+      containers:
+      - name: syslog-ng
+        image: "{{ .Values.syslog.image.repository }}:{{ .Values.syslog.image.tag }}"
+        ports:
+          - name: syslog
+            containerPort: {{ .Values.syslog.service.port }}
+            protocol: {{ .Values.syslog.service.protocol }}
+        volumeMounts:
+        - name: config-volume
+          mountPath: {{ .Values.syslog.configMap.mountPath }}
+          subPath: {{ .Values.syslog.configMap.subPath }}
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ .Values.syslog.configMap.name }}

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "superstream.fullname" . }}-syslog
+  labels:
+    {{- include "superstream.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.syslog.service.type }}
+  ports:
+    - port: {{ .Values.syslog.service.port }}
+      targetPort: syslog
+      protocol: {{ .Values.syslog.service.protocol }}
+      name: syslog
+  selector:
+    {{- include "superstream.selectorLabels" . | nindent 4 }}-syslog
