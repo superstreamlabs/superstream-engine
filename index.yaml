@@ -52,6 +52,6 @@ entries:
     name: superstream
     type: application
     urls:
-    - https://github.com/superstreamlabs/superstream-engine/old/superstream-0.3.0.tgz
+    - https://github.com/superstreamlabs/superstream-engine/superstream-0.3.0.tgz
     version: 0.3.0
 generated: "2024-06-03T20:12:52.934342742Z"
