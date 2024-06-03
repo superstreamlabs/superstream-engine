@@ -1,4 +1,5 @@
-helmVersion: 0.3.0 # Define the version of the superstream helm chart.
+helmVersion: | # Define the version of the superstream helm chart.
+  0.4.0
 namespace: superstream # Specify the Kubernetes namespace where the resources will be deployed, isolating them within this designated namespace.
 storageClassName: "" # Leave blank if you want to use default K8s cluster storageClass
 name: <DATAPLANE_NAME> # Define the data plane name within 32 characters, excluding '.', and using only letters, numbers, '-', and '_'.
