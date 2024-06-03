@@ -31,4 +31,27 @@ entries:
     urls:
     - https://github.com/superstreamlabs/superstream-engine/releases/download/superstream-0.4.1/superstream-0.4.1.tgz
     version: 0.4.1
+  - annotations:
+      category: Streaming and Messaging
+      licenses: Memphis Business Source License 1.0
+    apiVersion: v2
+    appVersion: 1.0.7
+    created: "2024-06-03T11:43:50.349713048Z"
+    description: Superstream Official Helm chart
+    digest: 5678cc1d7c061e438c6e5fc1e0a4ae32cba0d9dd612ca2e8e9ebb36bc955b7b6
+    home: https://superstream.ai
+    icon: https://memphis-public-files.s3.eu-central-1.amazonaws.com/superstream_logo.png
+    keywords:
+    - data streaming
+    - cost reduction
+    - superstream
+    - kafka
+    maintainers:
+    - name: Superstream Labs
+      url: https://superstream.ai
+    name: superstream
+    type: application
+    urls:
+    - https://github.com/superstreamlabs/superstream-engine/old/superstream-0.3.0.tgz
+    version: 0.3.0
 generated: "2024-06-03T20:12:52.934342742Z"
