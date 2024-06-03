@@ -1,7 +1,0 @@
-helmVersion: | # Define the version of the superstream helm chart.
-  0.4.1
-namespace: superstream # Specify the Kubernetes namespace where the resources will be deployed, isolating them within this designated namespace.
-storageClassName: "" # Leave blank if you want to use default K8s cluster storageClass
-name: <DATAPLANE_NAME> # Define the data plane name within 32 characters, excluding '.', and using only letters, numbers, '-', and '_'.
-accountId: "" # Provide the account ID that is associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
-activationToken: "" # Enter the activation token required for services or resources that need an initial token for activation or authentication.
