@@ -43,32 +43,35 @@ The following table lists the configurable parameters of the SuperStream chart a
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `superstream.environment` | Deployment environment (e.g., staging, production). | `""` |
-| `superstream.serviceAccount.create` | Specifies whether a service account should be created. | `true` |
-| `superstream.serviceAccount.annotations` | Annotations to add to the service account. | `{}` |
-| `superstream.serviceAccount.name` | The name of the service account to use. | `""` |
-| `initContainers.image` | Image used for readiness checks or setup tasks. | `curlimages/curl:8.6.0` |
-| `dataPlane.releaseDate` | Release date for the backend component. | `"2024-02-22-13-03"` |
-| `dataPlane.replicaCount` | Number of replicas for the backend deployment. | `2` |
-| `dataPlane.image.repository` | Docker image repository for the backend service. | `memphisos/superstream-data-plane-be` |
-| `dataPlane.image.pullPolicy` | Policy for pulling the image. | `Always` |
-| `dataPlane.image.tag` | Overrides the image tag. | `"latest"` |
-| `dataPlane.imagePullSecrets` | Image pull secrets. | `""` |
-| `dataPlane.configMap.enable` | Enable ConfigMap settings. | `""` |
-| `dataPlane.secret.name` | Secret configuration for sensitive information. | `superstream-creds` |
-| `dataPlane.service.enabled` | Enable service for the backend. | `false` |
-| `dataPlane.service.type` | Type of service for the backend. | `ClusterIP` |
-| `dataPlane.service.port` | Port for the backend service. | `8888` |
-| `dataPlane.ingress.enabled` | Enable ingress for the backend. | `false` |
-| `dataPlane.resources.limits.cpu` | CPU limit for the backend pod. | `500m` |
-| `dataPlane.resources.limits.memory` | Memory limit for the backend pod. | `500Mi` |
-| `dataPlane.resources.requests.cpu` | CPU request for the backend pod. | `50m` |
-| `dataPlane.resources.requests.memory` | Memory request for the backend pod. | `100Mi` |
-| `dataPlane.autoscaling.enabled` | Enable autoscaling for the backend. | `true` |
-| `dataPlane.autoscaling.minReplicas` | Minimum number of replicas for autoscaling. | `2` |
-| `dataPlane.autoscaling.maxReplicas` | Maximum number of replicas for autoscaling. | `5` |
-| `dataPlane.autoscaling.targetCPUUtilizationPercentage` | CPU utilization percentage for autoscaling. | `75` |
-| `dataPlane.autoscaling.targetMemoryUtilizationPercentage` | Memory utilization percentage for autoscaling. | `75` |
+| `global.environment` | Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'. | `""` |
+| `global.accountId` | Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account. | `""` |
+| `global.activationToken` | Enter the activation token required for services or resources that need an initial token for activation or authentication. | `""` |
+| `global.skipLocalAuthentication` | Specifies whether to skip local authentication. | `true` |
+| `superstreamEngine.serviceAccount.create` | Specifies whether a service account should be created. | `true` |
+| `superstreamEngine.serviceAccount.annotations` | Annotations to add to the service account. | `{}` |
+| `superstreamEngine.serviceAccount.name` | The name of the service account to use. | `""` |
+| `superstreamEngineinitContainers.image` | Image used for readiness checks or setup tasks. | `curlimages/curl:8.6.0` |
+| `superstreamEngine.releaseDate` | Release date for the backend component. | `"2024-02-22-13-03"` |
+| `superstreamEngine.replicaCount` | Number of replicas for the backend deployment. | `2` |
+| `superstreamEngine.image.repository` | Docker image repository for the backend service. | `memphisos/superstream-data-plane-be` |
+| `superstreamEngine.image.pullPolicy` | Policy for pulling the image. | `Always` |
+| `superstreamEngine.image.tag` | Overrides the image tag. | `"latest"` |
+| `superstreamEngine.imagePullSecrets` | Image pull secrets. | `""` |
+| `superstreamEngine.configMap.enable` | Enable ConfigMap settings. | `""` |
+| `superstreamEngine.secret.name` | Secret configuration for sensitive information. | `superstream-creds` |
+| `superstreamEngine.service.enabled` | Enable service for the backend. | `false` |
+| `superstreamEngine.service.type` | Type of service for the backend. | `ClusterIP` |
+| `superstreamEngine.service.port` | Port for the backend service. | `8888` |
+| `superstreamEngine.ingress.enabled` | Enable ingress for the backend. | `false` |
+| `superstreamEngine.resources.limits.cpu` | CPU limit for the backend pod. | `500m` |
+| `superstreamEngine.resources.limits.memory` | Memory limit for the backend pod. | `500Mi` |
+| `superstreamEngine.resources.requests.cpu` | CPU request for the backend pod. | `50m` |
+| `superstreamEngine.resources.requests.memory` | Memory request for the backend pod. | `100Mi` |
+| `superstreamEngine.autoscaling.enabled` | Enable autoscaling for the backend. | `true` |
+| `superstreamEngine.autoscaling.minReplicas` | Minimum number of replicas for autoscaling. | `2` |
+| `superstreamEngine.autoscaling.maxReplicas` | Maximum number of replicas for autoscaling. | `5` |
+| `superstreamEngine.autoscaling.targetCPUUtilizationPercentage` | CPU utilization percentage for autoscaling. | `75` |
+| `superstreamEngine.autoscaling.targetMemoryUtilizationPercentage` | Memory utilization percentage for autoscaling. | `75` |
 | `syslog.replicaCount` | Number of replicas for the syslog deployment. | `1` |
 | `syslog.image.repository` | Docker image repository for syslog. | `linuxserver/syslog-ng` |
 | `syslog.image.pullPolicy` | Pull policy for the syslog image. | `IfNotPresent` |
