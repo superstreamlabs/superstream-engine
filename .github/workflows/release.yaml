@@ -4,6 +4,8 @@ on:
   push:
     branches:
     - new_deployment
+    paths:
+    - "version.conf"
 
 jobs:
   release:
