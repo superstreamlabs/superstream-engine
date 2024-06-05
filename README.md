@@ -7,9 +7,9 @@ Reduce Costs and Boost Performance by 75% Without Changing a Single Component or
 
 </div>
 
-## How to deploy
+## Configure Environment Tokens
 
-To deploy the helm chart, the variables in the provided custom_values.yaml file should be filled according to the supplied by Superstream values:
+For easiness, create `custom_values.yaml` file and edit the following values:
 ```yaml
 ############################################################
 # GLOBAL configuration for Superstream Engine
@@ -28,12 +28,13 @@ nats:
   config:
     cluster:
       enabled: true
-# NATS storageClass configuration. Default is blank "".
+# NATS storageClass configuration. The default is blank "".
     jetstream:
       fileStore:
         pvc:
           storageClassName: ""
 ```
+
 To deploy it, run the following:
 ```bash
 helm repo add superstream https://k8s.superstream.ai/ --force-update && helm install superstream superstream/superstream -f custom_values.yaml --create-namespace --namespace superstream --wait
