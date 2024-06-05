@@ -62,6 +62,7 @@ superstreamEngine:
     name: superstream-creds
     encryptionSecretKey: ""
     activationToken: ""
+    useExisting: false
   podAnnotations:
     prometheus.io/path: "/monitoring/metrics"
     prometheus.io/scrape: 'true'

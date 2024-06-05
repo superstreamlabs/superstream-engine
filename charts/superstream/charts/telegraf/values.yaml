@@ -21,6 +21,11 @@ fullnameOverride: telegraf
 env:
 - name: HOSTNAME
   value: "telegraf-polling-service"
+- name: TOKEN
+  valueFrom:
+    secretKeyRef:
+      name: superstream-creds
+      key: ACTIVATION_TOKEN
 # An older "volumeMounts" key was previously added which will likely
 # NOT WORK as you expect. Please use this newer configuration.
 
