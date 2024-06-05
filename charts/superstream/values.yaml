@@ -23,7 +23,7 @@ nats:
 # Superstream Engine config
 ############################################################
 superstreamEngine:
-  releaseDate: "2024-02-22-13-03"
+  releaseDate: ""
   # Number of replicas for the backend deployment
   replicaCount: 2
   image:
@@ -136,7 +136,7 @@ superstreamEngine:
     remoteSyslog: superstream-syslog
     port: 5514
     protocol: udp
-  releaseDate: "2024-03-20-11-12"
+
 syslog:
   replicaCount: 1
   image:
