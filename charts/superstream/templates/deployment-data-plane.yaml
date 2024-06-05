@@ -18,7 +18,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        {{- if .Values.superstreamEngine.releaseDate  -}}
         releaseDate: {{ .Values.superstreamEngine.releaseDate }}
+        {{- end -}}
         {{- include "superstream.labels" . | nindent 8 }}
         {{- include "superstream.selectorLabels" . | nindent 8 }}-data-plane
     spec:
