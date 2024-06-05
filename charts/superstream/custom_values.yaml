@@ -2,18 +2,10 @@
 # GLOBAL configuration for Superstream Engine
 ############################################################
 global:
-<<<<<<< HEAD
-  environment: "valera"
-  accountId: "223671997"
-  activationToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2luZm8iOnsiYWNjb3VudF9pZCI6IjIyMzY3MTk5NyIsImVtYWlsIjoidmFsZXJhQG1lbXBoaXMuZGV2Iiwiand0IjoiZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKbFpESTFOVEU1TFc1clpYa2lmUS5leUpxZEdraU9pSktWMFZVV2pSWVRWRTNXbEl5UjBWS1NETXpXVE5VUmsxSVJFNU9TelEwTjFGVVVWSXpSMWxCVFRWTldGTkZOVVJQUkUxUklpd2lhV0YwSWpveE56RXdOamczTVRFeUxDSnBjM01pT2lKQlExWlJSMHBJVkZWUlJFdzBSalpDVUROVVZVdEdOMHcxVWtsVU5GVktXazVHVGxkSVZVSldRVUZQVmtNM1ZFRkxTVlJZTWxCWk15SXNJbTVoYldVaU9pSXlNak0yTnpFNU9UY2lMQ0p6ZFdJaU9pSlZRVWhYUzBoVlN6WlpVRmhFUlROUlJGcEZWekpJVUVOS1QwUlZTRkpLUWxkUVdscE9OVmRYVkRaSVNrTklWVkpCVWtSUlVEUk1WeUlzSW01aGRITWlPbnNpY0hWaUlqcDdmU3dpYzNWaUlqcDdmU3dpYzNWaWN5STZMVEVzSW1SaGRHRWlPaTB4TENKd1lYbHNiMkZrSWpvdE1Td2lkSGx3WlNJNkluVnpaWElpTENKMlpYSnphVzl1SWpveWZYMC5neXRxOFl2aDhrQzhVdlNiRGtTc2hsdXpQdm1MUExkc3dobGkwTU4tcURod2pNWFVHem1FTUtvMEFhVmwxVXZRTHVlRE5LdHI3eVE1b01MNE94dHlEdyIsIm5rZXkiOiJTVUFITVMzR0hSSlNPU01IRzdJQUhVWkoyNkdUSUJBQ0ZNUko2VFg2R0FIU1pWUjVCQTVSRkVaT1lFIiwib3JnYW5pemF0aW9uX25hbWUiOiJ2YWxlcmEifX0.8GRIBX7y3D8-wOuGtKWw2Scjjbaok6w2d9uXs65NflE"
-  skipLocalAuthentication: false
-=======
   environment: ""               # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
   accountId: ""                 # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
   activationToken: ""           # Enter the activation token required for services or resources that need an initial token for activation or authentication.
   skipLocalAuthentication: true
->>>>>>> 938c42cc1bd95b07e7e8de852df386f3459c7c3d
-
 ############################################################
 # NATS config
 ############################################################
