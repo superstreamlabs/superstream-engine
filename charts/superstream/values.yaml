@@ -173,6 +173,3 @@ syslog:
     accessModes:
       - ReadWriteOnce
     storageClassName: "standard"
-dataPlane:
-  image:
-    tag: latest

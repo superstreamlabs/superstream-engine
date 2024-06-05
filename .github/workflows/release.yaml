@@ -3,7 +3,7 @@ name: Release Charts
 on:
   push:
     branches:
-    - new_deployment
+    - master
     paths:
     - "version.conf"
 

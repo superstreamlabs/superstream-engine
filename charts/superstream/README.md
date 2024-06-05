@@ -6,6 +6,37 @@ Reduce Costs and Boost Performance by 75% Without Changing a Single Component or
 
 </div>
 
+## How to deploy
+
+To deploy the helm chart, the variables in the provided custom_values.yaml file should be filled according to the supplied by Superstream values:
+```yaml
+############################################################
+# GLOBAL configuration for Superstream Engine
+############################################################
+global:
+  environment: ""               # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
+  accountId: ""                 # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
+  activationToken: ""           # Enter the activation token required for services or resources that need an initial token for activation or authentication.
+  skipLocalAuthentication: true
+
+############################################################
+# NATS config
+############################################################
+# NATS HA Deployment. Default "true"
+nats:
+  config:
+    cluster:
+      enabled: true
+# NATS storageClass configuration. Default is blank "".
+    jetstream:
+      fileStore:
+        pvc:
+          storageClassName: ""
+```
+To deploy it, run the following:
+```bash
+helm repo add superstream https://k8s.superstream.dev/charts/ --force-update && helm install superstream superstream/superstream -f custom_values.yaml --create-namespace --namespace superstream --wait
+```
 
 ## Parameters
 The following table lists the configurable parameters of the SuperStream chart and their default values:
@@ -16,9 +47,6 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `global.accountId` | Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account. | `""` |
 | `global.activationToken` | Enter the activation token required for services or resources that need an initial token for activation or authentication. | `""` |
 | `global.skipLocalAuthentication` | Specifies whether to skip local authentication. | `true` |
-| `superstreamEngine.serviceAccount.create` | Specifies whether a service account should be created. | `true` |
-| `superstreamEngine.serviceAccount.annotations` | Annotations to add to the service account. | `{}` |
-| `superstreamEngine.serviceAccount.name` | The name of the service account to use. | `""` |
 | `superstreamEngineinitContainers.image` | Image used for readiness checks or setup tasks. | `curlimages/curl:8.6.0` |
 | `superstreamEngine.releaseDate` | Release date for the backend component. | `"2024-02-22-13-03"` |
 | `superstreamEngine.replicaCount` | Number of replicas for the backend deployment. | `2` |
@@ -28,6 +56,9 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `superstreamEngine.imagePullSecrets` | Image pull secrets. | `""` |
 | `superstreamEngine.configMap.enable` | Enable ConfigMap settings. | `""` |
 | `superstreamEngine.secret.name` | Secret configuration for sensitive information. | `superstream-creds` |
+| `superstreamEngine.serviceAccount.create` | Specifies whether a service account should be created. | `true` |
+| `superstreamEngine.serviceAccount.annotations` | Annotations to add to the service account. | `{}` |
+| `superstreamEngine.serviceAccount.name` | The name of the service account to use. | `""` |
 | `superstreamEngine.service.enabled` | Enable service for the backend. | `false` |
 | `superstreamEngine.service.type` | Type of service for the backend. | `ClusterIP` |
 | `superstreamEngine.service.port` | Port for the backend service. | `8888` |
