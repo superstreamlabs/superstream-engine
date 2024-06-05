@@ -15,8 +15,8 @@ To deploy the helm chart, the variables in the provided custom_values.yaml file 
 ############################################################
 global:
   environment: ""               # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
-  accountId: ""                 # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
-  activationToken: ""           # Enter the activation token required for services or resources that need an initial token for activation or authentication.
+  superstreamAccountId: ""                 # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
+  superstreamActivationToken: ""           # Enter the activation token required for services or resources that need an initial token for activation or authentication.
   skipLocalAuthentication: true
 
 ############################################################
@@ -44,8 +44,8 @@ The following table lists the configurable parameters of the SuperStream chart a
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `global.environment` | Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'. | `""` |
-| `global.accountId` | Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account. | `""` |
-| `global.activationToken` | Enter the activation token required for services or resources that need an initial token for activation or authentication. | `""` |
+| `global.superstreamAccountId` | Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account. | `""` |
+| `global.superstreamActivationToken` | Enter the activation token required for services or resources that need an initial token for activation or authentication. | `""` |
 | `global.skipLocalAuthentication` | Specifies whether to skip local authentication. | `true` |
 | `superstreamEngineinitContainers.image` | Image used for readiness checks or setup tasks. | `curlimages/curl:8.6.0` |
 | `superstreamEngine.releaseDate` | Release date for the backend component. | `"2024-02-22-13-03"` |

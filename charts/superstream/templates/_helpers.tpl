@@ -61,7 +61,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{ toYaml $secret.data }}
 {{- else -}}
 ENCRYPTION_SECRET_KEY: {{ randAlphaNum 32 | b64enc | quote }}
-ACTIVATION_TOKEN: {{ .Values.global.activationToken | toString | b64enc | quote }}
+ACTIVATION_TOKEN: {{ .Values.global.superstreamActivationToken | toString | b64enc | quote }}
 {{- end -}}
 {{- end -}}
 {{- end -}}
