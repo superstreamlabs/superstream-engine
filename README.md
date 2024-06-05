@@ -1,8 +1,9 @@
 <div align="center">
 
-<img src="https://github.com/memphisdev/superstream-helmfile/assets/70286779/5921cf13-ce6c-4888-8ed1-e602f7f60383" width="30%"><br><br>
-Improve And Optimize Your Kafka In Literally Minutes.<br>
-Reduce Costs and Boost Performance by 75% Without Changing a Single Component or Your Existing Kafka!
+![full logo superstream](https://github.com/superstreamlabs/superstream-engine/assets/107035359/19dc2e40-a907-49ee-9faf-d6d707633d53)
+
+<b>Improve And Optimize Your Kafka In Literally Minutes.<br>
+Reduce Costs and Boost Performance by 75% Without Changing a Single Component or Your Existing Kafka!</b>
 
 </div>
 
