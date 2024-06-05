@@ -3,8 +3,8 @@
 ############################################################
 global:
   environment: "" # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
-  accountId: "" # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
-  activationToken: "" # Enter the activation token required for services or resources that need an initial token for activation or authentication.
+  superstreamAccountId: "" # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
+  superstreamActivationToken: "" # Enter the activation token required for services or resources that need an initial token for activation or authentication.
   skipLocalAuthentication: true
 ############################################################
 # NATS config
@@ -23,7 +23,7 @@ nats:
 # Superstream Engine config
 ############################################################
 superstreamEngine:
-  releaseDate: "2024-02-22-13-03"
+  releaseDate: ""
   # Number of replicas for the backend deployment
   replicaCount: 2
   image:
@@ -61,7 +61,8 @@ superstreamEngine:
   secret:
     name: superstream-creds
     encryptionSecretKey: ""
-    activationToken: ""
+    superstreamActivationToken: ""
+    useExisting: false
   podAnnotations:
     prometheus.io/path: "/monitoring/metrics"
     prometheus.io/scrape: 'true'
@@ -135,7 +136,7 @@ superstreamEngine:
     remoteSyslog: superstream-syslog
     port: 5514
     protocol: udp
-  releaseDate: "2024-03-20-11-12"
+
 syslog:
   replicaCount: 1
   image:
@@ -172,6 +173,3 @@ syslog:
     accessModes:
       - ReadWriteOnce
     storageClassName: "standard"
-dataPlane:
-  image:
-    tag: latest
