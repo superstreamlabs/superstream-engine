@@ -36,7 +36,7 @@ superstreamEngine:
   imagePullSecrets: []
   # Overrides for Helm's default naming conventions
   nameOverride: ""
-  fullnameOverride: ""
+  fullnameOverride: "superstream"
   # ConfigMap settings for mounting or referencing within the deployment   
   # Init container configuration
   initContainers:
