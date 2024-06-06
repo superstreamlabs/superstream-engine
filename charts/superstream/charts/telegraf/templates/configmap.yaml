@@ -47,7 +47,7 @@ data:
         "https://superstream-monitoring.mgmt.memphis-gcp.dev"
       ]
       [outputs.influxdb_v2.http_headers]
-        Authorization = "<< $TOKEN >>"
+        Authorization = "$TOKEN"
     [[outputs.influxdb_v2]]
       bucket = "metrics"
       content_encoding = "gzip"
@@ -60,7 +60,7 @@ data:
         "https://superstream-monitoring.mgmt.memphis-gcp.dev"
       ]
       [outputs.influxdb_v2.http_headers]
-        Authorization = "<< $TOKEN >>"
+        Authorization = "$TOKEN"
     [[inputs.syslog]]
       server = "udp://:6514"
       [inputs.syslog.tags]
