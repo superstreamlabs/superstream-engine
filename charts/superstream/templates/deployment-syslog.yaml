@@ -20,15 +20,17 @@ spec:
       labels:
         {{- include "superstream.selectorLabels" . | nindent 8 }}-syslog
     spec:
-      {{- with .Values.syslog.imagePullSecrets }}
+      {{- with .Values.global.image.pullSecretNames }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      {{- range . }}
+      - name: {{ . | quote }}
+      {{- end }}
       {{- end }}    
       securityContext:
         fsGroup: 911
       containers:
       - name: syslog-ng
-        image: "{{ .Values.syslog.image.repository }}:{{ .Values.syslog.image.tag }}"
+        {{ include "superstream.image" (merge (pick $.Values "global") .Values.syslog.image) | nindent 8 }}
         ports:
           - name: syslog
             containerPort: {{ .Values.syslog.service.port }}
