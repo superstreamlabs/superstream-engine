@@ -159,8 +159,8 @@ metrics:
     service_address: "http://:8888"
     threshold: 5000.0
   internal:
-    enabled: true
-    collect_memstats: true
+    enabled: false
+    collect_memstats: false
 # Lifecycle hooks
 # hooks:
 #   postStart: ["/bin/sh", "-c", "echo Telegraf started"]
