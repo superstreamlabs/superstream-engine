@@ -76,3 +76,18 @@ Create the name of the service account to use
 {{- default "default" .Values.superstreamEngine.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+
+{{/*
+Print the image
+*/}}
+{{- define "superstream.image" }}
+{{- $image := printf "%s:%s" .repository .tag }}
+{{- if or .registry .global.image.registry }}
+{{- $image = printf "%s/%s" (.registry | default .global.image.registry) $image }}
+{{- end -}}
+image: {{ $image }}
+{{- if or .pullPolicy .global.image.pullPolicy }}
+imagePullPolicy: {{ .pullPolicy | default .global.image.pullPolicy }}
+{{- end }}
+{{- end }}

@@ -40,19 +40,20 @@ spec:
               sleep 2
             done 
 
-      {{- with .Values.superstreamEngine.imagePullSecrets }}
+      {{- with .Values.global.image.pullSecretNames }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      {{- range . }}
+      - name: {{ . | quote }}
+      {{- end }}
       {{- end }}
       serviceAccountName: {{ include "superstream.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.superstreamEngine.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-data-plane
+          {{ include "superstream.image" (merge (pick $.Values "global") .Values.superstreamEngine.image) | nindent 10 }}
           securityContext:
             {{- toYaml .Values.superstreamEngine.securityContext | nindent 12 }}
-          image: "{{ .Values.superstreamEngine.image.repository }}:{{ .Values.superstreamEngine.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.superstreamEngine.image.pullPolicy }}
           ports:
           - name: data-plane
             containerPort: {{ .Values.superstreamEngine.service.port }}
