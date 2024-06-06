@@ -6,6 +6,18 @@ global:
   superstreamAccountId: "" # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
   superstreamActivationToken: "" # Enter the activation token required for services or resources that need an initial token for activation or authentication.
   skipLocalAuthentication: true
+  
+  image:
+    # global image pull policy to use for all container images in the chart
+    # can be overridden by individual image pullPolicy
+    pullPolicy:
+    # global list of secret names to use as image pull secrets for all pod specs in the chart
+    # secrets must exist in the same namespace
+    # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    pullSecretNames: []
+    # global registry to use for all container images in the chart
+    # can be overridden by individual image registry
+    registry:
 ############################################################
 # NATS config
 ############################################################
@@ -33,10 +45,11 @@ superstreamEngine:
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
+    registry: 
   imagePullSecrets: []
   # Overrides for Helm's default naming conventions
   nameOverride: ""
-  fullnameOverride: ""
+  fullnameOverride: "superstream"
   # ConfigMap settings for mounting or referencing within the deployment   
   # Init container configuration
   initContainers:
@@ -113,8 +126,8 @@ superstreamEngine:
       cpu: '8'
       memory: 8Gi
     requests:
-      cpu: 500m
-      memory: 1Gi
+      cpu: '2'
+      memory: 2Gi
   # Autoscaling configuration for dynamically adjusting the number of pod replicas
   autoscaling:
     enabled: true
@@ -143,6 +156,7 @@ syslog:
     repository: linuxserver/syslog-ng
     pullPolicy: IfNotPresent
     tag: "4.5.0" # Use a specific version to ensure consistency across deployments
+    registry: 
   imagePullSecrets: []
   service:
     type: ClusterIP

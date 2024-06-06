@@ -2,11 +2,11 @@
 Expand the name of the chart.
 */}}
 {{- define "superstream.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- default .Chart.Name .Values.superstreamEngine.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{- define "superstream.namespace" -}}
-{{- default .Release.Namespace .Values.namespaceOverride | trunc 63 | trimSuffix "-" -}}
+{{- default .Release.Namespace .Values.superstreamEngine.namespaceOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -15,10 +15,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "superstream.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- if .Values.superstreamEngine.fullnameOverride }}
+{{- .Values.superstreamEngine.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- $name := default .Chart.Name .Values.superstreamEngine.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -74,5 +74,20 @@ Create the name of the service account to use
 {{- default (include "superstream.fullname" .) .Values.superstreamEngine.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.superstreamEngine.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+
+{{/*
+Print the image
+*/}}
+{{- define "superstream.image" }}
+{{- $image := printf "%s:%s" .repository .tag }}
+{{- if or .registry .global.image.registry }}
+{{- $image = printf "%s/%s" (.registry | default .global.image.registry) $image }}
+{{- end -}}
+image: {{ $image }}
+{{- if or .pullPolicy .global.image.pullPolicy }}
+imagePullPolicy: {{ .pullPolicy | default .global.image.pullPolicy }}
 {{- end }}
 {{- end }}
