@@ -83,7 +83,7 @@ data:
       ]
       name_override = "telegraf_logs"
       [inputs.tail.tags]
-        accountId = "{{ .Values.global.superstreamAccountId }}_{{ .Values.global.environment }}"
+        accountId = "{{ .Values.global.superstreamAccountId }}"
         env = {{ .Values.global.environment | quote }}
         appname = "telegraf"
 
