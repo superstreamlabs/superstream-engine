@@ -59,7 +59,7 @@ data:
     [[inputs.syslog]]
       server = "udp://:6514"
       [inputs.syslog.tags]
-        accountId = "{{ .Values.global.superstreamAccountId }}_{{ .Values.global.environment }}"
+        accountId = "{{ .Values.global.superstreamAccountId }}"
         env = {{ .Values.global.environment | quote }}
     [[inputs.prometheus]]
       kubernetes_label_selector = "app.kubernetes.io/name in (nats, superstream)"
@@ -68,7 +68,7 @@ data:
       monitor_kubernetes_pods_namespace = {{ .Release.Namespace | quote}}
       monitor_kubernetes_pods_port = 7777
       [inputs.prometheus.tags]
-        accountId = "{{ .Values.global.superstreamAccountId }}_{{ .Values.global.environment }}"
+        accountId = "{{ .Values.global.superstreamAccountId }}"
         env = {{ .Values.global.environment | quote }}
 
     [[inputs.tail]]
