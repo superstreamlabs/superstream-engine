@@ -20,9 +20,11 @@ spec:
       labels:
         {{- include "superstream.selectorLabels" . | nindent 8 }}-syslog
     spec:
-      {{- with .Values.global.image.imagePullSecrets }}
+      {{- with .Values.global.image.pullSecretNames }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      {{- range . }}
+      - name: {{ . | quote }}
+      {{- end }}
       {{- end }}    
       securityContext:
         fsGroup: 911

@@ -101,9 +101,11 @@ spec:
             path: /
             port: {{ trimPrefix "http://:" .service_address | int64 }}
         {{- end }}
-      {{- if .Values.imagePullSecrets }}
+      {{- with .Values.global.image.pullSecretNames }}
       imagePullSecrets:
-{{ toYaml .Values.imagePullSecrets | indent 8 }}
+      {{- range . }}
+      - name: {{ . | quote }}
+      {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

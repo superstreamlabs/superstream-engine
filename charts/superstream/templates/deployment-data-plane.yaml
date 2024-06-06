@@ -40,9 +40,11 @@ spec:
               sleep 2
             done 
 
-      {{- with .Values.global.image.imagePullSecrets }}
+      {{- with .Values.global.image.pullSecretNames }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      {{- range . }}
+      - name: {{ . | quote }}
+      {{- end }}
       {{- end }}
       serviceAccountName: {{ include "superstream.serviceAccountName" . }}
       securityContext:
