@@ -35,37 +35,32 @@ data:
         "syslog"
       ]
       source = "def apply(metric):\n    unique_str = metric.name + str(metric.fields) + str(metric.tags)\n    random_value = str(hash(unique_str))[-8:]\n    metric.tags['eventId'] = random_value\n    return metric                                         \n"
-    [[outputs.influxdb_v2]]
-      bucket = "logs"
-      content_encoding = "gzip"
+
+    [[outputs.loki]]
+      domain = "https://loki.mgmt.superstream.ai"
+      endpoint = "/loki/api/v1/push"
       namepass = [
         "syslog",
         "telegraf_logs"
       ]
-      organization = "superstream"
-      urls = [
-        "https://superstream-monitoring.mgmt.memphis-gcp.dev"
-      ]
-      [outputs.influxdb_v2.http_headers]
-        Authorization = "<< $TOKEN >>"
-    [[outputs.influxdb_v2]]
-      bucket = "metrics"
-      content_encoding = "gzip"
+      [outputs.loki.http_headers]
+        Authorization = "$TOKEN"
+    [[outputs.http]]
+      data_format = "prometheusremotewrite"
+      method = "POST"
       namedrop = [
         "syslog",
-        "telegraf_logs"
+        "telegraf_logs",
+        "internal"
       ]
-      organization = "superstream"
-      urls = [
-        "https://superstream-monitoring.mgmt.memphis-gcp.dev"
-      ]
-      [outputs.influxdb_v2.http_headers]
-        Authorization = "<< $TOKEN >>"
+      url = "https://prometheus.mgmt.superstream.ai/api/v1/write"
+      [outputs.http.headers]
+        Authorization = "$TOKEN"     
     [[inputs.syslog]]
       server = "udp://:6514"
       [inputs.syslog.tags]
-        accountId = "{{ .Values.global.superstreamAccountId }}_{{ .Values.global.environment }}"
-        env = {{ .Values.global.environment | quote }}
+        accountId = "{{ .Values.global.superstreamAccountId }}"
+        engineName = {{ .Values.global.engineName | quote }}
     [[inputs.prometheus]]
       kubernetes_label_selector = "app.kubernetes.io/name in (nats, superstream)"
       monitor_kubernetes_pods = true
@@ -73,13 +68,9 @@ data:
       monitor_kubernetes_pods_namespace = {{ .Release.Namespace | quote}}
       monitor_kubernetes_pods_port = 7777
       [inputs.prometheus.tags]
-        accountId = "{{ .Values.global.superstreamAccountId }}_{{ .Values.global.environment }}"
-        env = {{ .Values.global.environment | quote }}
-    [[inputs.internal]]
-      [inputs.internal.tags]
-        accountId = "{{ .Values.global.superstreamAccountId }}_{{ .Values.global.environment }}"
-        env = {{ .Values.global.environment | quote }}
-        chart = "telegraf-1.8.48"
+        accountId = "{{ .Values.global.superstreamAccountId }}"
+        engineName = {{ .Values.global.engineName | quote }}
+
     [[inputs.tail]]
       data_format = "grok"
       files = [
@@ -92,9 +83,12 @@ data:
       ]
       name_override = "telegraf_logs"
       [inputs.tail.tags]
-        accountId = "{{ .Values.global.superstreamAccountId }}_{{ .Values.global.environment }}"
-        env = {{ .Values.global.environment | quote }}
+        accountId = "{{ .Values.global.superstreamAccountId }}"
+        engineName = {{ .Values.global.engineName | quote }}
         appname = "telegraf"
 
     [[inputs.internal]]
       collect_memstats = true
+      [inputs.internal.tags]
+        accountId = "{{ .Values.global.superstreamAccountId }}"
+        engineName = {{ .Values.global.engineName | quote }}

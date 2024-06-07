@@ -15,9 +15,9 @@ For easiness, create `custom_values.yaml` file and edit the following values:
 # GLOBAL configuration for Superstream Engine
 ############################################################
 global:
-  environment: ""               # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
-  superstreamAccountId: ""                 # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
-  superstreamActivationToken: ""           # Enter the activation token required for services or resources that need an initial token for activation or authentication.
+  engineName: ""                   # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
+  superstreamAccountId: ""         # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
+  superstreamActivationToken: ""   # Enter the activation token required for services or resources that need an initial token for activation or authentication.
   skipLocalAuthentication: true
 
 ############################################################
@@ -45,10 +45,13 @@ The following table lists the configurable parameters of the SuperStream chart a
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `global.environment`                                      | Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'. | `""`                               |
-| `global.accountId`                                        | Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account. | `""`                               |
-| `global.activationToken`                                  | Enter the activation token required for services or resources that need an initial token for activation or authentication. | `""`                               |
+| `global.engineName`                                       | Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'. | `""`|
+| `global.superstreamAccountId`                             | Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account. | `""`|
+| `global.superstreamActivationToken`                       | Enter the activation token required for services or resources that need an initial token for activation or authentication. | `""` |
 | `global.skipLocalAuthentication`                          | Specifies whether to skip local authentication.                                      | `true`                             |
+| `global.image.pullPolicy`                                 | Global image pull policy to use for all container images in the chart. Can be overridden by individual image pullPolicy. | `""` |
+| `global.image.pullSecretNames`                            | Global list of secret names to use as image pull secrets for all pod specs in the chart. Secrets must exist in the same namespace. | `[]` |
+| `global.image.registry`                                   | Global registry to use for all container images in the chart. Can be overridden by individual image registry. | `""` |
 | `nats.config.cluster.enabled`                             | Indicates whether the NATS cluster is enabled.                                      | `true`                             |
 | `nats.config.jetstream.fileStore.pvc.storageClassName`    | Specifies the storage class name for the Jetstream file store PVC.                  | `""`                               |
 | `superstreamEngine.releaseDate`                           | Release date for the backend component.                                             | `"2024-02-22-13-03"`               |
