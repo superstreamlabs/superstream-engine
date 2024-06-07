@@ -1,22 +1,23 @@
 <div align="center">
 
-<img src="https://github.com/memphisdev/superstream-helmfile/assets/70286779/5921cf13-ce6c-4888-8ed1-e602f7f60383" width="30%"><br><br>
-Improve And Optimize Your Kafka In Literally Minutes.<br>
-Reduce Costs and Boost Performance by 75% Without Changing a Single Component or Your Existing Kafka!
+![full logo superstream](https://github.com/superstreamlabs/superstream-engine/assets/107035359/19dc2e40-a907-49ee-9faf-d6d707633d53)
+
+<b>Improve And Optimize Your Kafka In Literally Minutes.<br>
+Reduce Costs and Boost Performance by 75% Without Changing a Single Component or Your Existing Kafka!</b>
 
 </div>
 
-## How to deploy
+## Configure Environment Tokens
 
-To deploy the helm chart, the variables in the provided custom_values.yaml file should be filled according to the supplied by Superstream values:
+For easiness, create `custom_values.yaml` file and edit the following values:
 ```yaml
 ############################################################
 # GLOBAL configuration for Superstream Engine
 ############################################################
 global:
-  engineName: ""               # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
-  superstreamAccountId: ""                 # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
-  superstreamActivationToken: ""           # Enter the activation token required for services or resources that need an initial token for activation or authentication.
+  engineName: ""                   # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
+  superstreamAccountId: ""         # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
+  superstreamActivationToken: ""   # Enter the activation token required for services or resources that need an initial token for activation or authentication.
   skipLocalAuthentication: true
 
 ############################################################
@@ -27,7 +28,7 @@ nats:
   config:
     cluster:
       enabled: true
-# NATS storageClass configuration. Default is blank "".
+# NATS storageClass configuration. The default is blank "".
     jetstream:
       fileStore:
         pvc:
@@ -44,10 +45,13 @@ The following table lists the configurable parameters of the SuperStream chart a
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `global.engineName`                                      | Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'. | `""`                               |
-| `global.superstreamAccountId`                                        | Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account. | `""`                               |
-| `global.superstreamActivationToken`                                  | Enter the activation token required for services or resources that need an initial token for activation or authentication. | `""`                               |
+| `global.engineName`                                       | Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'. | `""`|
+| `global.superstreamAccountId`                             | Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account. | `""`|
+| `global.superstreamActivationToken`                       | Enter the activation token required for services or resources that need an initial token for activation or authentication. | `""` |
 | `global.skipLocalAuthentication`                          | Specifies whether to skip local authentication.                                      | `true`                             |
+| `global.image.pullPolicy`                                 | Global image pull policy to use for all container images in the chart. Can be overridden by individual image pullPolicy. | `""` |
+| `global.image.pullSecretNames`                            | Global list of secret names to use as image pull secrets for all pod specs in the chart. Secrets must exist in the same namespace. | `[]` |
+| `global.image.registry`                                   | Global registry to use for all container images in the chart. Can be overridden by individual image registry. | `""` |
 | `nats.config.cluster.enabled`                             | Indicates whether the NATS cluster is enabled.                                      | `true`                             |
 | `nats.config.jetstream.fileStore.pvc.storageClassName`    | Specifies the storage class name for the Jetstream file store PVC.                  | `""`                               |
 | `superstreamEngine.releaseDate`                           | Release date for the backend component.                                             | `"2024-02-22-13-03"`               |
