@@ -15,9 +15,9 @@ For easiness, create `custom_values.yaml` file and edit the following values:
 # GLOBAL configuration for Superstream Engine
 ############################################################
 global:
-  engineName: ""               # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
-  superstreamAccountId: ""                 # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
-  superstreamActivationToken: ""           # Enter the activation token required for services or resources that need an initial token for activation or authentication.
+  engineName: ""                   # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
+  superstreamAccountId: ""         # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
+  superstreamActivationToken: ""   # Enter the activation token required for services or resources that need an initial token for activation or authentication.
   skipLocalAuthentication: true
 
 ############################################################
