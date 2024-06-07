@@ -60,7 +60,7 @@ spec:
             protocol: TCP
           env:
             - name: ENV_NAME
-              value: {{ .Values.global.environment }}
+              value: {{ .Values.global.engineName }}
             - name: IS_HA
               value: {{ .Values.nats.config.cluster.enabled | quote }}
             - name: SKIP_LOCAL_AUTHENTICATION
