@@ -14,7 +14,7 @@ To deploy the helm chart, the variables in the provided custom_values.yaml file 
 # GLOBAL configuration for Superstream Engine
 ############################################################
 global:
-  environment: ""               # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
+  engineName: ""               # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
   superstreamAccountId: ""                 # Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account.
   superstreamActivationToken: ""           # Enter the activation token required for services or resources that need an initial token for activation or authentication.
   skipLocalAuthentication: true
@@ -44,9 +44,9 @@ The following table lists the configurable parameters of the SuperStream chart a
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `global.environment`                                      | Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'. | `""`                               |
-| `global.accountId`                                        | Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account. | `""`                               |
-| `global.activationToken`                                  | Enter the activation token required for services or resources that need an initial token for activation or authentication. | `""`                               |
+| `global.engineName`                                      | Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'. | `""`                               |
+| `global.superstreamAccountId`                                        | Provide the account ID associated with the deployment, which could be used for identifying resources or configurations tied to a specific account. | `""`                               |
+| `global.superstreamActivationToken`                                  | Enter the activation token required for services or resources that need an initial token for activation or authentication. | `""`                               |
 | `global.skipLocalAuthentication`                          | Specifies whether to skip local authentication.                                      | `true`                             |
 | `nats.config.cluster.enabled`                             | Indicates whether the NATS cluster is enabled.                                      | `true`                             |
 | `nats.config.jetstream.fileStore.pvc.storageClassName`    | Specifies the storage class name for the Jetstream file store PVC.                  | `""`                               |
