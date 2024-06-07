@@ -60,7 +60,7 @@ data:
       server = "udp://:6514"
       [inputs.syslog.tags]
         accountId = "{{ .Values.global.superstreamAccountId }}"
-        env = {{ .Values.global.environment | quote }}
+        engineName = {{ .Values.global.engineName | quote }}
     [[inputs.prometheus]]
       kubernetes_label_selector = "app.kubernetes.io/name in (nats, superstream)"
       monitor_kubernetes_pods = true
@@ -69,7 +69,7 @@ data:
       monitor_kubernetes_pods_port = 7777
       [inputs.prometheus.tags]
         accountId = "{{ .Values.global.superstreamAccountId }}"
-        env = {{ .Values.global.environment | quote }}
+        engineName = {{ .Values.global.engineName | quote }}
 
     [[inputs.tail]]
       data_format = "grok"
@@ -84,7 +84,7 @@ data:
       name_override = "telegraf_logs"
       [inputs.tail.tags]
         accountId = "{{ .Values.global.superstreamAccountId }}"
-        env = {{ .Values.global.environment | quote }}
+        engineName = {{ .Values.global.engineName | quote }}
         appname = "telegraf"
 
     [[inputs.internal]]
