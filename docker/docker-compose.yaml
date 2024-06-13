@@ -18,14 +18,13 @@ services:
     ports:
       - "7777:7777"
     environment:
-      ENV_NAME: ""
       ACTIVATION_TOKEN: ""
       SKIP_LOCAL_AUTHENTICATION: 'true'
       PORT: '7777'
       ENCRYPTION_SECRET_KEY: "long32charactersencryptionsecret"
       NATS_HOST: nats
       NATS_PORT: '4222'
-      CONTROL_PLANE_HOST: broker.superstream.dev
+      CONTROL_PLANE_HOST: broker.superstream.ai
       CONTROL_PLANE_PORT: '4222'
 
 networks:
