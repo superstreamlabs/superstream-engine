@@ -9,12 +9,11 @@ Reduce Costs and Boost Performance by 75% Without Changing a Single Component or
 
 ## Configure Environment Tokens
 
-Edit the following variables in `docker-compose.yaml` file supplied by Superstream.
+Edit the following variable in `docker-compose.yaml` file supplied by Superstream.
 ```yaml
 superstream:
   ...
   environment:
-    ENV_NAME: ""             # Define the superstream engine name within 32 characters, excluding '.', and using only lowercase letters, numbers, '-', and '_'.
     ACTIVATION_TOKEN: ""     # Enter the activation token required for services or resources that need an initial token for activation or authentication.
   ...
 ```
