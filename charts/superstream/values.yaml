@@ -164,11 +164,9 @@ syslog:
     protocol: UDP
   resources:
     limits:
-      cpu: "100m"
-      memory: "256Mi"
+      memory: 256Mi
     requests:
-      cpu: "50m"
-      memory: "128Mi"
+      cpu: 50m
   podAnnotations:
     prometheus.io/scrape: 'false'
   remoteSyslog:

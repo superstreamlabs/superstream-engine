@@ -39,6 +39,8 @@ spec:
         - name: config-volume
           mountPath: {{ .Values.syslog.configMap.mountPath }}
           subPath: {{ .Values.syslog.configMap.subPath }}
+        resources:
+            {{- toYaml .Values.syslog.resources | nindent 12 }} 
       volumes:
       - name: config-volume
         configMap:
