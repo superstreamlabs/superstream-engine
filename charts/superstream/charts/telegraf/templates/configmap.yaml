@@ -66,7 +66,7 @@ data:
       ]
       url = "https://prometheus.mgmt.superstream.ai/api/v1/write"
       [outputs.http.headers]
-        Authorization = "TOKEN"     
+        Authorization = "$TOKEN"    
     [[inputs.syslog]]
       server = "udp://:6514"
       [inputs.syslog.tags]
