@@ -176,7 +176,7 @@ syslog:
   configMap:
     enabled: true
     name: syslog-config
-    mountPath: /config/syslog-ng.conf
+    mountPath: /tmp/syslog-ng.conf
     subPath: syslog-ng.conf # Optional, use if you want to mount a specific file from the ConfigMap
   # Persistent Volume configuration, if needed
   persistence:

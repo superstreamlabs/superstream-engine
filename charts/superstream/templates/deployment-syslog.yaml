@@ -35,6 +35,7 @@ spec:
           - name: syslog
             containerPort: {{ .Values.syslog.service.port }}
             protocol: {{ .Values.syslog.service.protocol }}
+        command: ["/usr/sbin/syslog-ng", "-F", "-f", "/tmp/syslog-ng.conf", "--persist-file", "/config/syslog-ng.persist", "--pidfile=/config/syslog-ng.pid", "--control=/config/syslog-ng.ctl", "--stderr", "--no-caps"]
         volumeMounts:
         - name: config-volume
           mountPath: {{ .Values.syslog.configMap.mountPath }}
