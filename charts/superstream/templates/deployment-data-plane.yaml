@@ -30,7 +30,9 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
           - name: NATS_HOST
-            value: nats.{{ include "superstream.namespace" . }}    
+            value: nats.{{ include "superstream.namespace" . }}  
+          - name: NATS_MONITORING_PORT
+            value: "8222"    
         command: 
           - "sh"
           - "-c"
