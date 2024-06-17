@@ -35,7 +35,18 @@ data:
         "syslog"
       ]
       source = "def apply(metric):\n    unique_str = metric.name + str(metric.fields) + str(metric.tags)\n    random_value = str(hash(unique_str))[-8:]\n    metric.tags['eventId'] = random_value\n    return metric                                         \n"
-
+    [[processors.starlark]]
+      source = '''
+    def apply(metric):
+        level = metric.fields.get('level')
+        if level == "I":
+            metric.fields['level'] = "info"
+        elif level == "W":
+            metric.fields['level'] = "warning"
+        elif level == "E":
+            metric.fields['level'] = "error"
+        return metric
+      '''
     [[outputs.loki]]
       domain = "https://loki.mgmt.superstream.ai"
       endpoint = "/loki/api/v1/push"
@@ -55,7 +66,7 @@ data:
       ]
       url = "https://prometheus.mgmt.superstream.ai/api/v1/write"
       [outputs.http.headers]
-        Authorization = "$TOKEN"     
+        Authorization = "$TOKEN"    
     [[inputs.syslog]]
       server = "udp://:6514"
       [inputs.syslog.tags]
@@ -72,16 +83,17 @@ data:
         engineName = {{ .Values.global.engineName | quote }}
 
     [[inputs.tail]]
-      data_format = "grok"
-      files = [
-        "/tmp/telegraf.log"
-      ]
+      files = ["/tmp/telegraf.log"]
       from_beginning = false
-      grok_custom_patterns = "LOGLEVEL [IWE]"
-      grok_patterns = [
-        "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:loglevel}! %{GREEDYDATA:message}"
-      ]
       name_override = "telegraf_logs"
+      data_format = "grok"
+      grok_custom_patterns = '''
+    LOGLEVEL [IWE]
+    COMPONENT \[(.*?)\]
+      '''
+      grok_patterns = [
+        "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:level}! %{COMPONENT:component} %{GREEDYDATA:message}",
+      ]
       [inputs.tail.tags]
         accountId = "{{ .Values.global.superstreamAccountId }}"
         engineName = {{ .Values.global.engineName | quote }}
