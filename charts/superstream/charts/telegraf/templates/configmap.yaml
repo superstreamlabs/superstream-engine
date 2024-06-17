@@ -47,6 +47,21 @@ data:
             metric.fields['level'] = "error"
         return metric
       '''
+    [[processors.starlark]]
+      namepass = [
+        "syslog"
+      ]    
+      source = '''
+    def apply(metric):
+        severity = metric.tags.get('severity')
+        if severity == "err":
+            metric.tags['level'] = "error" 
+        elif severity == "warning":
+            metric.tags['level'] = "warning"            
+        elif severity == "notice":
+            metric.tags['level'] = "info"
+        return metric
+      '''      
     [[outputs.loki]]
       domain = "https://loki.mgmt.superstream.ai"
       endpoint = "/loki/api/v1/push"
