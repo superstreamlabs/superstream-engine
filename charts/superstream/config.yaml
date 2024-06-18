@@ -1,4 +1,4 @@
-dataPlane:
+superstreamEngine:
   configMap:
     enable: true
     name: connection.conf
