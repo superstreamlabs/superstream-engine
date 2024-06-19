@@ -185,3 +185,6 @@ syslog:
     accessModes:
       - ReadWriteOnce
     storageClassName: "standard"
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

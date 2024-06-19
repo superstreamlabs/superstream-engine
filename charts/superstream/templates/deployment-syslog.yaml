@@ -18,6 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        {{- include "telegraf.labels" . | nindent 8 }}
         {{- include "superstream.selectorLabels" . | nindent 8 }}-syslog
     spec:
       {{- with .Values.global.image.pullSecretNames }}
@@ -46,3 +47,15 @@ spec:
       - name: config-volume
         configMap:
           name: {{ .Values.syslog.configMap.name }}
+      {{- with .Values.syslog.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.syslog.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.syslog.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
