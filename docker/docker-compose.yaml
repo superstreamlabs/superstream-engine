@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  nats:
+    image: nats:alpine3.19
+    container_name: nats_server
+    ports:
+      - "4222:4222" # Client port
+      - "8222:8222" # HTTP management port    
+    volumes:
+      - "./nats.conf:/etc/nats/nats.conf"
+    command: "-c /etc/nats/nats.conf" 
+  superstream:
+    image: superstreamlabs/superstream-data-plane-be:latest
+    depends_on:
+      - nats
+    restart: on-failure
+    pull_policy: always
+    ports:
+      - "7777:7777"
+    environment:
+      ACTIVATION_TOKEN: ""
+      SKIP_LOCAL_AUTHENTICATION: 'true'
+      PORT: '7777'
+      ENCRYPTION_SECRET_KEY: "long32charactersencryptionsecret"
+      NATS_HOST: nats
+      NATS_PORT: '4222'
+      CONTROL_PLANE_HOST: broker.superstream.ai
+      CONTROL_PLANE_PORT: '4222'
+
+networks:
+  superstream:
+    ipam:
+      driver: default

@@ -27,7 +27,7 @@ data:
 
     # Define destination where the formatted logs will be sent
     destination d_local {
-        file("/config/log/rfc5424.log" template(t_rfc5424));
+        file("/tmp/rfc5424.log" template(t_rfc5424));
     };
     # Define destination for forwarding logs to a remote syslog server
     destination d_remote_syslog {

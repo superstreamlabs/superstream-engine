@@ -51,6 +51,9 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "telegraf.labels" -}}
+{{- with .Values.global.labels -}}
+{{ toYaml . }}
+{{ end -}}
 helm.sh/chart: {{ include "telegraf.chart" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{ include "telegraf.selectorLabels" . }}
