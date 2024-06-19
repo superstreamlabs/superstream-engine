@@ -184,4 +184,7 @@ syslog:
     size: "1Gi"
     accessModes:
       - ReadWriteOnce
-    storageClassName: "standard"
+    storageClassName: ""
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
