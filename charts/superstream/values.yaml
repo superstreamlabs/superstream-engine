@@ -155,7 +155,7 @@ syslog:
   image:
     repository: linuxserver/syslog-ng
     pullPolicy: IfNotPresent
-    tag: "4.5.0" # Use a specific version to ensure consistency across deployments
+    tag: "4.7.1" # Use a specific version to ensure consistency across deployments
     registry: 
   imagePullSecrets: []
   service:
@@ -164,11 +164,9 @@ syslog:
     protocol: UDP
   resources:
     limits:
-      cpu: "100m"
-      memory: "256Mi"
+      memory: 256Mi
     requests:
-      cpu: "50m"
-      memory: "128Mi"
+      cpu: 50m
   podAnnotations:
     prometheus.io/scrape: 'false'
   remoteSyslog:
@@ -178,7 +176,7 @@ syslog:
   configMap:
     enabled: true
     name: syslog-config
-    mountPath: /config/syslog-ng.conf
+    mountPath: /tmp/syslog-ng.conf
     subPath: syslog-ng.conf # Optional, use if you want to mount a specific file from the ConfigMap
   # Persistent Volume configuration, if needed
   persistence:
@@ -186,4 +184,7 @@ syslog:
     size: "1Gi"
     accessModes:
       - ReadWriteOnce
-    storageClassName: "standard"
+    storageClassName: ""
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
