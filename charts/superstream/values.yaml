@@ -142,7 +142,7 @@ superstreamEngine:
     host: ""
     port: 4222
   controlPlane:
-    host: "broker.superstream.dev"
+    host: "broker.superstream.ai"
     port: 4222
   syslog:
     enabled: true
