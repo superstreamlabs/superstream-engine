@@ -69,6 +69,14 @@ data:
         "syslog",
         "telegraf_logs"
       ]
+      fielddrop = [
+        "SDID@0_eventSource",
+        "facility_code",
+        "severity_code",
+        "version",
+        "timestamp",
+        "procid"
+      ]
       [outputs.loki.http_headers]
         Authorization = "$TOKEN"
     [[outputs.http]]
