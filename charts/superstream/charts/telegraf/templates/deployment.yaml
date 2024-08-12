@@ -50,6 +50,13 @@ spec:
 {{ toYaml .Values.args | indent 8 }}
         {{- end }}
         env:
+        - name: HTTP_PROXY
+          value: "http://squid-proxy:3128"
+        - name: HTTPS_PROXY
+          value: "http://squid-proxy:3128"  
+        - name: NO_PROXY
+          value: "10.96.0.1,172.19.0.2,10.244.80.141"
+              
 {{ toYaml .Values.env | indent 8 }}
 {{- if .Values.envFromSecret }}
         envFrom:
