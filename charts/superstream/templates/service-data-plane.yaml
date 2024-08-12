@@ -12,6 +12,12 @@ spec:
       targetPort: data-plane
       protocol: TCP
       name: data-plane
+    {{- if .Values.superstreamEngine.kafkaAutoScaler.enabled }}  
+    - port: {{ .Values.superstreamEngine.kafkaAutoScaler.service.port }}
+      targetPort: kafka-scaler
+      protocol: TCP
+      name: kafka-scaler
+    {{- end }}      
   selector:
     {{- include "superstream.selectorLabels" . | nindent 4 }}-data-plane
 {{- end }}

@@ -98,7 +98,18 @@ spec:
             - name: SYSLOG_PORT
               value: {{ .Values.superstreamEngine.syslog.port | quote }}
           resources:
-            {{- toYaml .Values.superstreamEngine.resources | nindent 12 }}                 
+            {{- toYaml .Values.superstreamEngine.resources | nindent 12 }}
+        {{- if .Values.superstreamEngine.kafkaAutoScaler.enabled }}            
+        - name: {{ .Chart.Name }}-kafka-auto-scaler
+          image: "{{ .Values.superstreamEngine.kafkaAutoScaler.image.repository }}:{{ .Values.superstreamEngine.kafkaAutoScaler.image.tag }}"
+          imagePullPolicy: {{ .Values.superstreamEngine.kafkaAutoScaler.image.pullPolicy }}
+          ports:
+          - name: kafka-scaler
+            containerPort: {{ .Values.superstreamEngine.kafkaAutoScaler.service.port }}
+            protocol: TCP
+          resources:
+            {{- toYaml .Values.superstreamEngine.kafkaAutoScaler.resources | nindent 12 }}
+        {{- end }}                             
       {{- $fileDataExists := and .Values.superstreamEngine.configMap.fileData .Values.superstreamEngine.configMap.fileData.fileContent }}        
       {{- if or $fileDataExists .Values.superstreamEngine.configMap.useExisting }}
           volumeMounts:
