@@ -103,10 +103,6 @@ spec:
         - name: {{ .Chart.Name }}-kafka-auto-scaler
           image: "{{ .Values.superstreamEngine.kafkaAutoScaler.image.repository }}:{{ .Values.superstreamEngine.kafkaAutoScaler.image.tag }}"
           imagePullPolicy: {{ .Values.superstreamEngine.kafkaAutoScaler.image.pullPolicy }}
-          ports:
-          - name: kafka-scaler
-            containerPort: {{ .Values.superstreamEngine.kafkaAutoScaler.service.port }}
-            protocol: TCP
           resources:
             {{- toYaml .Values.superstreamEngine.kafkaAutoScaler.resources | nindent 12 }}
         {{- end }}                             
