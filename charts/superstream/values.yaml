@@ -153,6 +153,8 @@ superstreamEngine:
     remoteSyslog: superstream-syslog
     port: 5514
     protocol: udp
+
+  # Optional service to automatically scale the Kafka cluster up/down based on CPU and memory metrics  
   kafkaAutoScaler:
     enabled: false
     image:
