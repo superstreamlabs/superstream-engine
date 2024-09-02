@@ -103,6 +103,24 @@ spec:
         - name: {{ .Chart.Name }}-kafka-auto-scaler
           image: "{{ .Values.superstreamEngine.kafkaAutoScaler.image.repository }}:{{ .Values.superstreamEngine.kafkaAutoScaler.image.tag }}"
           imagePullPolicy: {{ .Values.superstreamEngine.kafkaAutoScaler.image.pullPolicy }}
+          env:
+            - name: ENV_NAME
+              value: {{ .Values.global.engineName }}
+            - name: ACTIVATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: superstream-creds
+                  key: ACTIVATION_TOKEN
+            - name: CONTROL_PLANE_HOST
+              value: {{ .Values.superstreamEngine.controlPlane.host }}
+            - name: CONTROL_PLANE_PORT
+              value: {{ .Values.superstreamEngine.controlPlane.port | quote }}
+            - name: SYSLOG_HOST
+              value: {{ .Values.superstreamEngine.syslog.remoteSyslog }}.{{ include "superstream.namespace" . }}
+            - name: SYSLOG_PROTOCOL
+              value: {{ .Values.superstreamEngine.syslog.protocol }}
+            - name: SYSLOG_PORT
+              value: {{ .Values.superstreamEngine.syslog.port | quote }}          
           resources:
             {{- toYaml .Values.superstreamEngine.kafkaAutoScaler.resources | nindent 12 }}
         {{- end }}                             
