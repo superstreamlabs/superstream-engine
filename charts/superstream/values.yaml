@@ -18,6 +18,10 @@ global:
     # global registry to use for all container images in the chart
     # can be overridden by individual image registry
     registry:
+
+  # global labels will be applied to all resources deployed by the chart
+  labels: {}
+  
 ############################################################
 # NATS config
 ############################################################
@@ -142,7 +146,7 @@ superstreamEngine:
     host: ""
     port: 4222
   controlPlane:
-    host: "broker.superstream.dev"
+    host: "broker.superstream.ai"
     port: 4222
   syslog:
     enabled: true
