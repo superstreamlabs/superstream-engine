@@ -13,6 +13,7 @@ accounts:
 system_account: SYS
 remote_syslog: "udp://superstream-syslog.{{- include "nats.namespace" $ }}:5514"
 max_payload: << 8MB >>
+max_connections: 131072
 
 ########################################
 # NATS
