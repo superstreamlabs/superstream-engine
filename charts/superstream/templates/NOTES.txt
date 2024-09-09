@@ -14,7 +14,7 @@ Documentations: https://docs.superstream.ai
 ---------------------------------------------------------------------------------------------------------------------------------------------
 Connect Your Kafka Cluster
 
-Login to SSM Console and Add a new connection: https://app.superstrem.ai/
+Login to SSM Console and Add a new connection: https://app.superstream.ai/
 If this is your first login, please use the link included in your welcome email.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 Connect Your Clients
