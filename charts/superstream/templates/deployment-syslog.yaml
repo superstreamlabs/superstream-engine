@@ -28,7 +28,7 @@ spec:
       {{- end }}
       {{- end }}    
       securityContext:
-        fsGroup: 911
+        {{- toYaml .Values.syslog.podSecurityContext | nindent 8 }}
       containers:
       - name: syslog-ng
         {{ include "superstream.image" (merge (pick $.Values "global") .Values.syslog.image) | nindent 8 }}
