@@ -37,7 +37,7 @@ nats:
 
 To deploy it, run the following:
 ```bash
-helm repo add superstream https://k8s.superstream.ai/ --force-update && helm install superstream superstream/superstream -f custom_values.yaml --create-namespace --namespace superstream --wait
+helm repo add superstream https://k8s.superstream.ai/ --force-update && helm upgrade --install superstream superstream/superstream -f custom_values.yaml --create-namespace --namespace superstream --wait
 ```
 
 ## Parameters
@@ -52,6 +52,7 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `global.image.pullPolicy`                                 | Global image pull policy to use for all container images in the chart. Can be overridden by individual image pullPolicy. | `""` |
 | `global.image.pullSecretNames`                            | Global list of secret names to use as image pull secrets for all pod specs in the chart. Secrets must exist in the same namespace. | `[]` |
 | `global.image.registry`                                   | Global registry to use for all container images in the chart. Can be overridden by individual image registry. | `""` |
+| `global.labels`                                   | Global labels to use for all container images in the chart. | `""` |
 | `nats.config.cluster.enabled`                             | Indicates whether the NATS cluster is enabled.                                      | `true`                             |
 | `nats.config.jetstream.fileStore.pvc.storageClassName`    | Specifies the storage class name for the Jetstream file store PVC.                  | `""`                               |
 | `superstreamEngine.releaseDate`                           | Release date for the backend component.                                             | `"2024-02-22-13-03"`               |

@@ -56,7 +56,11 @@ env:
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-resources: {}
+resources:
+  limits:
+    memory: "1Gi"
+  requests:
+    cpu: "50m"
 # requests:
 #   memory: 128Mi
 #   cpu: 100m

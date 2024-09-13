@@ -18,6 +18,10 @@ global:
     # global registry to use for all container images in the chart
     # can be overridden by individual image registry
     registry:
+
+  # global labels will be applied to all resources deployed by the chart
+  labels: {}
+  
 ############################################################
 # NATS config
 ############################################################
@@ -142,7 +146,7 @@ superstreamEngine:
     host: ""
     port: 4222
   controlPlane:
-    host: "broker.superstream.dev"
+    host: "broker.superstream.ai"
     port: 4222
   syslog:
     enabled: true
@@ -155,7 +159,7 @@ syslog:
   image:
     repository: linuxserver/syslog-ng
     pullPolicy: IfNotPresent
-    tag: "4.5.0" # Use a specific version to ensure consistency across deployments
+    tag: "4.7.1" # Use a specific version to ensure consistency across deployments
     registry: 
   imagePullSecrets: []
   service:
@@ -164,13 +168,13 @@ syslog:
     protocol: UDP
   resources:
     limits:
-      cpu: "100m"
-      memory: "256Mi"
+      memory: 256Mi
     requests:
-      cpu: "50m"
-      memory: "128Mi"
+      cpu: 50m
   podAnnotations:
     prometheus.io/scrape: 'false'
+  podSecurityContext:
+    fsGroup: 911
   remoteSyslog:
     destinationHost: telegraf
     port: 6514
@@ -178,7 +182,7 @@ syslog:
   configMap:
     enabled: true
     name: syslog-config
-    mountPath: /config/syslog-ng.conf
+    mountPath: /tmp/syslog-ng.conf
     subPath: syslog-ng.conf # Optional, use if you want to mount a specific file from the ConfigMap
   # Persistent Volume configuration, if needed
   persistence:
@@ -186,4 +190,7 @@ syslog:
     size: "1Gi"
     accessModes:
       - ReadWriteOnce
-    storageClassName: "standard"
+    storageClassName: ""
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

@@ -38,6 +38,9 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "superstream.labels" -}}
+{{- with .Values.global.labels -}}
+{{ toYaml . }}
+{{ end -}}
 helm.sh/chart: {{ include "superstream.chart" . }}
 {{ include "superstream.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
