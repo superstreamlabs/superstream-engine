@@ -74,11 +74,6 @@ spec:
             - name: PORT
               value: {{ .Values.superstreamEngine.service.port | quote }}
             {{- end }}
-            - name: ENCRYPTION_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: superstream-creds
-                  key: ENCRYPTION_SECRET_KEY
             - name: NATS_HOST
               value: nats.{{ include "superstream.namespace" . }}
             - name: NATS_PORT
