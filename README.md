@@ -138,7 +138,7 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `superstreamEngine.kafkaAutoScaler.enabled`                           | Enables the Kafka auto-scaler.                                             | `"false"`                |
 | `superstreamEngine.kafkaAutoScaler.image.repository`                           | Docker image repository for the Kafka auto-scaler.                                             | `"superstreamlabs/superstream-kafka-auto-scaler"`                |
 | `superstreamEngine.kafkaAutoScaler.image.pullPolicy`                           | Policy for pulling the Docker image.                                             | `Always`                |
-| `superstreamEngine.kafkaAutoScaler.image.tag`                           | Docker image tag.                                             | `"Overrides the image "`                |
+| `superstreamEngine.kafkaAutoScaler.image.tag`                           | Docker image tag (Overrides the image).                                             | `"latest"`                |
 | `superstreamEngine.kafkaAutoScaler.resources.limits.cpu`                           | CPU limit for the auto-scaler.                                             | `"2"`                |
 | `superstreamEngine.kafkaAutoScaler.resources.limits.memory`                           | Memory limit for the auto-scaler.                                             | `"2Gi"`                |
 | `superstreamEngine.kafkaAutoScaler.resources.requests.cpu`                           | CPU request for the auto-scaler.                                             | `"500m"`                |
