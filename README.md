@@ -33,6 +33,31 @@ nats:
       fileStore:
         pvc:
           storageClassName: ""
+############################################################
+# Kafka Autoscaler config
+############################################################
+# Optional service to automatically scale the Kafka cluster up/down based on CPU and memory metrics  
+superstreamEngine:
+  kafkaAutoScaler:
+    enabled: false
+    image:
+        # Docker image repository for the backend service
+      repository: superstreamlabs/superstream-kafka-auto-scaler
+        # Policy for pulling the image
+      pullPolicy: Always
+        # Overrides the image tag whose default is the chart appVersion.
+      tag: "latest"     
+    resources:
+        # We usually recommend not to specify default resources and to leave this as a conscious
+        # choice for the user. This also increases chances charts run on environments with little
+        # resources, such as Minikube. If you do want to specify resources, uncomment the following
+        # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      limits:
+        cpu: '2'
+        memory: 2Gi
+      requests:
+        cpu: '500m'
+        memory: 500Mi          
 ```
 
 To deploy it, run the following:
@@ -111,6 +136,13 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `superstreamEngine.syslog.remoteSyslog`                   | Remote syslog server to send logs to.                                               | `"superstream-syslog"`             |
 | `superstreamEngine.releaseDate`                           | Release date for the backend component.                                             | `"2024-03-20-11-12"` 
 | `superstreamEngine.kafkaAutoScaler.enabled`                           | Enables the Kafka auto-scaler.                                             | `"false"`                |
+| `superstreamEngine.kafkaAutoScaler.image.repository`                           | Docker image repository for the Kafka auto-scaler.                                             | `"superstreamlabs/superstream-kafka-auto-scaler"`                |
+| `superstreamEngine.kafkaAutoScaler.image.pullPolicy`                           | Policy for pulling the Docker image.                                             | `Always`                |
+| `superstreamEngine.kafkaAutoScaler.image.tag`                           | Docker image tag.                                             | `"Overrides the image "`                |
+| `superstreamEngine.kafkaAutoScaler.resources.limits.cpu`                           | CPU limit for the auto-scaler.                                             | `"2"`                |
+| `superstreamEngine.kafkaAutoScaler.resources.limits.memory`                           | Memory limit for the auto-scaler.                                             | `"2Gi"`                |
+| `superstreamEngine.kafkaAutoScaler.resources.requests.cpu`                           | CPU request for the auto-scaler.                                             | `"500m"`                |
+| `superstreamEngine.kafkaAutoScaler.resources.requests.memory`                           | Memory request for the auto-scaler.                                             | `"500Mi"`                |
 | `syslog.replicaCount`                                     | Number of replicas for the syslog deployment.                                       | `1`                                |
 | `syslog.image.repository`                                 | Docker image repository for syslog.                                                 | `linuxserver/syslog-ng`            |
 | `syslog.image.pullPolicy`                                 | Pull policy for the syslog image.                                                   | `IfNotPresent`                     |
