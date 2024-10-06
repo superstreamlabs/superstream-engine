@@ -109,7 +109,8 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `superstreamEngine.controlPlane.port`                     | Port for the control plane connection.                                              | `4222`                             |
 | `superstreamEngine.syslog.enabled`                        | Determines whether the syslog is enabled for the superstream engine.                | `true`                             |
 | `superstreamEngine.syslog.remoteSyslog`                   | Remote syslog server to send logs to.                                               | `"superstream-syslog"`             |
-| `superstreamEngine.releaseDate`                           | Release date for the backend component.                                             | `"2024-03-20-11-12"`               |
+| `superstreamEngine.releaseDate`                           | Release date for the backend component.                                             | `"2024-03-20-11-12"` 
+| `superstreamEngine.kafkaAutoScaler.enabled`                           | Enables the Kafka auto-scaler.                                             | `"false"`                |
 | `syslog.replicaCount`                                     | Number of replicas for the syslog deployment.                                       | `1`                                |
 | `syslog.image.repository`                                 | Docker image repository for syslog.                                                 | `linuxserver/syslog-ng`            |
 | `syslog.image.pullPolicy`                                 | Pull policy for the syslog image.                                                   | `IfNotPresent`                     |
