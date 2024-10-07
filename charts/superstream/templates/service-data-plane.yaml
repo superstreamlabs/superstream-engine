@@ -11,7 +11,7 @@ spec:
     - port: {{ .Values.superstreamEngine.service.port }}
       targetPort: data-plane
       protocol: TCP
-      name: data-plane
+      name: data-plane    
   selector:
     {{- include "superstream.selectorLabels" . | nindent 4 }}-data-plane
 {{- end }}
