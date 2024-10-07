@@ -19,3 +19,10 @@ nats:
       fileStore:
         pvc:
           storageClassName: ""
+############################################################
+# Kafka Autoscaler config
+############################################################
+# Optional service to automatically scale the Kafka cluster up/down based on CPU and memory metrics  
+superstreamEngine:
+  kafkaAutoScaler:
+    enabled: false
