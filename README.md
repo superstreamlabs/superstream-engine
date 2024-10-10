@@ -93,11 +93,6 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `superstreamEngine.service.enabled`                       | Enable service for the backend.                                                     | `true`                             |
 | `superstreamEngine.service.type`                          | Type of service for the backend.                                                    | `ClusterIP`                        |
 | `superstreamEngine.service.port`                          | Port for the backend service.                                                       | `7777`                             |
-| `superstreamEngine.ingress.enabled`                       | Enable ingress for the backend.                                                     | `false`                            |
-| `superstreamEngine.ingress.className`                     | Class name for the ingress resource.                                                | `""`                               |
-| `superstreamEngine.ingress.annotations`                   | Annotations to add to the ingress resource.                                         | `{}`                               |
-| `superstreamEngine.ingress.hosts`                         | Hosts for the ingress resource, including paths and path types.                     | `[{ host: "chart-example.local", paths: [{ path: "/", pathType: "ImplementationSpecific" }] }]` |
-| `superstreamEngine.ingress.tls`                           | TLS settings for the ingress resource, including secret names and hosts.            | `[]`                               |
 | `superstreamEngine.resources.limits.cpu`                  | CPU limit for the backend pod.                                                      | `8`                                |
 | `superstreamEngine.resources.limits.memory`               | Memory limit for the backend pod.                                                   | `8Gi`                              |
 | `superstreamEngine.resources.requests.cpu`                | CPU request for the backend pod.                                                    | `500m`                             |
