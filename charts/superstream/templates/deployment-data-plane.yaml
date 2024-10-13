@@ -75,7 +75,7 @@ spec:
               value: {{ .Values.superstreamEngine.service.port | quote }}
             {{- end }}
             - name: NATS_HOST
-              value: nats.{{ include "superstream.namespace" . }}
+              value: {{ default (printf "nats.%s" (include "superstream.namespace" .)) .Values.nats.config.nats.tls.dnsRecord }}
             - name: NATS_PORT
               value: {{ .Values.superstreamEngine.internalNatsConnection.port | quote }}
             - name: NATS_MONITORING_PORT
@@ -135,7 +135,20 @@ spec:
       - name: config-volume
         configMap:
           name: {{ if .Values.superstreamEngine.configMap.useExisting }}{{ .Values.superstreamEngine.configMap.existingConfigMapName }}{{ else }}{{ .Values.superstreamEngine.configMap.name }}{{ end }}
-      {{- end }}                 
+      {{- end }}  
+          {{- if .Values.nats.config.nats.tls.localCa.enabled }}
+          volumeMounts:
+            - name: ca-cert-volume
+              mountPath: /etc/ssl/certs/ca-certificates.crt
+              subPath: ca-certificates.crt
+              readOnly: true
+            {{- end }} 
+      {{- if .Values.nats.config.nats.tls.localCa.enabled }}        
+      volumes:
+        - name: ca-cert-volume
+          secret:
+            secretName: {{ .Values.nats.config.nats.tls.localCa.secretName }}
+        {{- end }}                              
       {{- with .Values.superstreamEngine.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

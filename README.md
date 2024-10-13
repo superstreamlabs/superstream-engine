@@ -62,6 +62,11 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `global.labels`                                   | Global labels to use for all container images in the chart. | `""` |
 | `nats.config.cluster.enabled`                             | Indicates whether the NATS cluster is enabled.                                      | `true`                             |
 | `nats.config.jetstream.fileStore.pvc.storageClassName`    | Specifies the storage class name for the Jetstream file store PVC.                  | `""`                               |
+| `nats.config.nats.tls.enabled`                             | Enables or disables TLS (Transport Layer Security) for the NATS server. Set to `true` to enable TLS.                                      | `false`                             |
+| `nats.config.nats.tls.dnsRecord`                             | The DNS record for the NATS service. If not provided, the default value will be `nats.superstream.namespace`.                                      | `""`                             |
+| `nats.config.nats.tls.secretName`                             | If provided, mounts an existing secret to the directory for TLS credentials. Useful for referencing pre-existing certificates and keys.                                      | `""`                             |
+| `nats.config.cluster.enabled`                             | Indicates whether the NATS cluster is enabled.                                      | `true`                             |
+| `nats.config.cluster.enabled`                             | Indicates whether the NATS cluster is enabled.                                      | `true`                             |
 | `superstreamEngine.releaseDate`                           | Release date for the backend component.                                             | `"2024-02-22-13-03"`               |
 | `superstreamEngine.replicaCount`                          | Number of replicas for the backend deployment.                                      | `2`                                |
 | `superstreamEngine.image.repository`                      | Docker image repository for the backend service.                                    | `superstreamlabs/superstream-data-plane-be` |
