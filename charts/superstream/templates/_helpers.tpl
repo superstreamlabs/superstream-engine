@@ -100,11 +100,3 @@ imagePullPolicy: {{ .pullPolicy | default .global.image.pullPolicy }}
 {{ toYaml (.podSecurityContext | default .global.podSecurityContext) | nindent 4 -}}
 {{- end }}
 {{- end }}
-
-
-
-
-
-
-
-
