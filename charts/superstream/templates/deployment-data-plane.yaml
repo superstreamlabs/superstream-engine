@@ -75,7 +75,7 @@ spec:
               value: {{ .Values.superstreamEngine.service.port | quote }}
             {{- end }}
             - name: NATS_HOST
-              value: {{ default (printf "nats.%s" (include "superstream.namespace" .)) .Values.nats.config.nats.tls.dnsRecord }}
+              value: nats.{{ include "superstream.namespace" . }}
             - name: NATS_PORT
               value: {{ .Values.superstreamEngine.internalNatsConnection.port | quote }}
             - name: NATS_MONITORING_PORT

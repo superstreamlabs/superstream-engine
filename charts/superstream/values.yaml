@@ -39,8 +39,6 @@ nats:
       port: 4222
       tls:
         enabled: false
-        # nats.{{ "superstream.namespace" }} is the default 
-        dnsRecord: ""
         # set secretName in order to mount an existing secret to dir
         secretName: ""
         localCa:
