@@ -21,10 +21,10 @@ global:
 
   # global labels will be applied to all resources deployed by the chart
   labels: {}
-  podSecurityContext:
-    runAsUser: 1000
-    runAsGroup: 1000
-    fsGroup: 2000  
+  podSecurityContext: {}
+    # runAsUser: 1000
+    # runAsGroup: 1000
+    # fsGroup: 2000  
   
 ############################################################
 # NATS config
