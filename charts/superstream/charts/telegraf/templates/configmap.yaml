@@ -118,7 +118,7 @@ data:
       [inputs.prometheus.tags]
         accountId = "{{ .Values.global.superstreamAccountId }}"
         engineName = {{ .Values.global.engineName | quote }}
-        Application = "autoscaler"
+        Application = "auto-scaler"
         
     [[inputs.tail]]
       files = ["/tmp/telegraf.log"]
