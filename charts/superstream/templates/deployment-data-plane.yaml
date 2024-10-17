@@ -115,7 +115,11 @@ spec:
             - name: SYSLOG_PROTOCOL
               value: {{ .Values.superstreamEngine.syslog.protocol }}
             - name: SYSLOG_PORT
-              value: {{ .Values.superstreamEngine.syslog.port | quote }}          
+              value: {{ .Values.superstreamEngine.syslog.port | quote }}   
+          ports:
+          - name: auto-scaler-metrics
+            containerPort: 8000
+            protocol: TCP                     
           resources:
             {{- toYaml .Values.superstreamEngine.kafkaAutoScaler.resources | nindent 12 }}
         {{- end }}                             
