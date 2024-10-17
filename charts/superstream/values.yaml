@@ -92,7 +92,7 @@ superstreamEngine:
   podAnnotations:
     prometheus.io/path: "/monitoring/metrics"
     prometheus.io/scrape: 'true'
-    prometheus.io/port: "7777"
+    prometheus.io/port: "7777,8000"
   podSecurityContext: {}
   # fsGroup: 2000
 
