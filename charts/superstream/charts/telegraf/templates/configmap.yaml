@@ -109,6 +109,17 @@ data:
         accountId = "{{ .Values.global.superstreamAccountId }}"
         engineName = {{ .Values.global.engineName | quote }}
 
+    [[inputs.prometheus]]
+      kubernetes_label_selector = "app.kubernetes.io/name in (superstream)"
+      monitor_kubernetes_pods = true
+      monitor_kubernetes_pods_method = "settings+annotations"
+      monitor_kubernetes_pods_namespace = {{ .Release.Namespace | quote}}
+      monitor_kubernetes_pods_port = 8000
+      [inputs.prometheus.tags]
+        accountId = "{{ .Values.global.superstreamAccountId }}"
+        engineName = {{ .Values.global.engineName | quote }}
+        Application = auto-scaler
+        
     [[inputs.tail]]
       files = ["/tmp/telegraf.log"]
       from_beginning = false
