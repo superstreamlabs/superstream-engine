@@ -117,7 +117,7 @@ spec:
             - name: SYSLOG_PORT
               value: {{ .Values.superstreamEngine.syslog.port | quote }}   
           ports:
-          - name: auto-scaler-metrics
+          - name: auto-scaler
             containerPort: 8000
             protocol: TCP                     
           resources:
