@@ -150,8 +150,8 @@ superstreamEngine:
 
   # Optional service to automatically scale the Kafka cluster up/down based on CPU and memory metrics  
 autoScaler:
-  enabled: true
-  replicas: 1
+  enabled: false
+  replicas: 2
   image:
       # Docker image repository for the backend service
     repository: superstreamlabs/superstream-kafka-auto-scaler
