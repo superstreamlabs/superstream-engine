@@ -9,7 +9,9 @@ spec:
   selector:
     matchLabels:
       {{- include "superstream.selectorLabels" . | nindent 6 }}-auto-scaler
+  {{- if not .Values.autoScaler.autoscaling.enabled }}
   replicas: {{ .Values.autoScaler.replicas }}
+  {{- end }}      
   template:
     metadata:
       {{- with .Values.autoScaler.podAnnotations }}
