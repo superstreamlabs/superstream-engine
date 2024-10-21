@@ -1,3 +1,4 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -93,32 +94,7 @@ spec:
             - name: SYSLOG_PORT
               value: {{ .Values.superstreamEngine.syslog.port | quote }}
           resources:
-            {{- toYaml .Values.superstreamEngine.resources | nindent 12 }}
-        {{- if .Values.superstreamEngine.kafkaAutoScaler.enabled }}            
-        - name: {{ .Chart.Name }}-kafka-auto-scaler
-          image: "{{ .Values.superstreamEngine.kafkaAutoScaler.image.repository }}:{{ .Values.superstreamEngine.kafkaAutoScaler.image.tag }}"
-          imagePullPolicy: {{ .Values.superstreamEngine.kafkaAutoScaler.image.pullPolicy }}
-          env:
-            - name: ENV_NAME
-              value: {{ .Values.global.engineName }}
-            - name: ACTIVATION_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: superstream-creds
-                  key: ACTIVATION_TOKEN
-            - name: CONTROL_PLANE_HOST
-              value: {{ .Values.superstreamEngine.controlPlane.host }}
-            - name: CONTROL_PLANE_PORT
-              value: {{ .Values.superstreamEngine.controlPlane.port | quote }}
-            - name: SYSLOG_HOST
-              value: {{ .Values.superstreamEngine.syslog.remoteSyslog }}.{{ include "superstream.namespace" . }}
-            - name: SYSLOG_PROTOCOL
-              value: {{ .Values.superstreamEngine.syslog.protocol }}
-            - name: SYSLOG_PORT
-              value: {{ .Values.superstreamEngine.syslog.port | quote }}          
-          resources:
-            {{- toYaml .Values.superstreamEngine.kafkaAutoScaler.resources | nindent 12 }}
-        {{- end }}                             
+            {{- toYaml .Values.superstreamEngine.resources | nindent 12 }}                            
       {{- $fileDataExists := and .Values.superstreamEngine.configMap.fileData .Values.superstreamEngine.configMap.fileData.fileContent }}        
       {{- if or $fileDataExists .Values.superstreamEngine.configMap.useExisting }}
           volumeMounts:
@@ -135,7 +111,20 @@ spec:
       - name: config-volume
         configMap:
           name: {{ if .Values.superstreamEngine.configMap.useExisting }}{{ .Values.superstreamEngine.configMap.existingConfigMapName }}{{ else }}{{ .Values.superstreamEngine.configMap.name }}{{ end }}
-      {{- end }}                 
+      {{- end }}  
+          {{- if .Values.nats.config.nats.tls.localCa.enabled }}
+          volumeMounts:
+            - name: ca-cert-volume
+              mountPath: /etc/ssl/certs/ca-certificates.crt
+              subPath: ca-certificates.crt
+              readOnly: true
+            {{- end }} 
+      {{- if .Values.nats.config.nats.tls.localCa.enabled }}        
+      volumes:
+        - name: ca-cert-volume
+          secret:
+            secretName: {{ .Values.nats.config.nats.tls.localCa.secretName }}
+        {{- end }}                              
       {{- with .Values.superstreamEngine.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

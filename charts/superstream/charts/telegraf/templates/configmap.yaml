@@ -30,6 +30,10 @@ data:
             critical = 3
             healthy = 1
             problem = 2
+    [[processors.dedup]]
+      namepass = ["syslog"]    
+      fieldinclude = ["message"]  
+      dedup_interval = "10s"   
     [[processors.starlark]]
       namepass = [
         "syslog"
@@ -69,7 +73,7 @@ data:
         "syslog",
         "telegraf_logs"
       ]
-      fielddrop = [
+      fieldexclude = [
         "SDID@0_eventSource",
         "facility_code",
         "severity_code",

@@ -19,10 +19,18 @@ nats:
       fileStore:
         pvc:
           storageClassName: ""
+    nats:
+      port: 4222
+      tls:
+        enabled: false
+        # set secretName in order to mount an existing secret to dir
+        secretName: ""
+        localCa:
+          enabled: false
+          secretName: ""          
 ############################################################
 # Kafka Autoscaler config
 ############################################################
 # Optional service to automatically scale the Kafka cluster up/down based on CPU and memory metrics  
-superstreamEngine:
-  kafkaAutoScaler:
-    enabled: false
+autoScaler:
+  enabled: true

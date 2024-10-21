@@ -1,0 +1,40 @@
+{{- if and .Values.autoScaler.enabled .Values.autoScaler.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "superstream.fullname" . }}-auto-scaler
+  labels:
+    {{- include "superstream.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "superstream.fullname" . }}-auto-scaler
+  minReplicas: {{ .Values.autoScaler.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoScaler.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 180
+      selectPolicy: Max
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60
+  metrics:
+    {{- if .Values.autoScaler.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoScaler.autoscaling.targetCPUUtilizationPercentage }}    
+    {{- end }}
+    {{- if .Values.autoScaler.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoScaler.autoscaling.targetMemoryUtilizationPercentage }} 
+    {{- end }}
+{{- end }}
