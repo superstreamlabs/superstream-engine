@@ -37,9 +37,8 @@ nats:
 # Kafka Autoscaler config
 ############################################################
 # Optional service to automatically scale the Kafka cluster up/down based on CPU and memory metrics  
-superstreamEngine:
-  kafkaAutoScaler:
-    enabled: false      
+autoScaler:
+  enabled: false 
 ```
 
 To deploy it, run the following:

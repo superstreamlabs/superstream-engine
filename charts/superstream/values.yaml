@@ -148,7 +148,10 @@ superstreamEngine:
     port: 5514
     protocol: udp
 
-  # Optional service to automatically scale the Kafka cluster up/down based on CPU and memory metrics  
+############################################################
+# Kafka Autoscaler config
+############################################################
+# Optional service to automatically scale the Kafka cluster up/down based on CPU and memory metrics   
 autoScaler:
   enabled: false
   releaseDate: ""
@@ -173,11 +176,7 @@ autoScaler:
   #   - ALL
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
-  # runAsUser: 1000
-  service:
-    enabled: true
-    type: ClusterIP
-    port: 7777 
+  # runAsUser: 1000 
   resources:
       # We usually recommend not to specify default resources and to leave this as a conscious
       # choice for the user. This also increases chances charts run on environments with little
