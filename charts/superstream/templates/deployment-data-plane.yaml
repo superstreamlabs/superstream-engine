@@ -93,6 +93,13 @@ spec:
               value: {{ .Values.superstreamEngine.syslog.protocol }}
             - name: SYSLOG_PORT
               value: {{ .Values.superstreamEngine.syslog.port | quote }}
+          readinessProbe:
+            httpGet:
+              path: /monitoring/status
+              port: 7777
+              scheme: HTTP   
+            initialDelaySeconds: 5
+            periodSeconds: 10              
           resources:
             {{- toYaml .Values.superstreamEngine.resources | nindent 12 }}                            
       {{- $fileDataExists := and .Values.superstreamEngine.configMap.fileData .Values.superstreamEngine.configMap.fileData.fileContent }}        
@@ -100,13 +107,6 @@ spec:
           volumeMounts:
           - name: config-volume
             mountPath: {{ .Values.superstreamEngine.configMap.fileData.mountPath }}       
-          readinessProbe:
-            httpGet:
-              path: /monitoring/status
-              port: 7777
-              scheme: HTTP   
-            initialDelaySeconds: 5
-            periodSeconds: 10
       volumes:
       - name: config-volume
         configMap:
