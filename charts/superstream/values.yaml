@@ -148,27 +148,60 @@ superstreamEngine:
     port: 5514
     protocol: udp
 
-  # Optional service to automatically scale the Kafka cluster up/down based on CPU and memory metrics  
-  kafkaAutoScaler:
-    enabled: false
-    image:
-        # Docker image repository for the backend service
-      repository: superstreamlabs/superstream-kafka-auto-scaler
-        # Policy for pulling the image
-      pullPolicy: Always
-        # Overrides the image tag whose default is the chart appVersion.
-      tag: "latest"     
-    resources:
-        # We usually recommend not to specify default resources and to leave this as a conscious
-        # choice for the user. This also increases chances charts run on environments with little
-        # resources, such as Minikube. If you do want to specify resources, uncomment the following
-        # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      limits:
-        cpu: '2'
-        memory: 2Gi
-      requests:
-        cpu: '500m'
-        memory: 500Mi
+############################################################
+# Kafka Autoscaler config
+############################################################
+# Optional service to automatically scale the Kafka cluster up/down based on CPU and memory metrics   
+autoScaler:
+  enabled: true
+  releaseDate: ""
+  replicaCount: 2
+  image:
+      # Docker image repository for the backend service
+    repository: superstreamlabs/superstream-kafka-auto-scaler
+      # Policy for pulling the image
+    pullPolicy: Always
+      # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"  
+  podAnnotations:
+    prometheus.io/path: "/monitoring/metrics"
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: "7777"
+  podSecurityContext: {}
+  # fsGroup: 2000
+
+  securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 7777 
+  resources:
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    limits:
+      cpu: '2'
+      memory: 2Gi
+    requests:
+      cpu: '500m'
+      memory: 500Mi
+  # Enables autoscaling to manage the replicas of the autoscaler    
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 75      
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 syslog:
   replicaCount: 1

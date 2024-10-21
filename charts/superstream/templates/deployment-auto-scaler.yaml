@@ -1,0 +1,78 @@
+{{- if .Values.autoScaler.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "superstream.fullname" . }}-auto-scaler
+  labels:
+    {{- include "superstream.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "superstream.selectorLabels" . | nindent 6 }}-auto-scaler
+  {{- if not .Values.autoScaler.autoscaling.enabled }}
+  replicas: {{ .Values.autoScaler.replicaCount }}
+  {{- end }}      
+  template:
+    metadata:
+      {{- with .Values.autoScaler.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- if .Values.autoScaler.releaseDate }}
+        releaseDate: "{{ .Values.autoScaler.releaseDate }}"
+        {{- end }}  
+        {{- include "superstream.labels" . | nindent 8 }}
+        {{- include "superstream.selectorLabels" . | nindent 8 }}-auto-scaler
+    spec:
+      {{- with .Values.global.image.pullSecretNames }}
+      imagePullSecrets:
+      {{- range . }}
+      - name: {{ . | quote }}
+      {{- end }}
+      {{- end }}
+      serviceAccountName: {{ include "superstream.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.autoScaler.podSecurityContext | nindent 8 }}
+      containers:           
+        - name: {{ .Chart.Name }}-auto-scaler
+          {{ include "superstream.image" (merge (pick $.Values "global") .Values.autoScaler.image) | nindent 10 }}
+          securityContext:
+            {{- toYaml .Values.autoScaler.securityContext | nindent 12 }}
+          ports:
+          - name: auto-scaler
+            containerPort: {{ .Values.autoScaler.service.port }}
+            protocol: TCP
+          env:
+            - name: ENV_NAME
+              value: {{ .Values.global.engineName }}
+            - name: ACTIVATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: superstream-creds
+                  key: ACTIVATION_TOKEN
+            - name: CONTROL_PLANE_HOST
+              value: {{ .Values.superstreamEngine.controlPlane.host }}
+            - name: CONTROL_PLANE_PORT
+              value: {{ .Values.superstreamEngine.controlPlane.port | quote }}
+            - name: SYSLOG_HOST
+              value: {{ .Values.superstreamEngine.syslog.remoteSyslog }}.{{ include "superstream.namespace" . }}
+            - name: SYSLOG_PROTOCOL
+              value: {{ .Values.superstreamEngine.syslog.protocol }}
+            - name: SYSLOG_PORT
+              value: {{ .Values.superstreamEngine.syslog.port | quote }}          
+          resources:
+            {{- toYaml .Values.autoScaler.resources | nindent 12 }}                                                  
+      {{- with .Values.autoScaler.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.autoScaler.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.autoScaler.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
