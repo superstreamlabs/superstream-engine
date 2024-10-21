@@ -153,7 +153,7 @@ superstreamEngine:
 ############################################################
 # Optional service to automatically scale the Kafka cluster up/down based on CPU and memory metrics   
 autoScaler:
-  enabled: false
+  enabled: true
   releaseDate: ""
   replicaCount: 2
   image:
@@ -192,6 +192,7 @@ autoScaler:
     requests:
       cpu: '500m'
       memory: 500Mi
+  # Enables autoscaling to manage the replicas of the autoscaler    
   autoscaling:
     enabled: true
     minReplicas: 2
