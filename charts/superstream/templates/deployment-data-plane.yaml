@@ -93,6 +93,12 @@ spec:
               value: {{ .Values.superstreamEngine.syslog.protocol }}
             - name: SYSLOG_PORT
               value: {{ .Values.superstreamEngine.syslog.port | quote }}
+            {{- if .Values.superstreamEngine.extraEnv }}
+            {{- range .Values.superstreamEngine.extraEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+            {{- end }}               
           readinessProbe:
             httpGet:
               path: /monitoring/status
@@ -137,5 +143,6 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
 
 
