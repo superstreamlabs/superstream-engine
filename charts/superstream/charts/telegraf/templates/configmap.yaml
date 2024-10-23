@@ -85,6 +85,7 @@ data:
         Authorization = "$TOKEN"
     [[outputs.http]]
       data_format = "prometheusremotewrite"
+      timeout = "15s"
       method = "POST"
       namedrop = [
         "syslog",
