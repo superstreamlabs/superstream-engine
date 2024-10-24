@@ -68,6 +68,7 @@ data:
       '''      
     [[outputs.loki]]
       domain = "https://loki.mgmt.superstream.ai"
+      timeout = "15s"
       endpoint = "/loki/api/v1/push"
       namepass = [
         "syslog",
