@@ -111,6 +111,10 @@ superstreamEngine:
     # The name of the service account to use.
     # If not set and create is true, a name is generated using the fullname template
     name: ""
+  extraEnv: {}
+    # Add custom environment variables below
+    # - name: FEATURE_DP_FLAG
+    #   value: "enabled"    
   service:
     enabled: true
     type: ClusterIP
@@ -177,6 +181,10 @@ autoScaler:
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
+  extraEnv: {}
+    # Add custom environment variables below
+    # - name: FEATURE_AS_FLAG
+    #   value: "enabled"  
   service:
     enabled: true
     type: ClusterIP
@@ -211,6 +219,10 @@ syslog:
     tag: "4.7.1" # Use a specific version to ensure consistency across deployments
     registry: 
   imagePullSecrets: []
+  extraEnv: {}
+    # Add custom environment variables below
+    # - name: FEATURE_SYSLOG_FLAG
+    #   value: "enabled"  
   service:
     type: ClusterIP
     port: 5514
@@ -243,3 +255,4 @@ syslog:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+

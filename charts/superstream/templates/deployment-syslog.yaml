@@ -32,10 +32,17 @@ spec:
       containers:
       - name: syslog-ng
         {{ include "superstream.image" (merge (pick $.Values "global") .Values.syslog.image) | nindent 8 }}
+          {{- if .Values.syslog.extraEnv }}
+          {{- range .Values.syslog.extraEnv }}              
+        env:
+          - name: {{ .name }}
+            value: {{ .value | quote }}
+        {{- end }}
+        {{- end }}         
         ports:
           - name: syslog
             containerPort: {{ .Values.syslog.service.port }}
-            protocol: {{ .Values.syslog.service.protocol }}
+            protocol: {{ .Values.syslog.service.protocol }}        
         command: ["/usr/sbin/syslog-ng", "-F", "-f", "/tmp/syslog-ng.conf", "--persist-file", "/config/syslog-ng.persist", "--pidfile=/config/syslog-ng.pid", "--control=/config/syslog-ng.ctl", "--stderr", "--no-caps"]
         volumeMounts:
         - name: config-volume
@@ -59,3 +66,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
