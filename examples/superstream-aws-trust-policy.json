@@ -1,0 +1,13 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+	    {
+		"Sid": "Statement1",
+		"Effect": "Allow",
+		"Principal": {
+                	"AWS": "arn:aws:iam::<ACCOUNT_ID>:role/<ROLE_ASSIGNED_TO_NODEGROUP>"
+                },
+		"Action": "sts:AssumeRole"
+	    }
+	]
+}
