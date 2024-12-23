@@ -156,6 +156,7 @@
                 "logs:UpdateLogDelivery",
                 "ec2:DescribeVpcEndpoints",
                 "ec2:DescribeSubnets",
+                "ec2:DescribeInstanceTypes",
                 "cloudwatch:GetMetricData",
                 "ce:GetCostAndUsage",
                 "ec2:DescribeVpcAttribute",
