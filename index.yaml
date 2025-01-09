@@ -5,6 +5,36 @@ entries:
       category: Streaming and Messaging
       licenses: Memphis Business Source License 1.0
     apiVersion: v2
+    appVersion: 1.1.108
+    created: "2025-01-09T15:39:40.61173022Z"
+    dependencies:
+    - name: nats
+      repository: ""
+      version: 1.2.4
+    - name: telegraf
+      repository: ""
+      version: 1.8.48
+    description: Superstream Official Helm chart
+    digest: bd38b829669ec48b9fb912963964991ad138449c622c6af5fa25d798b83ad4d4
+    home: https://superstream.ai
+    icon: https://memphis-public-files.s3.eu-central-1.amazonaws.com/superstream_logo.png
+    keywords:
+    - data streaming
+    - cost reduction
+    - superstream
+    - kafka
+    maintainers:
+    - name: Superstream Labs
+      url: https://superstream.ai
+    name: superstream
+    type: application
+    urls:
+    - https://github.com/superstreamlabs/superstream-engine/releases/download/superstream-0.4.20/superstream-0.4.20.tgz
+    version: 0.4.20
+  - annotations:
+      category: Streaming and Messaging
+      licenses: Memphis Business Source License 1.0
+    apiVersion: v2
     appVersion: 1.0.700
     created: "2024-10-21T12:46:50.529749593Z"
     dependencies:
@@ -594,4 +624,4 @@ entries:
     urls:
     - https://superstreamlabs.github.io/superstream-engine/old/superstream-0.3.0.tgz
     version: 0.3.0
-generated: "2024-10-21T12:46:50.52985495Z"
+generated: "2025-01-09T15:39:40.611836178Z"
