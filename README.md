@@ -1,11 +1,16 @@
 <div align="center">
 
-![full logo superstream](https://github.com/superstreamlabs/superstream-engine/assets/107035359/19dc2e40-a907-49ee-9faf-d6d707633d53)
+<img src="https://github.com/user-attachments/assets/35899c78-24eb-4507-97ed-e87e84c49fea#gh-dark-mode-only" width="500">
+<img src="https://github.com/user-attachments/assets/8a7bca49-c362-4a8c-945e-a331fb26d8eb#gh-light-mode-only" width="500">
 
-<b>Improve And Optimize Your Kafka In Literally Minutes.<br>
-Reduce Costs and Boost Performance by 75% Without Changing a Single Component or Your Existing Kafka!</b>
+<p>
+  Superstream is an autonomous platform designed<br>to optimize data infrastructure for cost reduction and reduced operations.<br>
+  <a href="https://superstream.ai">Website</a> | <a href="https://docs.superstream.ai">Docs</a>
+</p>
 
 </div>
+
+#### This chart is for Superstream customers who prefer to host a local engine
 
 ## Configure Environment Tokens
 
@@ -93,6 +98,7 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `superstreamEngine.serviceAccount.create`                 | Specifies whether a service account should be created.                              | `true`                             |
 | `superstreamEngine.serviceAccount.annotations`            | Annotations to add to the service account.                                          | `{}`                               |
 | `superstreamEngine.serviceAccount.name`                   | The name of the service account to use.                                             | `""`                               |
+| `superstreamEngine.extraEnv`                    |	A map of additional environment variables for the application.	| `{}` |
 | `superstreamEngine.service.enabled`                       | Enable service for the backend.                                                     | `true`                             |
 | `superstreamEngine.service.type`                          | Type of service for the backend.                                                    | `ClusterIP`                        |
 | `superstreamEngine.service.port`                          | Port for the backend service.                                                       | `7777`                             |
@@ -130,6 +136,7 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `autoScaler.autoscaling.maxReplicas`               | Maximum number of replicas for autoscaling.                                         | `5`                                |
 | `autoScaler.autoscaling.targetCPUUtilizationPercentage` | CPU utilization percentage for autoscaling.                                         | `75`                               |
 | `autoScaler.autoscaling.targetMemoryUtilizationPercentage` | Memory utilization percentage for autoscaling.                                      | `75`                               |
+| `autoScaler.extraEnv`                    |	A map of additional environment variables for the application.	| `{}` |
 | `autoScaler.nodeSelector`                          | Node selectors to control the placement of pods.                                    | `{}`                               |
 | `autoScaler.tolerations`                           | Tolerations for pods to tolerate certain node conditions or taints.                 | `[]`                               |
 | `autoScaler.affinity`                              | Affinity rules for pod scheduling.                                                  | `{}`                               |
@@ -141,6 +148,7 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `syslog.service.type`                                     | Type of service for syslog.                                                         | `ClusterIP`                        |
 | `syslog.service.port`                                     | Port for the syslog service.                                                        | `5514`                             |
 | `syslog.service.protocol`                                 | Protocol for the syslog service.                                                    | `UDP`                              |
+| `syslog.extraEnv`                    |	A map of additional environment variables for the application.	| `{}` |
 | `syslog.resources.limits.cpu`                             | CPU limit for the syslog pod.                                                       | `"100m"`                           |
 | `syslog.resources.limits.memory`                          | Memory limit for the syslog pod.                                                    | `"256Mi"`                          |
 | `syslog.resources.requests.cpu`                           | CPU request for the syslog pod.                                                     | `"50m"`                            |
@@ -157,3 +165,4 @@ The following table lists the configurable parameters of the SuperStream chart a
 | `syslog.persistence.size`                                 | Size of the persistent volume for syslog.                                           | `"1Gi"`                            |
 | `syslog.persistence.accessModes`                          | Access modes (e.g., ReadWriteOnce) for the syslog persistent volume.                | `["ReadWriteOnce"]`                |
 | `syslog.persistence.storageClassName`                     | Storage class name for the syslog persistent volume.                                | `"standard"`                       |
+
