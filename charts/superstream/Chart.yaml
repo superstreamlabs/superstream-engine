@@ -2,8 +2,8 @@ apiVersion: v2
 annotations:
   category: Streaming and Messaging
   licenses: Memphis Business Source License 1.0
-  dataPlaneVersion: "1.1.107"
-  autoScalerVersion: "1.1.100"
+  dataPlaneVersion: "1.1.108"
+  autoScalerVersion: "1.1.200"
   artifacthub.io/changes: |
     - kind: changed
       description: Bump data-plane to 1.1.100
@@ -30,7 +30,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.4.22
+version: 0.4.23
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
