@@ -35,19 +35,19 @@ jobs:
       env:
         CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-    - name: Extract Version
-      id: extract_version
-      run: |
-        versionTag=$(cat version.conf)
-        echo "versionTag=$versionTag" >> $GITHUB_ENV  
+    # - name: Extract Version
+    #   id: extract_version
+    #   run: |
+    #     versionTag=$(cat version.conf)
+    #     echo "versionTag=$versionTag" >> $GITHUB_ENV  
 
-    - name: Create GitHub Release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        tag: "superstream-${{ env.versionTag }}"
-      run: |
-        gh release delete "$tag" --yes --repo "$GITHUB_REPOSITORY" || true
-        git push --delete origin "$tag" || true
-        git tag -f "$tag"
-        git push origin "$tag"
-        gh release create "$tag" --generate-notes 
+    # - name: Create GitHub Release
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     tag: "superstream-${{ env.versionTag }}"
+    #   run: |
+    #     gh release delete "$tag" --yes --repo "$GITHUB_REPOSITORY" || true
+    #     git push --delete origin "$tag" || true
+    #     git tag -f "$tag"
+    #     git push origin "$tag"
+    #     gh release create "$tag" --generate-notes 
