@@ -105,7 +105,16 @@ spec:
               port: 7777
               scheme: HTTP   
             initialDelaySeconds: 5
-            periodSeconds: 10              
+            periodSeconds: 10 
+          livenessProbe:
+            httpGet:
+              path: /monitoring/status
+              port: 7777
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3                         
           resources:
             {{- toYaml .Values.superstreamEngine.resources | nindent 12 }}                            
       {{- $fileDataExists := and .Values.superstreamEngine.configMap.fileData .Values.superstreamEngine.configMap.fileData.fileContent }}        
