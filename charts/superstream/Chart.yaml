@@ -41,4 +41,4 @@ dependencies:
   - name: nats
     version: 1.2.4
   - name: telegraf
-    version: 1.8.48
+    version: 1.8.55
