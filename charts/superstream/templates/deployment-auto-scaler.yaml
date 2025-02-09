@@ -66,7 +66,23 @@ spec:
             - name: {{ .name }}
               value: {{ .value | quote }}
             {{- end }}
-            {{- end }}                         
+            {{- end }} 
+          readinessProbe:
+            httpGet:
+              path: /monitoring/status
+              port: 7777
+              scheme: HTTP   
+            initialDelaySeconds: 5
+            periodSeconds: 10 
+          livenessProbe:
+            httpGet:
+              path: /monitoring/status
+              port: 7777
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3                                    
           resources:
             {{- toYaml .Values.autoScaler.resources | nindent 12 }}                                                  
       {{- with .Values.autoScaler.nodeSelector }}
