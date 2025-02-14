@@ -2,8 +2,8 @@ apiVersion: v2
 annotations:
   category: Streaming and Messaging
   licenses: Memphis Business Source License 1.0
-  dataPlaneVersion: "null"
-  autoScalerVersion: "null"
+  dataPlaneVersion: "1.1.314"
+  autoScalerVersion: "1.1.302"
   artifacthub.io/changes: |-
     - kind: changed
       description: Bump Telegraf component to 1.32
@@ -35,7 +35,7 @@ version: 0.5.0
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "null"
+appVersion: "1.1.314"
 icon: https://memphis-public-files.s3.eu-central-1.amazonaws.com/superstream_logo.png
 dependencies:
   - name: nats
