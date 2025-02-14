@@ -6,7 +6,7 @@ annotations:
   autoScalerVersion: "1.1.302"
   artifacthub.io/changes: |-
     - kind: changed
-      description: Bump Superstream-Autoscaler to 1.1.302
+      description: Bump Telegraf component to 1.32
 name: superstream
 description: Superstream Official Helm chart
 home: https://superstream.ai
@@ -30,7 +30,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.4.57
+version: 0.5.0
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
@@ -41,4 +41,4 @@ dependencies:
   - name: nats
     version: 1.2.4
   - name: telegraf
-    version: 1.8.48
+    version: 1.8.55
