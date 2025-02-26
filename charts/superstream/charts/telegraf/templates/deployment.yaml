@@ -40,8 +40,6 @@ spec:
         securityContext:
 {{ toYaml .Values.containerSecurityContext | indent 10 }}
 {{- end }}
-        #image: "{{ .Values.image.repo }}:{{ .Values.image.tag }}"
-        #imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
         {{ include "telegraf.image" (merge (pick $.Values "global") .Values.image) | nindent 8 }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
