@@ -316,7 +316,7 @@ config:
 container:
   image:
     repository: nats
-    tag: 2.10.20-alpine
+    tag: 2.10.25-alpine
     pullPolicy:
     registry:
 
@@ -398,7 +398,7 @@ promExporter:
   enabled: true
   image:
     repository: natsio/prometheus-nats-exporter
-    tag: 0.15.0
+    tag: 0.16.0
     pullPolicy:
     registry:
 
