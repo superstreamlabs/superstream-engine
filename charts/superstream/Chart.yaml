@@ -39,6 +39,6 @@ appVersion: "1.1.400"
 icon: https://memphis-public-files.s3.eu-central-1.amazonaws.com/superstream_logo.png
 dependencies:
   - name: nats
-    version: 1.2.4
+    version: 1.2.10
   - name: telegraf
     version: 1.8.55
