@@ -20,7 +20,7 @@ global:
 replicaCount: 1
 image:
   repo: "library/telegraf"
-  tag: "1.32-alpine"
+  tag: "1.33-alpine"
   pullPolicy: IfNotPresent
   registry: 
 podAnnotations: {}
