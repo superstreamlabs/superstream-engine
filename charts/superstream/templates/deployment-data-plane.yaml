@@ -48,8 +48,8 @@ spec:
       {{- end }}
       {{- end }}
       serviceAccountName: {{ include "superstream.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.superstreamEngine.podSecurityContext | nindent 8 }}
+      securityContext: 
+      {{- include "superstream.podSecurityContext" (merge (pick $.Values "global") .Values.superstreamEngine) | nindent 4 }}
       containers:
         - name: {{ .Chart.Name }}-data-plane
           {{ include "superstream.image" (merge (pick $.Values "global") .Values.superstreamEngine.image) | nindent 10 }}
