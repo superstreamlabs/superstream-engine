@@ -166,7 +166,8 @@ autoScaler:
       # Policy for pulling the image
     pullPolicy: Always
       # Overrides the image tag whose default is the chart appVersion.
-    tag: "latest"  
+    tag: "latest"
+  imagePullSecrets: []
   podAnnotations:
     prometheus.io/path: "/monitoring/metrics"
     prometheus.io/scrape: 'true'
