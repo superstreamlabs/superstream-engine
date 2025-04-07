@@ -41,10 +41,11 @@ spec:
               sleep 2
             done 
 
-      {{- with .Values.global.image.pullSecretNames }}
+      {{- $pullSecrets := or .Values.global.image.pullSecretNames .Values.superstreamEngine.imagePullSecrets }}
+      {{- if $pullSecrets }}
       imagePullSecrets:
-      {{- range . }}
-      - name: {{ . | quote }}
+      {{- range $pullSecrets }}
+        - name: {{ . | quote }}
       {{- end }}
       {{- end }}
       serviceAccountName: {{ include "superstream.serviceAccountName" . }}
