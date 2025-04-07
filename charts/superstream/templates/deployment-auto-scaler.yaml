@@ -25,10 +25,11 @@ spec:
         {{- include "superstream.labels" . | nindent 8 }}
         {{- include "superstream.selectorLabels" . | nindent 8 }}-auto-scaler
     spec:
-      {{- with .Values.global.image.pullSecretNames }}
+      {{- $pullSecrets := or .Values.global.image.pullSecretNames .Values.autoScaler.imagePullSecrets }}
+      {{- if $pullSecrets }}
       imagePullSecrets:
-      {{- range . }}
-      - name: {{ . | quote }}
+      {{- range $pullSecrets }}
+        - name: {{ . | quote }}
       {{- end }}
       {{- end }}
       serviceAccountName: {{ include "superstream.serviceAccountName" . }}
