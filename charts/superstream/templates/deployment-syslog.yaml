@@ -33,14 +33,14 @@ spec:
       - name: syslog-ng
         {{ include "superstream.image" (merge (pick $.Values "global") .Values.syslog.image) | nindent 8 }}
           {{- if .Values.syslog.extraEnv }}
-          {{- range .Values.syslog.extraEnv }}   
-        securityContext:
-          {{- toYaml .Values.syslog.securityContext | nindent 12 }}                     
+          {{- range .Values.syslog.extraEnv }}                    
         env:
           - name: {{ .name }}
             value: {{ .value | quote }}
         {{- end }}
-        {{- end }}         
+        {{- end }}      
+        securityContext:
+          {{- toYaml .Values.syslog.securityContext | nindent 12 }}           
         ports:
           - name: syslog
             containerPort: {{ .Values.syslog.service.port }}
