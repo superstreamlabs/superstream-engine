@@ -33,7 +33,9 @@ spec:
       - name: syslog-ng
         {{ include "superstream.image" (merge (pick $.Values "global") .Values.syslog.image) | nindent 8 }}
           {{- if .Values.syslog.extraEnv }}
-          {{- range .Values.syslog.extraEnv }}              
+          {{- range .Values.syslog.extraEnv }}   
+        securityContext:
+          {{- toYaml .Values.superstreamEngine.securityContext | nindent 12 }}                     
         env:
           - name: {{ .name }}
             value: {{ .value | quote }}

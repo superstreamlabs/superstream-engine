@@ -236,8 +236,14 @@ syslog:
   podAnnotations:
     prometheus.io/scrape: 'false'
   podSecurityContext:
-    readOnlyRootFilesystem: true
     fsGroup: 911
+  securityContext:
+  # capabilities:
+  #   drop:
+  #   - ALL
+    readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000    
   remoteSyslog:
     destinationHost: telegraf
     port: 6514
