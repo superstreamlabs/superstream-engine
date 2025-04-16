@@ -236,6 +236,7 @@ syslog:
   podAnnotations:
     prometheus.io/scrape: 'false'
   podSecurityContext:
+    readOnlyRootFilesystem: true
     fsGroup: 911
   remoteSyslog:
     destinationHost: telegraf
