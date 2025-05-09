@@ -96,11 +96,11 @@ superstreamEngine:
   podSecurityContext: {}
   # fsGroup: 2000
 
-  securityContext: {}
+  securityContext:
   # capabilities:
   #   drop:
   #   - ALL
-  # readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
   serviceAccount:
@@ -237,6 +237,13 @@ syslog:
     prometheus.io/scrape: 'false'
   podSecurityContext:
     fsGroup: 911
+  securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+    # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000    
   remoteSyslog:
     destinationHost: telegraf
     port: 6514
