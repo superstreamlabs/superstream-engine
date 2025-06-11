@@ -217,7 +217,7 @@ syslog:
   image:
     repository: linuxserver/syslog-ng
     pullPolicy: IfNotPresent
-    tag: "4.8.1" # Use a specific version to ensure consistency across deployments
+    tag: "4.8.3" # Use a specific version to ensure consistency across deployments
     registry: 
   imagePullSecrets: []
   extraEnv: {}
