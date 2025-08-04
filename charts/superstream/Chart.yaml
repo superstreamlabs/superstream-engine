@@ -2,11 +2,11 @@ apiVersion: v2
 annotations:
   category: Streaming and Messaging
   licenses: Memphis Business Source License 1.0
-  dataPlaneVersion: "1.1.911"
+  dataPlaneVersion: "1.1.912"
   autoScalerVersion: "1.1.702"
   artifacthub.io/changes: |-
     - kind: changed
-      description: Bump Superstream-Data-Plane to 1.1.911
+      description: Bump Superstream-Data-Plane to 1.1.912
 name: superstream
 description: Superstream Official Helm chart
 home: https://superstream.ai
@@ -30,12 +30,12 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.9.20
+version: 0.9.21
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "1.1.911"
+appVersion: "1.1.912"
 icon: https://memphis-public-files.s3.eu-central-1.amazonaws.com/superstream_logo.png
 dependencies:
   - name: nats
