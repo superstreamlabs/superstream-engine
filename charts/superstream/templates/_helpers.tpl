@@ -94,3 +94,9 @@ image: {{ $image }}
 imagePullPolicy: {{ .pullPolicy | default .global.image.pullPolicy }}
 {{- end }}
 {{- end }}
+
+{{- define "superstream.podSecurityContext" -}}
+{{- if or .podSecurityContext .global.podSecurityContext -}}
+{{ toYaml (.podSecurityContext | default .global.podSecurityContext) | nindent 4 -}}
+{{- end }}
+{{- end }}

@@ -21,6 +21,10 @@ global:
 
   # global labels will be applied to all resources deployed by the chart
   labels: {}
+  podSecurityContext: {}
+    # runAsUser: 1000
+    # runAsGroup: 1000
+    # fsGroup: 2000  
   
 ############################################################
 # NATS config
@@ -94,7 +98,7 @@ superstreamEngine:
     prometheus.io/scrape: 'true'
     prometheus.io/port: "7777"
   podSecurityContext: {}
-  # fsGroup: 2000
+    # fsGroup: 2000
 
   securityContext: {}
   # capabilities:
