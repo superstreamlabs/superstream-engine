@@ -4,6 +4,41 @@ entries:
   - annotations:
       artifacthub.io/changes: |-
         - kind: changed
+          description: Bump Superstream-Data-Plane to 1.1.919
+      autoScalerVersion: 1.1.900
+      category: Streaming and Messaging
+      dataPlaneVersion: 1.1.919
+      licenses: Memphis Business Source License 1.0
+    apiVersion: v2
+    appVersion: 1.1.919
+    created: "2025-08-21T13:27:42.964698512Z"
+    dependencies:
+    - name: nats
+      repository: ""
+      version: 1.2.10
+    - name: telegraf
+      repository: ""
+      version: 1.8.55
+    description: Superstream Official Helm chart
+    digest: 96b8f285a19cb7c5410e2d1221803889031de032272bf1ebd8495621465273e3
+    home: https://superstream.ai
+    icon: https://memphis-public-files.s3.eu-central-1.amazonaws.com/superstream_logo.png
+    keywords:
+    - data streaming
+    - cost reduction
+    - superstream
+    - kafka
+    maintainers:
+    - name: Superstream Labs
+      url: https://superstream.ai
+    name: superstream
+    type: application
+    urls:
+    - https://github.com/superstreamlabs/superstream-engine/releases/download/superstream-0.9.29/superstream-0.9.29.tgz
+    version: 0.9.29
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
           description: Bump Superstream-Data-Plane to 1.1.918
       autoScalerVersion: 1.1.900
       category: Streaming and Messaging
@@ -4924,4 +4959,4 @@ entries:
     urls:
     - https://superstreamlabs.github.io/superstream-engine/old/superstream-0.3.0.tgz
     version: 0.3.0
-generated: "2025-08-15T16:06:38.7389602Z"
+generated: "2025-08-21T13:27:42.965056495Z"
