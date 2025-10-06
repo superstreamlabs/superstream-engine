@@ -2,7 +2,7 @@ apiVersion: v2
 annotations:
   category: Streaming and Messaging
   licenses: Memphis Business Source License 1.0
-  dataPlaneVersion: "1.1.929"
+  dataPlaneVersion: "1.1.930"
   autoScalerVersion: "1.1.902"
   artifacthub.io/changes: |-
     - kind: changed
@@ -35,7 +35,7 @@ version: 0.9.39
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "1.1.929"
+appVersion: "1.1.930"
 icon: https://memphis-public-files.s3.eu-central-1.amazonaws.com/superstream_logo.png
 dependencies:
   - name: nats
