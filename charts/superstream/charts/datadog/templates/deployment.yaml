@@ -1,0 +1,419 @@
+{{- if .Values.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "datadog.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "datadog.labels" . | nindent 4 }}
+    app.kubernetes.io/name: datadog
+    app.kubernetes.io/instance: datadog
+    app.kubernetes.io/component: agent
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 10
+  strategy:
+    {{- toYaml .Values.updateStrategy | nindent 4 }}
+  selector:
+    matchLabels:
+      app: datadog
+  template:
+    metadata:
+      labels:
+        app: datadog
+        {{- include "datadog.selectorLabels" . | nindent 8 }}
+        admission.datadoghq.com/enabled: "false"
+      annotations:
+        checksum/config: {{ toYaml .Values | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "datadog.serviceAccountName" . }}
+      automountServiceAccountToken: true
+      securityContext:
+        runAsUser: 0
+      
+      initContainers:
+      - name: init-volume
+        image: {{ .Values.image.registry }}{{ .Values.image.repo }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["bash", "-c"]
+        args:
+          - cp -r /etc/datadog-agent /opt
+        volumeMounts:
+          - name: config
+            mountPath: /opt/datadog-agent
+        resources:
+          {{- toYaml .Values.initResources | nindent 10 }}
+      
+      - name: init-config
+        image: {{ .Values.image.registry }}{{ .Values.image.repo }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["bash", "-c"]
+        args:
+          - for script in $(find /etc/cont-init.d/ -type f -name '*.sh' | sort) ; do bash $script ; done
+        env:
+          - name: DD_API_KEY
+            value: "/etc/datadog-secrets/api-key"          
+          - name: DD_CLUSTER_NAME
+            value: {{ printf "%s-%s" .Values.global.superstreamAccountId .Values.global.agentName | quote }}
+          - name: DD_SITE
+            value: {{ .Values.site | quote }}
+          - name: KUBERNETES
+            value: "yes"
+        volumeMounts:
+          - name: config
+            mountPath: /etc/datadog-agent
+          - name: logdatadog
+            mountPath: /var/log/datadog
+        resources:
+          {{- toYaml .Values.initResources | nindent 10 }}
+            
+      - name: yaml-config-generator
+        image: {{ .Values.superstreamConfig.image.registry }}{{ .Values.superstreamConfig.image.repo }}:{{ .Values.superstreamConfig.image.tag }}
+        imagePullPolicy: {{ .Values.superstreamConfig.image.pullPolicy }}
+        command: ["/usr/local/bin/yaml-generator"]
+        env:
+        - name: ACTIVATION_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: superstream-creds
+              key: ACTIVATION_TOKEN
+        - name: ENV_NAME
+          value: "production"
+        - name: AGENT_NAME
+          value: {{ .Values.global.agentName | quote }}
+        - name: CONTROL_PLANE_HOST
+          value: {{ .Values.controlPlane.host | quote }}
+        - name: CONTROL_PLANE_PORT
+          value: {{ .Values.controlPlane.port | quote }}
+        - name: CONTROL_PLANE_PROTOCOL
+          value: {{ .Values.controlPlane.protocol | quote }}
+        - name: SYSLOG_HOST
+          value: {{ .Values.syslog.host | quote }}
+        - name: SYSLOG_PROTOCOL
+          value: {{ .Values.syslog.protocol | quote }}
+        - name: SYSLOG_PORT
+          value: {{ .Values.syslog.port | quote }}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/datadog-agent
+        resources:
+          {{- toYaml .Values.initResources | nindent 10 }}
+      - name: dd-key-fetcher
+        image: {{ .Values.superstreamConfig.image.registry }}{{ .Values.superstreamConfig.image.repo }}:{{ .Values.superstreamConfig.image.tag }}
+        imagePullPolicy: {{ .Values.superstreamConfig.image.pullPolicy }}
+        command: ["/usr/local/bin/dd-key-fetcher"]
+        env:
+        - name: ACTIVATION_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: superstream-creds
+              key: ACTIVATION_TOKEN
+        - name: ENV_NAME
+          value: "production"
+        - name: AGENT_NAME
+          value: {{ .Values.global.agentName | quote }}
+        - name: CONTROL_PLANE_HOST
+          value: {{ .Values.controlPlane.host | quote }}
+        - name: CONTROL_PLANE_PORT
+          value: {{ .Values.controlPlane.port | quote }}
+        - name: CONTROL_PLANE_PROTOCOL
+          value: {{ .Values.controlPlane.protocol | quote }}
+        - name: SYSLOG_HOST
+          value: {{ .Values.syslog.host | quote }}
+        - name: SYSLOG_PROTOCOL
+          value: {{ .Values.syslog.protocol | quote }}
+        - name: SYSLOG_PORT
+          value: {{ .Values.syslog.port | quote }}
+        volumeMounts:
+        - name: datadog-secrets
+          mountPath: /etc/datadog-secrets
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+                     
+      containers:
+      - name: agent
+        image: {{ .Values.image.registry }}{{ .Values.image.repo }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["sh", "-c"]
+        args: ["export DD_API_KEY=$(cat /etc/datadog-secrets/api-key) && agent run"]
+        
+        ports:
+        - containerPort: 8125
+          name: dogstatsdport
+          protocol: UDP
+        
+        env:
+          - name: DD_CLUSTER_NAME
+            value: {{ printf "%s-%s" .Values.global.superstreamAccountId .Values.global.agentName | quote }}
+          - name: DD_SITE
+            value: {{ .Values.site | quote }}
+          - name: DD_HOSTNAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: KUBERNETES
+            value: "yes"
+          - name: DD_LOG_LEVEL
+            value: {{ .Values.agent.logLevel | quote }}
+          
+          # DogStatsD
+          - name: DD_DOGSTATSD_PORT
+            value: "8125"
+          - name: DD_DOGSTATSD_NON_LOCAL_TRAFFIC
+            value: "true"
+          - name: DD_DOGSTATSD_TAG_CARDINALITY
+            value: "low"
+          - name: DD_DOGSTATSD_SOCKET
+            value: "/var/run/datadog/dsd.socket"
+
+          # Logs
+          - name: DD_LOGS_ENABLED
+            value: "true"
+          - name: DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL
+            value: "false"
+          - name: DD_LOGS_CONFIG_K8S_CONTAINER_USE_FILE
+            value: "true"
+          
+          # APM
+          - name: DD_APM_ENABLED
+            value: "true"
+          - name: DD_APM_NON_LOCAL_TRAFFIC
+            value: "true"
+          - name: DD_APM_RECEIVER_PORT
+            value: "8126"
+          - name: DD_APM_RECEIVER_SOCKET
+            value: "/var/run/datadog/apm.socket"
+          
+          # Health
+          - name: DD_HEALTH_PORT
+            value: "5555"
+          
+          # JMX & Autodiscovery
+          - name: DD_ORCHESTRATOR_EXPLORER_ENABLED
+            value: "false"
+          - name: DD_IGNORE_AUTOCONF
+            value: "redisdb kubernetes_state kubelet"
+          - name: DD_CONTAINER_IMAGE_ENABLED
+            value: "true"
+          - name: DD_KUBERNETES_KUBELET_HOST
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.hostIP  
+          - name: DD_CONTAINER_EXCLUDE
+            value: "name:.*"   
+          - name: DD_CONTAINER_EXCLUDE_METRICS
+            value: "name:.*"                         
+        
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        
+        volumeMounts:
+          - name: logdatadog
+            mountPath: /var/log/datadog
+          - name: tmpdir
+            mountPath: /tmp
+          - name: config
+            mountPath: /etc/datadog-agent
+          - name: kubelet-config
+            mountPath: /etc/datadog-agent/conf.d/kubelet.d/conf.yaml
+            subPath: kubelet.yaml
+            readOnly: true
+          - name: kubelet-config
+            mountPath: /etc/datadog-agent/conf.d/datadog-agent-logs.d/conf.yaml
+            subPath: datadog-agent-logs.yaml
+            readOnly: true
+          - name: pointerdir
+            mountPath: /opt/datadog-agent/run
+          - name: logpodpath
+            mountPath: /var/log/pods
+            readOnly: true
+          - name: auth-token
+            mountPath: /etc/datadog-agent/auth
+          - name: dsdsocket
+            mountPath: /var/run/datadog
+          - name: datadog-secrets
+            mountPath: /etc/datadog-secrets
+            readOnly: true
+        
+        livenessProbe:
+          httpGet:
+            path: /live
+            port: 5555
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 6
+        
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 5555
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 6
+        
+        startupProbe:
+          httpGet:
+            path: /startup
+            port: 5555
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 6
+      
+      - name: trace-agent
+        image: {{ .Values.image.registry }}{{ .Values.image.repo }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["sh", "-c"]
+        args: ["export DD_API_KEY=$(cat /etc/datadog-secrets/api-key) && trace-agent -config=/etc/datadog-agent/datadog.yaml"]
+        
+        ports:
+        - containerPort: 8126
+          name: traceport
+          protocol: TCP
+        
+        env:
+          - name: DD_CLUSTER_NAME
+            value: {{ printf "%s-%s" .Values.global.superstreamAccountId .Values.global.agentName | quote }}
+          - name: DD_SITE
+            value: {{ .Values.site | quote }}
+          - name: DD_LOG_LEVEL
+            value: {{ .Values.agent.logLevel | quote }}
+          - name: KUBERNETES
+            value: "yes"
+          
+          # APM
+          - name: DD_APM_ENABLED
+            value: "true"
+          - name: DD_APM_NON_LOCAL_TRAFFIC
+            value: "true"
+          - name: DD_APM_RECEIVER_PORT
+            value: "8126"
+          - name: DD_APM_RECEIVER_SOCKET
+            value: "/var/run/datadog/apm.socket"
+          - name: DD_DOGSTATSD_SOCKET
+            value: "/var/run/datadog/dsd.socket"
+        
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        
+        volumeMounts:
+          - name: config
+            mountPath: /etc/datadog-agent
+            readOnly: true
+          - name: kubelet-config
+            mountPath: /etc/datadog-agent/conf.d/kubelet.d/conf.yaml
+            subPath: kubelet.yaml
+            readOnly: true
+          - name: logdatadog
+            mountPath: /var/log/datadog
+          - name: auth-token
+            mountPath: /etc/datadog-agent/auth
+            readOnly: true
+          - name: tmpdir
+            mountPath: /tmp
+          - name: dsdsocket
+            mountPath: /var/run/datadog
+          - name: datadog-secrets
+            mountPath: /etc/datadog-secrets
+            readOnly: true
+        
+        livenessProbe:
+          tcpSocket:
+            port: 8126
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+          
+      - name: config-monitor
+        image: {{ .Values.superstreamConfig.image.registry }}{{ .Values.superstreamConfig.image.repo }}:{{ .Values.superstreamConfig.image.tag }}
+        imagePullPolicy: {{ .Values.superstreamConfig.image.pullPolicy }}
+        command: ["/usr/local/bin/config-monitor"]
+        env:
+        - name: ACTIVATION_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: superstream-creds
+              key: ACTIVATION_TOKEN
+        - name: ENV_NAME
+          value: "production"
+        - name: AGENT_NAME
+          value: {{ .Values.global.agentName | quote }}
+        - name: CONTROL_PLANE_HOST
+          value: {{ .Values.controlPlane.host | quote }}
+        - name: CONTROL_PLANE_PORT
+          value: {{ .Values.controlPlane.port | quote }}
+        - name: CONTROL_PLANE_PROTOCOL
+          value: {{ .Values.controlPlane.protocol | quote }}
+        - name: SYSLOG_HOST
+          value: {{ .Values.syslog.host | quote }}
+        - name: SYSLOG_PROTOCOL
+          value: {{ .Values.syslog.protocol | quote }}
+        - name: SYSLOG_PORT
+          value: {{ .Values.syslog.port | quote }}
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: config
+          mountPath: /etc/datadog-agent
+        resources:
+          {{- toYaml .Values.initResources | nindent 10 }}
+      
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      
+      volumes:
+        - name: datadog-secrets
+          emptyDir:
+            medium: Memory      
+        - name: auth-token
+          emptyDir: {}
+        - name: config
+          emptyDir: {}
+        - name: kubelet-config
+          configMap:
+            name: {{ include "datadog.fullname" . }}-config
+        - name: logdatadog
+          emptyDir: {}
+        - name: tmpdir
+          emptyDir: {}
+        - name: dsdsocket
+          emptyDir: {}
+        - name: pointerdir
+          hostPath:
+            path: /var/lib/datadog-agent/logs
+        - name: logpodpath
+          hostPath:
+            path: /var/log/pods
+{{- end }}
