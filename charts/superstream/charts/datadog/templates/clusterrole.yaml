@@ -1,0 +1,36 @@
+{{- if and .Values.enabled .Values.rbac.create .Values.rbac.clusterWide -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "datadog.clusterResourceName" . }}
+  labels:
+    {{- include "datadog.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources:
+      - services
+      - events
+      - endpoints
+      - pods
+      - nodes
+      - namespaces
+      - componentstatuses
+    verbs:
+      - get
+      - list
+      - watch
+  - nonResourceURLs:
+      - "/version"
+      - "/healthz"
+      - "/metrics"
+    verbs:
+      - get
+  - apiGroups: [""]
+    resources:
+      - nodes/metrics
+      - nodes/spec
+      - nodes/proxy
+      - nodes/stats
+    verbs:
+      - get
+{{- end }}
