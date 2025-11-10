@@ -1,0 +1,27 @@
+{{- if and .Values.enabled .Values.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "datadog.serviceName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "datadog.labels" . | nindent 4 }}
+    app: datadog
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: datadog
+  ports:
+    - name: trace
+      port: {{ .Values.service.ports.trace.port }}
+      targetPort: {{ .Values.service.ports.trace.targetPort }}
+      protocol: {{ .Values.service.ports.trace.protocol }}
+    - name: dogstatsd
+      port: {{ .Values.service.ports.dogstatsd.port }}
+      targetPort: {{ .Values.service.ports.dogstatsd.targetPort }}
+      protocol: {{ .Values.service.ports.dogstatsd.protocol }}
+{{- end }}

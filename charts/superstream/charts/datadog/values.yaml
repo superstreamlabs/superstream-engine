@@ -1,0 +1,107 @@
+## Default values.yaml for Datadog Agent
+## This is a YAML-formatted file.
+## ref: https://docs.datadoghq.com/agent/
+################################################################################
+# Global options
+################################################################################
+
+# Enable or disable the Datadog agent
+enabled: true
+
+# Global image configuration
+global:
+  image:
+    pullPolicy:
+    pullSecretNames: []
+    registry:
+
+# Basic configuration - most values come from parent chart
+replicaCount: 1
+image:
+  repo: "gcr.io/datadoghq/agent"
+  tag: "7.71.1-jmx"
+  pullPolicy: IfNotPresent
+  registry: 
+
+podAnnotations: {}
+podLabels: {}
+imagePullSecrets: []
+fullnameOverride: datadog
+
+# Datadog API configuration
+site: "us5.datadoghq.com"
+
+# Superstream configuration for Datadog
+controlPlane:
+  host: "broker.superstream.ai"
+  port: "4222"
+  protocol: "nats"
+syslog:
+  host: "telegraf"
+  protocol: "udp"
+  port: "6514"
+
+# Service configuration
+service:
+  enabled: true
+  type: ClusterIP
+  annotations: {}
+  ports:
+    trace:
+      port: 8126
+      targetPort: 8126
+      protocol: TCP
+    dogstatsd:
+      port: 8125
+      targetPort: 8125
+      protocol: UDP
+
+# RBAC configuration
+rbac:
+  create: true
+  clusterWide: true
+  createRole: true  # Also create Role/RoleBinding in addition to ClusterRole/ClusterRoleBinding
+  clusterResourceNameOverride: ""  # Override ClusterRole/ClusterRoleBinding name to avoid conflicts
+
+serviceAccount:
+  create: true
+  name:
+  annotations: {}
+
+# Resource configuration
+resources: 
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+  requests:
+    cpu: "200m"
+    memory: "320Mi"
+
+# Init container resources
+initResources:
+  limits:
+    memory: "200Mi"
+    cpu: "100m"
+  requests:
+    cpu: "50m"
+    memory: "64Mi"
+
+nodeSelector: {}
+affinity: {}
+tolerations: []
+
+# Update strategy
+updateStrategy:
+  type: Recreate
+
+# Datadog Agent configuration (most values are hardcoded in deployment template)
+agent:
+  logLevel: "INFO"
+
+# Superstream connection config image
+superstreamConfig:
+  image:
+    repo: "superstreamlabs/superstream-connection-config"
+    tag: "latest"
+    pullPolicy: Always
+    registry:
