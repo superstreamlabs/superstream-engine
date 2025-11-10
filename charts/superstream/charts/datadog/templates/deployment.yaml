@@ -57,7 +57,7 @@ spec:
           - name: DD_API_KEY
             value: "/etc/datadog-secrets/api-key"          
           - name: DD_CLUSTER_NAME
-            value: {{ printf "%s-%s" .Values.global.superstreamAccountId .Values.global.agentName | quote }}
+            value: {{ printf "%s-%s" .Values.global.superstreamAccountId .Values.global.engineName | quote }}
           - name: DD_SITE
             value: {{ .Values.site | quote }}
           - name: KUBERNETES
@@ -83,7 +83,7 @@ spec:
         - name: ENV_NAME
           value: "production"
         - name: AGENT_NAME
-          value: {{ .Values.global.agentName | quote }}
+          value: {{ .Values.global.engineName | quote }}
         - name: CONTROL_PLANE_HOST
           value: {{ .Values.controlPlane.host | quote }}
         - name: CONTROL_PLANE_PORT
@@ -114,7 +114,7 @@ spec:
         - name: ENV_NAME
           value: "production"
         - name: AGENT_NAME
-          value: {{ .Values.global.agentName | quote }}
+          value: {{ .Values.global.engineName | quote }}
         - name: CONTROL_PLANE_HOST
           value: {{ .Values.controlPlane.host | quote }}
         - name: CONTROL_PLANE_PORT
@@ -152,7 +152,7 @@ spec:
         
         env:
           - name: DD_CLUSTER_NAME
-            value: {{ printf "%s-%s" .Values.global.superstreamAccountId .Values.global.agentName | quote }}
+            value: {{ printf "%s-%s" .Values.global.superstreamAccountId .Values.global.engineName | quote }}
           - name: DD_SITE
             value: {{ .Values.site | quote }}
           - name: DD_HOSTNAME
@@ -284,7 +284,7 @@ spec:
         
         env:
           - name: DD_CLUSTER_NAME
-            value: {{ printf "%s-%s" .Values.global.superstreamAccountId .Values.global.agentName | quote }}
+            value: {{ printf "%s-%s" .Values.global.superstreamAccountId .Values.global.engineName | quote }}
           - name: DD_SITE
             value: {{ .Values.site | quote }}
           - name: DD_LOG_LEVEL
@@ -353,7 +353,7 @@ spec:
         - name: ENV_NAME
           value: "production"
         - name: AGENT_NAME
-          value: {{ .Values.global.agentName | quote }}
+          value: {{ .Values.global.engineName | quote }}
         - name: CONTROL_PLANE_HOST
           value: {{ .Values.controlPlane.host | quote }}
         - name: CONTROL_PLANE_PORT
