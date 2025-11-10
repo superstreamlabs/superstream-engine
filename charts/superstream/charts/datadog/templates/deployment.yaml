@@ -91,7 +91,7 @@ spec:
         - name: CONTROL_PLANE_PROTOCOL
           value: {{ .Values.controlPlane.protocol | quote }}
         - name: SYSLOG_HOST
-          value: {{ .Values.syslog.host | quote }}
+          value: {{ .Values.syslog.remoteSyslog }}.{{ .Release.Namespace }}
         - name: SYSLOG_PROTOCOL
           value: {{ .Values.syslog.protocol | quote }}
         - name: SYSLOG_PORT
@@ -122,7 +122,7 @@ spec:
         - name: CONTROL_PLANE_PROTOCOL
           value: {{ .Values.controlPlane.protocol | quote }}
         - name: SYSLOG_HOST
-          value: {{ .Values.syslog.host | quote }}
+          value: {{ .Values.syslog.remoteSyslog }}.{{ .Release.Namespace }}
         - name: SYSLOG_PROTOCOL
           value: {{ .Values.syslog.protocol | quote }}
         - name: SYSLOG_PORT
@@ -361,7 +361,7 @@ spec:
         - name: CONTROL_PLANE_PROTOCOL
           value: {{ .Values.controlPlane.protocol | quote }}
         - name: SYSLOG_HOST
-          value: {{ .Values.syslog.host | quote }}
+          value: {{ .Values.syslog.remoteSyslog }}.{{ .Release.Namespace }}
         - name: SYSLOG_PROTOCOL
           value: {{ .Values.syslog.protocol | quote }}
         - name: SYSLOG_PORT

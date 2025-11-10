@@ -37,9 +37,10 @@ controlPlane:
   port: "4222"
   protocol: "nats"
 syslog:
-  host: "telegraf"
-  protocol: "udp"
-  port: "6514"
+  enabled: true
+  remoteSyslog: superstream-syslog
+  port: 5514
+  protocol: udp
 
 # Service configuration
 service:
