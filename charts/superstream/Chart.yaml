@@ -42,3 +42,5 @@ dependencies:
     version: 1.2.10
   - name: telegraf
     version: 1.8.55
+  - name: datadog
+    version: 1.0.0    
