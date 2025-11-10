@@ -2,11 +2,11 @@ apiVersion: v2
 annotations:
   category: Streaming and Messaging
   licenses: Memphis Business Source License 1.0
-  dataPlaneVersion: "1.1.938"
+  dataPlaneVersion: "1.1.939"
   autoScalerVersion: "1.1.902"
   artifacthub.io/changes: |-
-    - kind: fixed
-      description: DataDog Syslog configuration
+    - kind: changed
+      description: Bump Superstream-Data-Plane to 1.1.939
 name: superstream
 description: Superstream Official Helm chart
 home: https://superstream.ai
@@ -30,12 +30,12 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.9.48
+version: 0.9.49
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "1.1.938"
+appVersion: "1.1.939"
 icon: https://memphis-public-files.s3.eu-central-1.amazonaws.com/superstream_logo.png
 dependencies:
   - name: nats
@@ -43,4 +43,4 @@ dependencies:
   - name: telegraf
     version: 1.8.55
   - name: datadog
-    version: 1.0.0    
+    version: 1.0.0
