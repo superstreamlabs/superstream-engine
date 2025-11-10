@@ -1,0 +1,17 @@
+1. Get the application URL by running these commands:
+{{- if .Values.service.enabled }}
+{{- range $key, $value := .Values.service.ports }}
+  export SERVICE_PORT={{ $value.port }}
+{{- end }}
+  echo http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:$SERVICE_PORT
+{{- else }}
+  echo "No service defined"
+{{- end }}
+
+2. Check the status of your deployment:
+  kubectl get pods -l app=datadog -n {{ .Release.Namespace }}
+
+3. View logs:
+  kubectl logs -l app=datadog -n {{ .Release.Namespace }}
+
+4. Datadog Agent is now running and collecting metrics and traces.

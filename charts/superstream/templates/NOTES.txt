@@ -32,3 +32,4 @@ Deployment Information
 1 - Telegraf
 1 - Superstream Syslog
 3 - NATS
+3 - DataDog
