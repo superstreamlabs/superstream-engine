@@ -3,6 +3,44 @@ entries:
   superstream:
   - annotations:
       artifacthub.io/changes: |-
+        - kind: fixed
+          description: Datadog Agent Static Name
+      autoScalerVersion: 1.1.902
+      category: Streaming and Messaging
+      dataPlaneVersion: 1.1.940
+      licenses: Memphis Business Source License 1.0
+    apiVersion: v2
+    appVersion: 1.1.940
+    created: "2025-11-11T17:12:51.287578128Z"
+    dependencies:
+    - name: nats
+      repository: ""
+      version: 1.2.10
+    - name: telegraf
+      repository: ""
+      version: 1.8.55
+    - name: datadog
+      repository: ""
+      version: 1.0.0
+    description: Superstream Official Helm chart
+    digest: a511f6379fdb9de1366559ebc3800d07f061f44c1193ae43da9c215673c02eac
+    home: https://superstream.ai
+    icon: https://memphis-public-files.s3.eu-central-1.amazonaws.com/superstream_logo.png
+    keywords:
+    - data streaming
+    - cost reduction
+    - superstream
+    - kafka
+    maintainers:
+    - name: Superstream Labs
+      url: https://superstream.ai
+    name: superstream
+    type: application
+    urls:
+    - https://github.com/superstreamlabs/superstream-engine/releases/download/superstream-0.9.51/superstream-0.9.51.tgz
+    version: 0.9.51
+  - annotations:
+      artifacthub.io/changes: |-
         - kind: changed
           description: Bump Superstream-Data-Plane to 1.1.940
       autoScalerVersion: 1.1.902
@@ -5706,4 +5744,4 @@ entries:
     urls:
     - https://superstreamlabs.github.io/superstream-engine/old/superstream-0.3.0.tgz
     version: 0.3.0
-generated: "2025-11-11T11:55:59.972975716Z"
+generated: "2025-11-11T17:12:51.288023526Z"
