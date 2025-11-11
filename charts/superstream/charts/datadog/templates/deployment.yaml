@@ -156,9 +156,7 @@ spec:
           - name: DD_SITE
             value: {{ .Values.site | quote }}
           - name: DD_HOSTNAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
+            value: {{ printf "%s-%s" .Values.global.superstreamAccountId .Values.global.engineName | quote }}
           - name: KUBERNETES
             value: "yes"
           - name: DD_LOG_LEVEL
