@@ -10,4 +10,7 @@ rules:
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["get", "list", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]  # ← Add replicasets here
+  verbs: ["get", "update", "patch"]
 {{- end }}
